@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TrackAI — El copiloto de mezcla para Serato DJ</title>
+<meta name="description" content="TrackAI es un add-on flotante para Serato DJ Pro que lee lo que tocas en vivo y te sugiere la próxima canción, compatible en BPM y tonalidad." />
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0b0c0f;
+    --panel: #16181d;
+    --panel2: #1e2127;
+    --border: rgba(255,255,255,0.09);
+    --border2: rgba(255,255,255,0.055);
+    --text: #eef0f4;
+    --dim: #9a9ca6;
+    --faint: #62646d;
+    --accent: #2f80ed;
+    --accent2: #5aa2ff;
+    --key: #b877e0;
+    --crate: #e8862a;
+    --green: #46c37b;
+    --yellow: #f2c14e;
+    --red: #ff5a5f;
+    --pink: #ff7ac0;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.6;
+    overflow-x: hidden; perspective: 1400px;
+  }
+  /* Fondo inmersivo con orbes que se mueven con el mouse */
+  .bg-orbs { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+  .orb {
+    position: absolute; border-radius: 50%; filter: blur(70px); opacity: 0.55;
+    transition: transform 0.35s cubic-bezier(0.2,0.8,0.2,1);
+  }
+  .orb.a { width: 520px; height: 520px; background: #1c4fa0; top: -120px; left: -100px; }
+  .orb.b { width: 460px; height: 460px; background: #6a2fb0; top: 30%; right: -140px; }
+  .orb.c { width: 400px; height: 400px; background: #0f3d6e; bottom: -140px; left: 20%; }
+  .grid-lines {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image: linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 46px 46px; mask-image: radial-gradient(circle at 50% 30%, #000 0%, transparent 75%);
+  }
+
+  .wrap { max-width: 980px; margin: 0 auto; padding: 0 22px; position: relative; z-index: 2; }
+
+  /* ============ NAV ============ */
+  nav {
+    position: sticky; top: 0; z-index: 50; backdrop-filter: blur(14px);
+    background: rgba(11,12,15,0.72); border-bottom: 1px solid var(--border2);
+  }
+  nav .wrap { display: flex; align-items: center; justify-content: space-between; padding: 12px 22px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 17px; }
+  .brand span { color: var(--accent); }
+  .mini-disc {
+    width: 24px; height: 24px; border-radius: 50%;
+    background: radial-gradient(circle at center, var(--accent) 0 3px, transparent 4px),
+      repeating-radial-gradient(circle at center, #0000 0 2px, rgba(255,255,255,0.08) 2px 3.5px), #1a1b20;
+    border: 1px solid var(--border); animation: spin 4s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  nav .links { display: flex; gap: 22px; font-size: 14px; }
+  nav .links a { color: var(--dim); text-decoration: none; transition: color 0.2s; }
+  nav .links a:hover { color: var(--text); }
+  @media (max-width: 640px) { nav .links { display: none; } }
+
+  /* ============ HERO 3D ============ */
+  .hero { text-align: center; padding: 90px 0 40px; transform-style: preserve-3d; }
+  .badge-top {
+    display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: 0.5px;
+    color: var(--accent2); background: rgba(47,128,237,0.12); border: 1px solid rgba(47,128,237,0.3);
+    padding: 6px 14px; border-radius: 999px; margin-bottom: 26px;
+  }
+  .hero h1 {
+    font-size: 58px; font-weight: 800; line-height: 1.05; letter-spacing: -2px; margin-bottom: 20px;
+    background: linear-gradient(120deg, #fff 0%, var(--accent2) 45%, var(--key) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .hero p.sub { font-size: 20px; color: var(--dim); max-width: 640px; margin: 0 auto 30px; }
+  .cta-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .btn {
+    font-size: 15px; font-weight: 700; padding: 13px 26px; border-radius: 12px; text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s; display: inline-block;
+  }
+  .btn-primary { background: linear-gradient(135deg, var(--accent), #1e63c9); color: #fff; box-shadow: 0 10px 30px rgba(47,128,237,0.35); }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 14px 40px rgba(47,128,237,0.5); }
+  .btn-ghost { background: var(--panel); color: var(--text); border: 1px solid var(--border); }
+  .btn-ghost:hover { transform: translateY(-2px); border-color: var(--accent); }
+
+  /* Maqueta de la ventana flotante en 3D */
+  .stage { margin: 60px auto 0; max-width: 720px; transform-style: preserve-3d; }
+  .serato-back {
+    position: relative; border-radius: 18px; padding: 26px; overflow: hidden;
+    background:
+      linear-gradient(180deg, #101319, #0a0c10);
+    border: 1px solid var(--border); box-shadow: 0 40px 90px rgba(0,0,0,0.6);
+    transform: rotateX(14deg) rotateY(-8deg) rotateZ(1deg); transform-style: preserve-3d;
+    transition: transform 0.4s cubic-bezier(0.2,0.8,0.2,1);
+  }
+  .stage:hover .serato-back { transform: rotateX(6deg) rotateY(-3deg); }
+  .wave { display: flex; gap: 2px; align-items: center; height: 60px; margin-bottom: 8px; opacity: 0.65; }
+  .wave i { flex: 1; border-radius: 2px; background: linear-gradient(180deg, var(--key), var(--accent)); }
+  .serato-tabs { display: flex; gap: 14px; font-size: 11px; color: var(--faint); margin-top: 10px; }
+  /* Ventana TrackAI flotante encima */
+  .float-win {
+    position: absolute; right: 22px; top: 60px; width: 260px; z-index: 5;
+    background: rgba(20,21,24,0.96); border: 1px solid var(--border); border-radius: 14px;
+    box-shadow: 0 30px 70px rgba(0,0,0,0.7); transform: translateZ(80px);
+    overflow: hidden; text-align: left;
+  }
+  .fw-head { display: flex; align-items: center; gap: 7px; padding: 9px 11px; border-bottom: 1px solid var(--border); font-size: 11px; font-weight: 800; }
+  .fw-head .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+  .fw-modes { display: flex; gap: 3px; padding: 8px 10px 0; }
+  .fw-mode { flex: 1; text-align: center; font-size: 8.5px; font-weight: 800; padding: 5px 2px; border-radius: 6px; color: var(--dim); background: var(--panel2); border: 1px solid var(--border2); }
+  .fw-mode.on { background: var(--accent); color: #fff; }
+  .fw-now { margin: 9px 10px; padding: 10px; border-radius: 9px; background: var(--panel); border: 1px solid var(--border); }
+  .fw-now .t { font-size: 11px; font-weight: 800; }
+  .fw-now .a { font-size: 9px; color: var(--dim); }
+  .fw-chips { display: flex; gap: 4px; margin-top: 7px; }
+  .mini-chip { font-size: 8px; font-weight: 800; padding: 2px 6px; border-radius: 5px; background: var(--panel2); border: 1px solid var(--border); }
+  .mini-chip.k { color: var(--key); border-color: var(--key); }
+  .mini-chip.c { color: var(--crate); border-color: var(--crate); }
+  .fw-sug { margin: 0 10px 10px; padding: 8px 9px; border-radius: 8px; background: var(--panel2); border: 1px solid var(--border2); }
+  .fw-sug .t { font-size: 10px; font-weight: 700; }
+  .fw-b { display: flex; gap: 3px; margin-top: 4px; }
+  .fw-badge { font-size: 7px; font-weight: 800; padding: 1px 5px; border-radius: 4px; border: 1px solid; }
+  .fw-badge.p { color: var(--green); border-color: var(--green); }
+  .fw-badge.n { color: var(--green); border-color: var(--green); }
+
+  /* ============ SECCIONES ============ */
+  section { padding: 60px 0; position: relative; z-index: 2; }
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s, transform 0.7s; }
+  .reveal.in { opacity: 1; transform: none; }
+  .kicker { font-size: 12px; font-weight: 800; letter-spacing: 2.5px; text-transform: uppercase; color: var(--accent2); margin-bottom: 12px; }
+  h2 { font-size: 34px; font-weight: 800; letter-spacing: -1px; margin-bottom: 14px; line-height: 1.1; }
+  p.lead { font-size: 17px; color: var(--dim); max-width: 680px; margin-bottom: 30px; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; }
+  .card {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 16px; padding: 24px;
+    transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s; transform-style: preserve-3d;
+  }
+  .card:hover { border-color: rgba(47,128,237,0.4); box-shadow: 0 20px 50px rgba(0,0,0,0.4); }
+  .card .ico { font-size: 28px; margin-bottom: 12px; }
+  .card h3 { font-size: 17px; font-weight: 800; margin-bottom: 7px; }
+  .card p { font-size: 14.5px; color: var(--dim); }
+  .card p strong { color: var(--text); }
+  .card.mode { border-top: 3px solid var(--accent); }
+  .card.mode.safe { border-top-color: var(--yellow); }
+  .card.mode.fresh { border-top-color: var(--green); }
+
+  /* Cómo se conecta - pasos */
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; counter-reset: st; }
+  .step { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; padding: 22px; position: relative; }
+  .step::before {
+    counter-increment: st; content: counter(st); position: absolute; top: -14px; left: 20px;
+    width: 30px; height: 30px; border-radius: 8px; background: var(--accent); color: #fff;
+    display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px;
+  }
+  .step h3 { font-size: 15px; margin: 8px 0 6px; }
+  .step p { font-size: 14px; color: var(--dim); }
+
+  /* Badges table */
+  table.bt { width: 100%; border-collapse: collapse; }
+  table.bt td { padding: 12px 4px; border-bottom: 1px solid var(--border2); vertical-align: top; font-size: 15px; color: var(--dim); }
+  table.bt td:first-child { width: 160px; white-space: nowrap; }
+  table.bt tr:last-child td { border-bottom: none; }
+  .badge { display: inline-block; font-size: 11px; font-weight: 800; border-radius: 6px; padding: 3px 9px; background: var(--panel2); border: 1px solid var(--border2); color: var(--dim); margin: 2px 3px 2px 0; }
+  .b-perfect{color:var(--green);border-color:var(--green)} .b-rel{color:var(--accent);border-color:var(--accent)}
+  .b-up{color:var(--yellow);border-color:var(--yellow)} .b-down{color:#6db6ff;border-color:#6db6ff}
+  .b-boost{color:var(--pink);border-color:var(--pink)} .b-mood{color:var(--key);border-color:var(--key)}
+  .b-bpm{color:var(--accent);border-color:var(--accent)} .b-new{color:var(--green);border-color:var(--green)}
+  .b-prov{color:var(--yellow);border-color:var(--yellow)} .b-over{color:var(--red);border-color:var(--red)}
+  .b-crate{color:var(--crate);border-color:var(--crate)}
+
+  ul.clean { list-style: none; }
+  ul.clean li { padding: 10px 0 10px 30px; position: relative; color: var(--dim); font-size: 15px; border-bottom: 1px solid var(--border2); }
+  ul.clean li:last-child { border-bottom: none; }
+  ul.clean li strong { color: var(--text); }
+  ul.clean li::before { content: '✓'; position: absolute; left: 0; color: var(--green); font-weight: 800; }
+  ul.no li::before { content: '✕'; color: var(--red); }
+  ul.req li::before { content: '▸'; color: var(--accent); }
+
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: center; }
+  @media (max-width: 720px) { .split { grid-template-columns: 1fr; } .hero h1 { font-size: 40px; } }
+
+  .callout {
+    background: linear-gradient(135deg, rgba(47,128,237,0.12), rgba(184,119,224,0.09));
+    border: 1px solid var(--border); border-left: 3px solid var(--accent);
+    border-radius: 0 14px 14px 0; padding: 18px 22px; color: var(--dim); font-size: 15px;
+  }
+  .callout strong { color: var(--text); }
+
+  .final-cta {
+    text-align: center; padding: 70px 30px; margin: 40px 0;
+    background: radial-gradient(circle at 50% 0%, rgba(47,128,237,0.18), transparent 70%), var(--panel);
+    border: 1px solid var(--border); border-radius: 24px;
+  }
+  .final-cta h2 { font-size: 32px; }
+
+  footer { text-align: center; padding: 40px 0 60px; color: var(--faint); font-size: 13px; border-top: 1px solid var(--border2); }
+  footer a { color: var(--accent); text-decoration: none; font-weight: 600; }
+
+  @media (max-width: 560px) { .hero { padding: 60px 0 20px; } .hero h1 { font-size: 34px; } h2 { font-size: 26px; } table.bt td:first-child { width: 120px; } }
+</style>
+</head>
+<body>
+
+<div class="bg-orbs">
+  <div class="orb a" data-depth="0.03"></div>
+  <div class="orb b" data-depth="0.05"></div>
+  <div class="orb c" data-depth="0.04"></div>
+</div>
+<div class="grid-lines"></div>
+
+<nav>
+  <div class="wrap">
+    <div class="brand"><span class="mini-disc"></span>Track<span>AI</span></div>
+    <div class="links">
+      <a href="#que">Qué hace</a>
+      <a href="#serato">Con Serato</a>
+      <a href="#modos">Modos</a>
+      <a href="#badges">Badges</a>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="badge-top">🎧 Add-on para Serato DJ Pro</div>
+    <h1>Tu copiloto de mezcla<br>en tiempo real</h1>
+    <p class="sub">TrackAI flota sobre Serato, lee lo que estás tocando y te sopla la siguiente canción — compatible en BPM y tonalidad — para que nunca te quedes en blanco frente a la pista.</p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="#serato">Ver cómo funciona</a>
+      <a class="btn btn-ghost" href="#modos">Los 3 modos</a>
+    </div>
+
+    <!-- Maqueta 3D -->
+    <div class="stage">
+      <div class="serato-back" id="tiltStage">
+        <div class="wave" id="wave"></div>
+        <div class="wave" id="wave2" style="height:44px;opacity:0.4"></div>
+        <div class="serato-tabs"><span>Archivos</span><span>Preparar</span><span>Historia</span><span>SUPER ROS</span></div>
+
+        <div class="float-win">
+          <div class="fw-head"><span class="dot"></span> TrackAI <span style="margin-left:auto;color:var(--faint)">09:29</span></div>
+          <div class="fw-modes">
+            <div class="fw-mode on">⚖ Auto</div>
+            <div class="fw-mode">💎 Seguro</div>
+            <div class="fw-mode">🌱 Fresco</div>
+          </div>
+          <div class="fw-now">
+            <div class="t">ARTE ELEGANTE</div>
+            <div class="a">FT MARCIANEKE</div>
+            <div class="fw-chips">
+              <span class="mini-chip k">11A</span>
+              <span class="mini-chip">90 BPM</span>
+              <span class="mini-chip c">🗂️ RGT</span>
+            </div>
+          </div>
+          <div class="fw-sug">
+            <div class="t">DREFQUILA — Autos, Bikes...</div>
+            <div class="fw-b"><span class="fw-badge p">🎯 Perfecta</span><span class="fw-badge n">✨ Nueva</span></div>
+          </div>
+          <div class="fw-sug">
+            <div class="t">EL FUTURO F...</div>
+            <div class="fw-b"><span class="fw-badge p">🎯 Perfecta</span><span class="fw-badge n">✨ Nueva</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- QUÉ HACE -->
+  <section id="que">
+    <div class="reveal">
+      <div class="kicker">Qué hace</div>
+      <h2>Piensa la mezcla contigo, no por ti</h2>
+      <p class="lead">TrackAI observa el track que suena y busca en toda tu biblioteca las mejores opciones para seguir. Te muestra 3 sugerencias con toda la info para decidir en un segundo — pero la última palabra siempre es tuya.</p>
+    </div>
+    <div class="grid">
+      <div class="card reveal"><div class="ico">🎯</div><h3>Mezclas que calzan</h3><p>Cruza <strong>BPM</strong> y <strong>tonalidad (rueda Camelot)</strong> para transiciones limpias, incluso a <strong>doble o mitad de tiempo</strong>.</p></div>
+      <div class="card reveal"><div class="ico">🗂️</div><h3>Conoce tu biblioteca</h3><p>Usa tus <strong>crates</strong> y tu <strong>historial real</strong> de reproducciones. Sabe qué es tu banger probado y qué es un estreno.</p></div>
+      <div class="card reveal"><div class="ico">⚡</div><h3>En vivo, sin fricción</h3><p>Ventana compacta siempre encima de Serato. Se actualiza sola con cada cambio de canción. Cero menús en pleno set.</p></div>
+    </div>
+  </section>
+
+  <!-- CÓMO SE CONECTA CON SERATO -->
+  <section id="serato">
+    <div class="reveal">
+      <div class="kicker">Con Serato</div>
+      <h2>Un add-on de verdad, no invasivo</h2>
+      <p class="lead">TrackAI no reemplaza a Serato: lo potencia. Se conecta a la información que Serato ya genera y la convierte en decisiones de mezcla, sin tocar ni un archivo tuyo.</p>
+    </div>
+    <div class="steps">
+      <div class="step reveal"><h3>Lee lo que suena</h3><p>Detecta en tiempo real el track en el deck: título, artista, BPM y tonalidad, directo desde la base de Serato DJ.</p></div>
+      <div class="step reveal"><h3>Entiende tu biblioteca</h3><p>Carga tus <strong>crates</strong> y tu historial de reproducciones para saber qué tienes y qué has tocado.</p></div>
+      <div class="step reveal"><h3>Calcula compatibilidad</h3><p>Aplica la rueda Camelot y el análisis de BPM para rankear las mejores continuaciones.</p></div>
+      <div class="step reveal"><h3>Te muestra 3 opciones</h3><p>Dos de la misma vibra y una para cambiar el ritmo, con badges que explican el porqué.</p></div>
+    </div>
+
+    <div class="split" style="margin-top:36px">
+      <div class="card reveal" style="border-color:rgba(70,195,123,0.3)">
+        <h3 style="color:var(--green)">✅ Lo que SÍ hace</h3>
+        <ul class="clean" style="margin-top:10px">
+          <li>Lee tu Serato en <strong>solo lectura</strong>.</li>
+          <li>Flota encima, arrastrable, día y noche.</li>
+          <li>Se adapta a tu versión de Serato automáticamente.</li>
+          <li>Guarda un registro de tu sesión (opcional).</li>
+        </ul>
+      </div>
+      <div class="card reveal" style="border-color:rgba(255,90,95,0.3)">
+        <h3 style="color:var(--red)">🚫 Lo que NUNCA hace</h3>
+        <ul class="clean no" style="margin-top:10px">
+          <li>No modifica tus archivos ni tu biblioteca.</li>
+          <li>No toca tus decks ni sincroniza por ti.</li>
+          <li>No sube tu música a ningún lado.</li>
+          <li>No decide por ti: solo sugiere.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODOS -->
+  <section id="modos">
+    <div class="reveal">
+      <div class="kicker">3 modos</div>
+      <h2>Sugerencias según el momento del set</h2>
+      <p class="lead">Un toque para cambiar cómo piensa TrackAI, según cómo esté la pista.</p>
+    </div>
+    <div class="grid">
+      <div class="card mode reveal"><div class="ico">⚖️</div><h3>Auto</h3><p>El balance por defecto. Mezcla compatibilidad, temas probados y frescos. Para no pensar.</p></div>
+      <div class="card mode safe reveal"><div class="ico">💎</div><h3>Seguro</h3><p>Prioriza tus <strong>bangers probados</strong>. Ideal con público frío, para pegar seguro.</p></div>
+      <div class="card mode fresh reveal"><div class="ico">🌱</div><h3>Fresco</h3><p>Prioriza <strong>temas nuevos o poco tocados</strong>. Para cuando la pista pide algo distinto.</p></div>
+    </div>
+  </section>
+
+  <!-- BADGES -->
+  <section id="badges">
+    <div class="reveal">
+      <div class="kicker">Cómo leerlo</div>
+      <h2>Cada etiqueta te dice por qué</h2>
+      <p class="lead">Las sugerencias vienen con badges de colores. De un vistazo sabes qué tan buena es la mezcla y por qué.</p>
+    </div>
+    <div class="reveal">
+      <h3 style="color:var(--dim);font-size:13px;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">Transición (armonía)</h3>
+      <table class="bt">
+        <tr><td><span class="badge b-perfect">🎯 Perfecta</span></td><td>Misma tonalidad exacta. La mezcla más limpia posible.</td></tr>
+        <tr><td><span class="badge b-rel">🔄 Relativa</span></td><td>Mayor ↔ menor manteniendo armonía. Suena natural.</td></tr>
+        <tr><td><span class="badge b-up">⚡ Energía +</span></td><td>Sube un paso: empujón de energía sin romper la armonía.</td></tr>
+        <tr><td><span class="badge b-down">🌊 Energía −</span></td><td>Baja un paso: suaviza y relaja el ambiente.</td></tr>
+        <tr><td><span class="badge b-boost">🚀 Boost +2</span></td><td>Salto de energía notorio. Para levantar la pista.</td></tr>
+        <tr><td><span class="badge b-mood">🎭 Mood</span></td><td>Cambio de ánimo más arriesgado, con criterio.</td></tr>
+      </table>
+      <h3 style="color:var(--dim);font-size:13px;letter-spacing:1px;text-transform:uppercase;margin:22px 0 6px">BPM &amp; frescura &amp; crate</h3>
+      <table class="bt">
+        <tr><td><span class="badge b-bpm">×2</span> <span class="badge b-bpm">½</span></td><td>Compatible a <strong>doble o mitad de tiempo</strong>. Truco creativo para cambiar de género sin frenar.</td></tr>
+        <tr><td><span class="badge b-new">✨ Nueva</span> <span class="badge b-prov">💎 Probada</span> <span class="badge b-over">♻️ Muy sonada</span></td><td>Qué tan fresca es según tu historial: estreno, banger que funciona, o algo que ya sonó hace poco.</td></tr>
+        <tr><td><span class="badge b-crate">🗂️ RGT 2025</span></td><td>De qué crate viene. Reconoces el estilo al instante.</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- BARRA DE SET + CUE -->
+  <section>
+    <div class="split">
+      <div class="reveal">
+        <div class="kicker">Tu sesión</div>
+        <h2>Sabe cómo va tu set</h2>
+        <ul class="clean" style="margin-top:8px">
+          <li><strong>⏱️ Minutos tocando</strong> — cuánto llevas.</li>
+          <li><strong>📈 Energía sube / 📉 baja / ➡️ estable</strong> — si tu set viene acelerando o desacelerando en BPM.</li>
+          <li><strong>🎵 Tracks</strong> — cuántas canciones llevas puestas.</li>
+        </ul>
+      </div>
+      <div class="reveal">
+        <div class="callout">
+          <strong>🎚️ Cue de salida (beta).</strong> Si el track tiene cue points en Serato, TrackAI te muestra la última salida como referencia de por dónde ir soltando la mezcla. Experimental, por ahora en MP3/AIFF.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REQUISITOS -->
+  <section>
+    <div class="reveal">
+      <div class="kicker">Requisitos</div>
+      <h2>Qué necesitas</h2>
+      <ul class="clean req" style="max-width:640px">
+        <li>Serato DJ Pro (versión 4.x) con tu biblioteca analizada (BPM y tonalidad).</li>
+        <li>Una Mac (macOS).</li>
+        <li>Tracks con BPM y tonalidad detectados en Serato — así las sugerencias son precisas.</li>
+      </ul>
+    </div>
+  </section>
+
+  <div class="final-cta reveal">
+    <h2>Deja de buscar a ciegas.<br>Empieza a mezclar con copiloto.</h2>
+    <p style="color:var(--dim);margin:14px 0 26px;font-size:17px">TrackAI hace el trabajo pesado. Tú pones el arte.</p>
+    <a class="btn btn-primary" href="#serato">Ver cómo funciona</a>
+  </div>
+
+</div>
+
+<footer>
+  🎧 <strong style="color:var(--text)">TrackAI</strong> — By DJ-Vlex · Desarrollado con <a href="https://tusitioya.cl" target="_blank">TuSitioYa.cl</a>
+</footer>
+
+<script>
+  // Parallax de orbes con el mouse
+  const orbs = document.querySelectorAll('.orb');
+  window.addEventListener('mousemove', (e) => {
+    const cx = (e.clientX / window.innerWidth - 0.5);
+    const cy = (e.clientY / window.innerHeight - 0.5);
+    orbs.forEach((o) => {
+      const d = parseFloat(o.dataset.depth || 0.03) * 600;
+      o.style.transform = `translate(${cx * d}px, ${cy * d}px)`;
+    });
+  });
+
+  // Tilt 3D de la maqueta según el mouse
+  const stage = document.getElementById('tiltStage');
+  const stageWrap = document.querySelector('.stage');
+  if (stage && stageWrap) {
+    stageWrap.addEventListener('mousemove', (e) => {
+      const r = stageWrap.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width - 0.5;
+      const py = (e.clientY - r.top) / r.height - 0.5;
+      stage.style.transform = `rotateX(${8 - py * 16}deg) rotateY(${-6 + px * 18}deg)`;
+    });
+    stageWrap.addEventListener('mouseleave', () => {
+      stage.style.transform = 'rotateX(14deg) rotateY(-8deg) rotateZ(1deg)';
+    });
+  }
+
+  // Ondas del "Serato" de fondo
+  function fillWave(id, n) {
+    const w = document.getElementById(id);
+    if (!w) return;
+    let h = '';
+    for (let i = 0; i < n; i++) {
+      const v = 20 + Math.abs(Math.sin(i * 0.6)) * 80 * Math.random();
+      h += `<i style="height:${v}%"></i>`;
+    }
+    w.innerHTML = h;
+  }
+  fillWave('wave', 60);
+  fillWave('wave2', 60);
+
+  // Scroll reveal
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((en) => { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+</script>
+</body>
+</html>
