@@ -165,18 +165,62 @@
   .step h3 { font-size: 15px; margin: 8px 0 6px; }
   .step p { font-size: 14px; color: var(--dim); }
 
-  /* Badges table */
-  table.bt { width: 100%; border-collapse: collapse; }
-  table.bt td { padding: 12px 4px; border-bottom: 1px solid var(--border2); vertical-align: top; font-size: 15px; color: var(--dim); }
-  table.bt td:first-child { width: 160px; white-space: nowrap; }
-  table.bt tr:last-child td { border-bottom: none; }
-  .badge { display: inline-block; font-size: 11px; font-weight: 800; border-radius: 6px; padding: 3px 9px; background: var(--panel2); border: 1px solid var(--border2); color: var(--dim); margin: 2px 3px 2px 0; }
-  .b-perfect{color:var(--green);border-color:var(--green)} .b-rel{color:var(--accent);border-color:var(--accent)}
-  .b-up{color:var(--yellow);border-color:var(--yellow)} .b-down{color:#6db6ff;border-color:#6db6ff}
-  .b-boost{color:var(--pink);border-color:var(--pink)} .b-mood{color:var(--key);border-color:var(--key)}
-  .b-bpm{color:var(--accent);border-color:var(--accent)} .b-new{color:var(--green);border-color:var(--green)}
-  .b-prov{color:var(--yellow);border-color:var(--yellow)} .b-over{color:var(--red);border-color:var(--red)}
-  .b-crate{color:var(--crate);border-color:var(--crate)}
+  /* Badges guide & responsive list */
+  .badge-group-title {
+    color: var(--dim);
+    font-size: 13px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    margin: 24px 0 10px;
+    font-weight: 700;
+  }
+  .badge-group-title:first-child { margin-top: 0; }
+  .bt-list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border: 1px solid var(--border2);
+    border-radius: 14px;
+    background: var(--panel2);
+    overflow: hidden;
+  }
+  .bt-row {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border2);
+    transition: background 0.2s ease;
+  }
+  .bt-row:hover { background: rgba(255, 255, 255, 0.02); }
+  .bt-row:last-child { border-bottom: none; }
+  .bt-badges {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+  }
+  .bt-desc {
+    font-size: 14.5px;
+    color: var(--dim);
+    line-height: 1.45;
+  }
+  .bt-desc strong { color: var(--text); }
+
+  .badge { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 800; border-radius: 6px; padding: 4px 10px; background: var(--panel); border: 1px solid var(--border2); color: var(--dim); white-space: nowrap; }
+  .b-perfect{color:var(--green);border-color:rgba(70,195,123,0.4);background:rgba(70,195,123,0.1)} 
+  .b-rel{color:var(--accent);border-color:rgba(47,128,237,0.4);background:rgba(47,128,237,0.1)}
+  .b-up{color:var(--yellow);border-color:rgba(242,153,74,0.4);background:rgba(242,153,74,0.1)} 
+  .b-down{color:#6db6ff;border-color:rgba(109,182,255,0.4);background:rgba(109,182,255,0.1)}
+  .b-boost{color:var(--pink);border-color:rgba(255,107,184,0.4);background:rgba(255,107,184,0.1)} 
+  .b-mood{color:var(--key);border-color:rgba(184,119,224,0.4);background:rgba(184,119,224,0.1)}
+  .b-bpm{color:var(--accent);border-color:rgba(47,128,237,0.4);background:rgba(47,128,237,0.1)} 
+  .b-new{color:var(--green);border-color:rgba(70,195,123,0.4);background:rgba(70,195,123,0.1)}
+  .b-prov{color:var(--yellow);border-color:rgba(242,153,74,0.4);background:rgba(242,153,74,0.1)} 
+  .b-over{color:var(--red);border-color:rgba(235,87,87,0.4);background:rgba(235,87,87,0.1)}
+  .b-crate{color:var(--crate);border-color:rgba(155,81,224,0.4);background:rgba(155,81,224,0.1)}
 
   ul.clean { list-style: none; }
   ul.clean li { padding: 10px 0 10px 30px; position: relative; color: var(--dim); font-size: 15px; border-bottom: 1px solid var(--border2); }
@@ -215,7 +259,10 @@
   footer .ft-line { margin-bottom: 14px; }
   footer .vc { font-size: 11px; color: rgba(255,255,255,0.13); letter-spacing: 2px; font-variant-numeric: tabular-nums; }
 
-  @media (max-width: 560px) { .hero { padding: 60px 0 20px; } .hero h1 { font-size: 34px; } h2 { font-size: 26px; } table.bt td:first-child { width: 120px; } }
+  @media (max-width: 640px) {
+    .hero { padding: 60px 0 20px; } .hero h1 { font-size: 34px; } h2 { font-size: 26px; }
+    .bt-row { grid-template-columns: 1fr; gap: 8px; padding: 12px 14px; }
+  }
 </style>
 </head>
 <body>
@@ -244,9 +291,9 @@
 
   <!-- HERO -->
   <header class="hero">
-    <div class="badge-top">🎧 Add-on para Serato DJ Pro</div>
-    <h1>Tu copiloto de mezcla<br>en tiempo real</h1>
-    <p class="sub">TrackAI flota sobre Serato, lee lo que estás tocando y te sopla la siguiente canción — compatible en BPM y tonalidad — y con el tiempo <strong>aprende tu estilo</strong> para sugerir como lo harías tú.</p>
+    <div class="badge-top">🚀 TrackAI v3.2.0 — Modo Ultra IA + Túnel 3D + 5 Puentes Creativos</div>
+    <h1>Mezcla más rápido.<br />Sorprende a la pista.</h1>
+    <p class="sub">TrackAI lee lo que suena en Serato DJ Pro en tiempo real y te sugiere la siguiente canción con inteligencia armónica, control de BPM decimal y cambio de ritmo automatizado. Diseñado por <strong>DJ Vlex</strong>.</p>
     <div class="cta-row">
       <a class="btn btn-primary" href="#serato">Ver cómo funciona</a>
       <a class="btn btn-ghost" href="#modos">Los 3 modos</a>
@@ -388,21 +435,58 @@
       <p class="lead">Las sugerencias vienen con badges de colores. De un vistazo sabes qué tan buena es la mezcla y por qué.</p>
     </div>
     <div class="reveal">
-      <h3 style="color:var(--dim);font-size:13px;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">Transición (armonía)</h3>
-      <table class="bt">
-        <tr><td><span class="badge b-perfect">🎯 Perfecta</span></td><td>Misma tonalidad exacta. La mezcla más limpia posible.</td></tr>
-        <tr><td><span class="badge b-rel">🔄 Relativa</span></td><td>Mayor ↔ menor manteniendo armonía. Suena natural.</td></tr>
-        <tr><td><span class="badge b-up">⚡ Energía +</span></td><td>Sube un paso: empujón de energía sin romper la armonía.</td></tr>
-        <tr><td><span class="badge b-down">🌊 Energía −</span></td><td>Baja un paso: suaviza y relaja el ambiente.</td></tr>
-        <tr><td><span class="badge b-boost">🚀 Boost +2</span></td><td>Salto de energía notorio. Para levantar la pista.</td></tr>
-        <tr><td><span class="badge b-mood">🎭 Mood</span></td><td>Cambio de ánimo más arriesgado, con criterio.</td></tr>
-      </table>
-      <h3 style="color:var(--dim);font-size:13px;letter-spacing:1px;text-transform:uppercase;margin:22px 0 6px">BPM &amp; frescura &amp; crate</h3>
-      <table class="bt">
-        <tr><td><span class="badge b-bpm">×2</span> <span class="badge b-bpm">½</span></td><td>Compatible a <strong>doble o mitad de tiempo</strong>. Truco creativo para cambiar de género sin frenar.</td></tr>
-        <tr><td><span class="badge b-new">✨ Nueva</span> <span class="badge b-prov">💎 Probada</span> <span class="badge b-over">♻️ Muy sonada</span></td><td>Qué tan fresca es según tu historial: estreno, banger que funciona, o algo que ya sonó hace poco.</td></tr>
-        <tr><td><span class="badge b-crate">🗂️ RGT 2025</span></td><td>De qué crate viene. Reconoces el estilo al instante.</td></tr>
-      </table>
+      <h3 class="badge-group-title">Transición (armonía)</h3>
+      <div class="bt-list">
+        <div class="bt-row">
+          <div class="bt-badges"><span class="badge b-perfect">🎯 Perfecta</span></div>
+          <div class="bt-desc">Misma tonalidad exacta. La mezcla más limpia posible.</div>
+        </div>
+        <div class="bt-row">
+          <div class="bt-badges"><span class="badge b-rel">🔄 Relativa</span></div>
+          <div class="bt-desc">Mayor ↔ menor manteniendo armonía. Suena natural.</div>
+        </div>
+        <div class="bt-row">
+          <div class="bt-badges"><span class="badge b-up">⚡ Energía +</span></div>
+          <div class="bt-desc">Sube un paso: empujón de energía sin romper la armonía.</div>
+        </div>
+        <div class="bt-row">
+          <div class="bt-badges"><span class="badge b-down">🌊 Energía −</span></div>
+          <div class="bt-desc">Baja un paso: suaviza y relaja el ambiente.</div>
+        </div>
+        <div class="bt-row">
+          <div class="bt-badges"><span class="badge b-boost">🚀 Boost +2</span></div>
+          <div class="bt-desc">Salto de energía notorio. Para levantar la pista.</div>
+        </div>
+        <div class="bt-row">
+          <div class="bt-badges"><span class="badge b-mood">🎭 Mood</span></div>
+          <div class="bt-desc">Cambio de ánimo más arriesgado, con criterio.</div>
+        </div>
+      </div>
+
+      <h3 class="badge-group-title">BPM &amp; frescura &amp; crate</h3>
+      <div class="bt-list">
+        <div class="bt-row">
+          <div class="bt-badges">
+            <span class="badge b-bpm">×2</span>
+            <span class="badge b-bpm">½</span>
+          </div>
+          <div class="bt-desc">Compatible a <strong>doble o mitad de tiempo</strong>. Truco creativo para cambiar de género sin frenar.</div>
+        </div>
+        <div class="bt-row">
+          <div class="bt-badges">
+            <span class="badge b-new">✨ Nueva</span>
+            <span class="badge b-prov">💎 Probada</span>
+            <span class="badge b-over">♻️ Muy sonada</span>
+          </div>
+          <div class="bt-desc">Qué tan fresca es según tu historial: estreno, banger que funciona, o algo que ya sonó hace poco.</div>
+        </div>
+        <div class="bt-row">
+          <div class="bt-badges">
+            <span class="badge b-crate">🗂️ RGT 2025</span>
+          </div>
+          <div class="bt-desc">De qué crate viene. Reconoces el estilo al instante.</div>
+        </div>
+      </div>
     </div>
   </section>
 
