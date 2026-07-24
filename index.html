@@ -352,7 +352,7 @@
 
   <!-- HERO -->
   <header class="hero">
-    <div class="badge-top">🚀 TrackAI v3.2.2 — Live Pitch + 4 Modos Inteligentes</div>
+    <div class="badge-top">🚀 TrackAI v3.2.3 — Live Pitch + 4 Modos Inteligentes</div>
     <h1>El copiloto de mezcla <br />para Serato DJ Pro</h1>
     <p class="sub">No es magia, es matemáticas. Lee tu deck principal y te sugiere la canción perfecta basándose en BPM en vivo y tonalidad Camelot.</p>
     <div class="cta-row">
@@ -429,36 +429,51 @@
     <div class="reveal">
       <div class="kicker">La función estrella</div>
       <h2>Live Pitch<sup style="font-size:0.42em;vertical-align:super;color:var(--yellow)">®</sup> — el pulso real de tu fiesta</h2>
-      <p class="lead">No mide el BPM del archivo: mide lo que <strong>de verdad baila la gente</strong>. TrackAI toma tu pitch en vivo, calcula el pulso de la fiesta y te lo dibuja en tiempo real — como una ecografía de tu set — para que sepas al instante si vas subiendo o bajando la intensidad.</p>
+      <p class="lead">No mide el BPM del archivo: mide lo que <strong>de verdad baila la gente</strong>. TrackAI toma tu pitch en vivo, calcula el pulso de la fiesta y te lo dibuja en tiempo real — como una ecografía de tu set — para que sepas al instante si vas subiendo o bajando la intensidad. Ahora piensa con vos: <b>zona de pitch segura</b>, <b>coach de energía</b> y <b>tap-tempo</b>.</p>
     </div>
     <div class="lp-wrap reveal">
-      <!-- Réplica fiel del panel Live Pitch® -->
-      <div class="lp-panel">
-        <div class="lp-title">⚡ LIVE PITCH<sup>®</sup></div>
-        <div class="lp-hero">
-          <div class="lp-hero-head">
-            <span class="lbl">🫀 PULSO DE LA FIESTA</span>
-            <span class="lp-trend" id="lpTrend">📉 bajaste -7%</span>
+      <!-- Réplica fiel del panel Live Pitch® (pulso de fondo + zona segura + tap + coach) -->
+      <div class="lp-panel" style="padding:0; overflow:hidden;">
+        <canvas id="lpChart" style="position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:0.5"></canvas>
+        <div style="position:absolute;inset:0;z-index:0;background:radial-gradient(130% 100% at 50% 0%,rgba(13,15,20,0.30),rgba(13,15,20,0.74))"></div>
+        <div style="position:relative;z-index:1;padding:14px 16px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+            <span style="font-size:11px;font-weight:900;letter-spacing:1.2px;color:#fff;text-shadow:0 2px 10px #ffca28;">⚡ LIVE PITCH<sup style="font-size:7px">®</sup></span>
+            <span style="display:flex;gap:6px;">
+              <span style="font-size:9.5px;font-weight:900;padding:3px 8px;border-radius:999px;background:rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.14);color:#ff6b6b;">🚀 +4%</span>
+              <span id="lpTrend" style="font-size:9.5px;font-weight:900;padding:3px 8px;border-radius:999px;background:rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.14);color:#4fc3f7;">📉 bajaste -7%</span>
+            </span>
           </div>
-          <div class="lp-canvas-box"><canvas id="lpChart" style="position:absolute;inset:0;width:100%;height:100%"></canvas></div>
-          <div class="lp-avg">Promedio del set: <b id="lpAvg">93.3</b> BPM</div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+            <span style="display:flex;flex-direction:column;align-items:center;padding:6px 20px;background:rgba(0,0,0,0.55);border:1px solid #ffca28;border-radius:12px;box-shadow:0 0 22px rgba(255,202,40,0.4);">
+              <b style="font-size:30px;font-weight:900;color:#ffca28;font-family:monospace;line-height:1;">95.0</b>
+              <span style="font-size:9px;color:#fff;opacity:0.88;font-weight:700;margin-top:3px;">BPM <b style="color:#f2c14e;">+8.0%</b> · 🫀 prom <b id="lpAvg" style="color:#ffca28;">93.3</b></span>
+            </span>
+            <div style="display:flex;align-items:center;gap:7px;">
+              <span style="font-size:9px;font-weight:800;color:#f2c14e;">🟡 Audible</span>
+              <div style="position:relative;height:7px;width:150px;border-radius:99px;overflow:hidden;background:linear-gradient(90deg,#46c37b 0 33.3%,#f2c14e 33.3% 66.6%,#ff5a5f 66.6% 100%);">
+                <div style="position:absolute;top:-2px;left:66%;transform:translateX(-50%);width:3px;height:11px;background:#fff;border-radius:2px;box-shadow:0 0 6px #fff;"></div>
+              </div>
+            </div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center;">
+              <span class="lp-btn">−5</span>
+              <span class="lp-btn">−1</span>
+              <span class="lp-btn" style="color:#ffca28;border-color:rgba(255,202,40,0.6);">🥁 TAP</span>
+              <span class="lp-btn">+1</span>
+              <span class="lp-btn">+5</span>
+            </div>
+          </div>
+          <div style="text-align:center;margin-top:11px;font-size:11px;color:#ffd873;font-weight:600;">🎯 🔥 Peak · sostené la energía, luego cerrá</div>
         </div>
-        <div class="lp-controls">
-          <span class="lp-btn">−5%</span>
-          <span class="lp-btn">−1%</span>
-          <span class="lp-bpm"><b>95.0</b><span>BPM (+8.0%)</span></span>
-          <span class="lp-btn">+1%</span>
-          <span class="lp-btn">+5%</span>
-        </div>
-        <div class="lp-help">💡 Control de Energía</div>
       </div>
       <!-- Qué hace, al detalle -->
       <div>
         <ul class="lp-feat">
-          <li><span class="ic">🫀</span><b>El pulso de la fiesta, no del archivo.</b><p>Aplica tu pitch en vivo: si tu tema es de 88 y la fiesta va a 95, el gráfico marca 95 — exactamente lo que escucha el público.</p></li>
-          <li><span class="ic">📉</span><b>Ves si bajaste o subiste.</b><p>Lee la tendencia del set y te avisa <b>“bajaste −7%”</b>, “subiste +5%” o “estable”. De un vistazo sabes hacia dónde va tu energía.</p></li>
-          <li><span class="ic">📊</span><b>El promedio de tu set.</b><p>El pulso promedio de toda la sesión, para sostener el ritmo que buscas o cambiarlo con intención.</p></li>
-          <li><span class="ic">🎚️</span><b>Sugerencias que descuentan el pitch.</b><p>Busca la próxima en el BPM <b>real</b> (descontando el pitch) para que puedas <b>bajar la intensidad</b> cuando vas muy rápido, en vez de seguir empujando arriba.</p></li>
+          <li><span class="ic">🫀</span><b>El pulso de la fiesta, no del archivo.</b><p>Aplica tu pitch en vivo: si tu tema es de 88 y la fiesta va a 95, el gráfico marca 95 — lo que escucha el público — con el <b>promedio del set</b> y la tendencia (📉 bajaste / 📈 subiste).</p></li>
+          <li><span class="ic">🎚️</span><b>Zona de Pitch Segura.</b><p>Colorea tu pitch y el de cada sugerencia: <b style="color:var(--green)">🟢 ≤4% natural</b>, <b style="color:var(--yellow)">🟡 4-8% audible</b>, <b style="color:var(--red)">🔴 &gt;8% forzado</b>. Si te pasás, el cerebro te avisa fuerte antes de que suene mal.</p></li>
+          <li><span class="ic">🎯</span><b>Coach de Energía.</b><p>Lee tus minutos tocando y la tendencia, y te guía por el arco del set: <b>warm-up → build → groove → peak → cierre</b>. Sin depender del género.</p></li>
+          <li><span class="ic">🥁</span><b>Tap-Tempo + Momentum.</b><p>Golpeás al ritmo y fija el BPM de la fiesta al toque, sin escribir. Y el momentum te avisa si venís <b>acelerando 🚀 o frenando 🧊</b> muy rápido.</p></li>
+          <li><span class="ic">↙️</span><b>Sugerencias que descuentan el pitch.</b><p>Busca la próxima en el BPM <b>real</b> (descontando el pitch) para poder <b>bajar la intensidad</b> cuando vas muy rápido, en vez de seguir empujando arriba.</p></li>
         </ul>
         <div class="powered">
           <svg class="claude-mark" width="36" height="36" viewBox="0 0 100 100" role="img" aria-label="Claude">
