@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="favicon.ico">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<title>TrackAI · Análisis de Set con IA — Live Pitch®</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#08070c; --panel:#0e1018; --panel2:#12141f;
+    --cyan:#37d6c3; --blue:#2f80ed; --ink:#eef2f8; --dim:#9aa7c4; --faint:#5b6478;
+    --hot:#ff5678; --amber:#f2c14e;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:'Archivo',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;overflow-x:hidden}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+  .mono{font-variant-numeric:tabular-nums}
+  h1,h2,h3,.black{font-family:'Archivo Black',sans-serif;letter-spacing:-1px;text-transform:uppercase}
+  @keyframes rise{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+  @keyframes breathe{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.25);opacity:.9}}
+  .rev{opacity:0}
+  .rev.in{animation:rise .7s both}
+
+  /* fondo neón */
+  .glowbg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+  .glowbg i{position:absolute;border-radius:50%;filter:blur(90px);opacity:.5}
+  .b1{width:560px;height:560px;background:#0b3a86;top:-160px;left:-120px}
+  .b2{width:520px;height:520px;background:#0e3c6b;bottom:-200px;right:-140px}
+  .b3{width:420px;height:420px;background:rgba(55,214,195,.25);top:36%;left:44%}
+
+  header.hero{position:relative;z-index:2;padding:70px 0 30px;text-align:center}
+  .badge{display:inline-flex;align-items:center;gap:9px;font-size:12px;font-weight:700;letter-spacing:2px;
+    text-transform:uppercase;color:var(--cyan);border:1px solid rgba(55,214,195,.35);border-radius:999px;padding:7px 15px}
+  .badge .dot{width:8px;height:8px;border-radius:50%;background:var(--cyan);animation:breathe 2s ease-in-out infinite}
+  header.hero h1{font-size:clamp(38px,7vw,76px);line-height:.94;margin:22px 0 14px}
+  header.hero h1 .g{background:linear-gradient(92deg,var(--cyan),var(--blue));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .sub{color:var(--dim);font-size:18px;max-width:620px;margin:0 auto}
+  .meta{color:var(--faint);font-size:13px;letter-spacing:1px;text-transform:uppercase;margin-top:12px}
+
+  body{counter-reset:sec}
+  section{position:relative;z-index:2;padding:26px 0;counter-increment:sec}
+  section.wrap{position:relative;background:linear-gradient(180deg,rgba(20,22,33,.62),rgba(12,13,19,.34));border:1px solid rgba(242,238,250,.08);border-radius:26px;padding:48px 40px;margin:0 auto 30px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.28)}
+  @media(max-width:640px){section.wrap{padding:34px 22px}}
+  section.wrap:last-of-type{background:none;border:none;box-shadow:none;padding:10px 0;overflow:visible}
+  section::before{content:counter(sec,decimal-leading-zero);position:absolute;top:18px;right:26px;font-family:'Archivo Black';font-size:96px;line-height:1;color:rgba(242,238,250,.05);z-index:-1;pointer-events:none;letter-spacing:-3px}
+  section.wrap:last-of-type::before{content:none}
+  .kicker{font-size:12px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--cyan);margin-bottom:8px}
+  .kicker::before{content:counter(sec,decimal-leading-zero) " · ";color:var(--faint)}
+  .lead{color:var(--dim);font-size:16px;max-width:640px}
+
+  /* Live Pitch panel */
+  .lp{border:1px solid rgba(55,214,195,.25);border-radius:22px;background:linear-gradient(180deg,rgba(55,214,195,.07),transparent 60%);padding:22px 20px 10px;overflow:hidden}
+  .lp .top{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:12px;margin-bottom:8px}
+  .lp .live{display:flex;align-items:center;gap:9px;font-weight:700;letter-spacing:1px;font-size:13px;text-transform:uppercase;color:var(--cyan)}
+  .lp .live .dot{width:9px;height:9px;border-radius:50%;background:var(--hot);box-shadow:0 0 0 0 rgba(255,86,120,.6);animation:pp 1.4s infinite}
+  @keyframes pp{0%,100%{box-shadow:0 0 0 0 rgba(255,86,120,.5)}50%{box-shadow:0 0 0 12px rgba(255,86,120,0)}}
+  .lp .read{font-family:'Archivo Black';font-size:40px;line-height:1;color:var(--ink)}
+  .lp .read b{color:var(--cyan)}
+  .lp .read small{font-family:'Archivo';font-size:13px;color:var(--dim);font-weight:600;display:block;letter-spacing:1px}
+  canvas{display:block;width:100%;height:300px}
+  .lp .foot{display:flex;justify-content:space-between;color:var(--faint);font-size:12px;padding:4px 2px 8px}
+
+  /* stats */
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-top:18px}
+  .stat{border:1px solid rgba(238,242,248,.09);border-radius:16px;background:var(--panel);padding:18px}
+  .stat .n{font-family:'Archivo Black';font-size:34px;line-height:1;color:var(--ink)}
+  .stat .n.c{color:var(--cyan)} .stat .n.b{color:var(--blue)} .stat .n.a{color:var(--amber)}
+  .stat .l{font-size:12.5px;color:var(--dim);margin-top:6px}
+
+  /* arc */
+  .acts{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin-top:18px}
+  .act{border:1px solid rgba(238,242,248,.09);border-radius:16px;background:var(--panel);padding:20px;position:relative;overflow:hidden}
+  .act .ph{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--faint)}
+  .act .bpm{font-family:'Archivo Black';font-size:30px;margin:6px 0 4px}
+  .act p{font-size:14px;color:var(--dim)}
+  .act .bar{position:absolute;left:0;bottom:0;height:4px;background:linear-gradient(90deg,var(--cyan),var(--blue))}
+
+  /* bars crates */
+  .cr{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+  .cr .row{display:grid;grid-template-columns:130px 1fr 42px;align-items:center;gap:12px;font-size:14px;text-transform:uppercase;letter-spacing:.5px}
+  .cr .track{height:12px;background:#171a26;border-radius:6px;overflow:hidden}
+  .cr .fill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--blue),var(--cyan));width:0;transition:width 1.1s cubic-bezier(.2,.7,.2,1)}
+  .cr .val{color:var(--dim);text-align:right;font-variant-numeric:tabular-nums}
+
+  /* camelot chips */
+  .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+  .chip{border:1px solid rgba(47,128,237,.4);border-radius:12px;padding:10px 14px;background:rgba(47,128,237,.08);font-weight:600}
+  .chip b{color:var(--cyan)} .chip span{color:var(--faint);font-size:12px;margin-left:6px}
+
+  /* insights */
+  .ins{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:18px}
+  .card{border:1px solid rgba(238,242,248,.09);border-radius:18px;background:linear-gradient(180deg,var(--panel2),var(--panel));padding:22px;position:relative}
+  .card .ai{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--cyan);display:flex;align-items:center;gap:7px;margin-bottom:10px}
+  .card .ai .sp{width:6px;height:6px;border-radius:50%;background:var(--cyan);animation:breathe 2.4s infinite}
+  .card h4{font-size:17px;margin-bottom:6px}
+  .card p{font-size:14px;color:var(--dim)}
+
+  /* upsell */
+  .cta{margin:26px 0 60px;border-radius:26px;border:1px solid rgba(55,214,195,.35);
+    background:radial-gradient(circle at 50% 0%,rgba(47,128,237,.22),transparent 66%);padding:52px 28px;text-align:center;position:relative;overflow:hidden}
+  .cta h2{font-size:clamp(28px,5vw,46px);line-height:1;margin-bottom:14px}
+  .cta p{color:var(--dim);max-width:600px;margin:0 auto 26px;font-size:17px}
+  .btn{display:inline-block;font-weight:700;font-size:16px;padding:16px 36px;border-radius:999px;background:var(--cyan);color:#08070c;text-decoration:none;transition:transform .2s}
+  .btn:hover{transform:translateY(-3px)}
+  .cta .fine{color:var(--faint);font-size:12.5px;margin-top:14px}
+  footer{position:relative;z-index:2;border-top:1px solid rgba(238,242,248,.08);padding:24px 0 60px;text-align:center;color:var(--faint);font-size:13px}
+  .hl{color:var(--cyan)} .hlb{color:var(--blue)} strong{color:var(--ink);font-weight:700}
+</style>
+</head>
+<body>
+<div class="glowbg"><i class="b1"></i><i class="b2"></i><i class="b3"></i></div>
+
+<header class="hero wrap">
+  <span class="badge"><span class="dot"></span> TrackAI · Análisis de set con IA</span>
+  <h1>Tu set,<br><span class="g">leído por dentro.</span></h1>
+  <p class="sub">Esto es lo que <strong>Live Pitch®</strong> —el cerebro de TrackAI— vio mientras tocabas. No es tu lista de temas: es la <strong>historia de energía</strong> de tu noche.</p>
+  <div class="meta" id="metaLine">Comadre Lola · 25 jul 2026 · en vivo</div>
+</header>
+
+<!-- LIVE PITCH -->
+<section class="wrap">
+  <div class="kicker rev">El cerebro · Live Pitch®</div>
+  <h2 class="rev" style="font-size:clamp(24px,4vw,34px)">El pulso de la fiesta</h2>
+  <p class="lead rev" style="margin-bottom:16px">Cada punto es un tema. La línea es el <strong>BPM real que sintió la pista</strong> toda la noche. Mira cómo subiste, bajaste y volviste a levantar.</p>
+  <div class="lp rev">
+    <div class="top">
+      <div class="live"><span class="dot"></span> Live Pitch · reproduciendo tu noche</div>
+      <div class="read"><b id="bpmNow">—</b> BPM<small id="crateNow">&nbsp;</small></div>
+    </div>
+    <canvas id="lp"></canvas>
+    <div class="foot"><span>Apertura</span><span>Punto más alto ▲</span><span>Cierre</span></div>
+  </div>
+  <div class="grid" id="stats"></div>
+</section>
+
+<!-- ARCO -->
+<section class="wrap">
+  <div class="kicker rev">Arco de energía</div>
+  <h2 class="rev" style="font-size:clamp(24px,4vw,34px)">Tu noche en 3 actos</h2>
+  <div class="acts" id="acts"></div>
+</section>
+
+<!-- ARMONIA -->
+<section class="wrap">
+  <div class="kicker rev">Mezcla armónica · Camelot</div>
+  <h2 class="rev" style="font-size:clamp(24px,4vw,34px)">Tus movimientos de tono</h2>
+  <p class="lead rev"><b class="hl" id="harmTxt">—</b></p>
+  <div class="chips rev" id="chips"></div>
+</section>
+
+<!-- GENEROS -->
+<section class="wrap">
+  <div class="kicker rev">Mundos que cruzaste</div>
+  <h2 class="rev" style="font-size:clamp(24px,4vw,34px)">De qué estuvo hecha la noche</h2>
+  <div class="cr rev" id="crates"></div>
+</section>
+
+<!-- INSIGHTS -->
+<section class="wrap">
+  <div class="kicker rev">Lo que la IA leyó</div>
+  <h2 class="rev" style="font-size:clamp(24px,4vw,34px)">5 cosas que hiciste sin darte cuenta</h2>
+  <div class="ins" id="insights"></div>
+</section>
+
+<!-- UPSELL -->
+<section class="wrap">
+  <div class="cta rev">
+    <div class="kicker" style="color:var(--cyan)">Esto fue UNA noche</div>
+    <h2>Ahora imagina que <span class="hl">aprende de todas.</span></h2>
+    <p>Live Pitch® gratis te muestra el pulso. En <strong>Pro</strong>, <strong>aprende de tus mezclas</strong>: sabe qué sueles poner después de qué, tu rango de energía y tus tonos. Se convierte en tu copiloto y te sugiere el próximo tema <strong>antes</strong> de que lo pienses.</p>
+    <a class="btn" href="https://trackai.tusitioya.cl" target="_blank" rel="noopener">Quiero esto en mis sets →</a>
+    <div class="fine">TrackAI · flota sobre Serato DJ · macOS · con tecnología Fable 5</div>
+  </div>
+</section>
+
+<footer>🎧 TrackAI — By DJ-Vlex · Live Pitch® es la inteligencia detrás de tu mezcla</footer>
+
+<script>
+const SETDATA = {"totalTracks":131,"harmonicPct":27,"maxStreak":4,"bpmMin":80,"bpmMax":172.9,"bpmAvg":123,"arc":[133,114,122],"peakIdx":120,"peakVal":166,"crates":[["Rock Latino",57],["Pop Latino",42],["FUNKY",7],["Hip Hop",7],["Latino 90",5],["Hip Hop 2000",3]],"moves":[["8A→8A",7],["10A→9A",6],["8A→1A",5],["8A→9A",5],["6A→8A",5],["1A→9A",4]],"serie":[{"b":94,"c":"10A","cr":"FUNKY"},{"b":94,"c":"9A","cr":"FUNKY"},{"b":80,"c":"5A","cr":"Hip Hop 2000"},{"b":94,"c":"8A","cr":"Rock Latino"},{"b":97,"c":"11A","cr":"Rock Latino"},{"b":99,"c":"10A","cr":"Rock Latino"},{"b":101,"c":"9A","cr":"Rock Latino"},{"b":114,"c":"12B","cr":"Rock Latino"},{"b":115,"c":"8A","cr":"Rock Latino"},{"b":118,"c":"8A","cr":"Rock Latino"},{"b":124,"c":"1A","cr":"Rock Latino"},{"b":123,"c":"9A","cr":"Rock Latino"},{"b":124,"c":"1A","cr":"Rock Latino"},{"b":124,"c":"9A","cr":"Rock Latino"},{"b":124,"c":"11A","cr":"Rock Latino"},{"b":124,"c":"12B","cr":"Rock Latino"},{"b":125,"c":"8A","cr":"Rock Latino"},{"b":125,"c":"9A","cr":"Rock Latino"},{"b":126,"c":"4A","cr":"Rock Latino"},{"b":126,"c":"10B","cr":"Rock Latino"},{"b":127,"c":"8B","cr":"Rock Latino"},{"b":127,"c":"8A","cr":"Rock Latino"},{"b":132,"c":"6A","cr":"Rock Latino"},{"b":137,"c":"8A","cr":"Rock Latino"},{"b":142,"c":"8A","cr":"Rock Latino"},{"b":143,"c":"8A","cr":"Rock Latino"},{"b":147,"c":"1A","cr":"Rock Latino"},{"b":148,"c":"1B","cr":"Rock Latino"},{"b":151,"c":"5A","cr":"Rock Latino"},{"b":151,"c":"10A","cr":"Rock Latino"},{"b":152,"c":"7A","cr":"Rock Latino"},{"b":152,"c":"8A","cr":"Rock Latino"},{"b":151,"c":"10A","cr":"Rock Latino"},{"b":154,"c":"11A","cr":"Rock Latino"},{"b":163,"c":"10A","cr":"Rock Latino"},{"b":168,"c":"9A","cr":"Rock Latino"},{"b":163,"c":"10A","cr":"Rock Latino"},{"b":162,"c":"6A","cr":"Rock Latino"},{"b":163,"c":"10A","cr":"Rock Latino"},{"b":168,"c":"9A","cr":"Rock Latino"},{"b":162,"c":"6A","cr":"Rock Latino"},{"b":161,"c":"8B","cr":"Rock Latino"},{"b":153,"c":"10B","cr":"Rock Latino"},{"b":158,"c":"8A","cr":"Pachanga 2000"},{"b":125,"c":"4A","cr":"Hip Hop 2000"},{"b":133,"c":"12A","cr":"Latino 90"},{"b":130,"c":"9A","cr":"Latino 90"},{"b":124,"c":"8A","cr":"Latino 90"},{"b":132,"c":"9A","cr":"Rock Latino"},{"b":126,"c":"8A","cr":"Rock Latino"},{"b":124,"c":"10A","cr":"Rock Latino"},{"b":124,"c":"9A","cr":"Rock Latino"},{"b":115,"c":"8A","cr":"Rock Latino"},{"b":101,"c":"9A","cr":"Rock Latino"},{"b":126,"c":"7A","cr":"Funk y Disco"},{"b":125,"c":"4A","cr":"Hip Hop 2000"},{"b":116,"c":"6A","cr":"Hip Hop"},{"b":108,"c":"7A","cr":"Hip Hop"},{"b":108,"c":"1A","cr":"Hip Hop"},{"b":107,"c":"9A","cr":"Hip Hop"},{"b":106,"c":"1A","cr":"Hip Hop"},{"b":102,"c":"11A","cr":"Hip Hop"},{"b":102,"c":"7A","cr":"Hip Hop"},{"b":95,"c":"1A","cr":"Hip Hop Español"},{"b":90,"c":"4A","cr":"Latino 90"},{"b":124,"c":"8A","cr":"Latino 90"},{"b":128,"c":"1A","cr":"Pachanga 2000"},{"b":131,"c":"10A","cr":"Pachanga 2000"},{"b":105,"c":"9A","cr":"Pachanga Latino 90"},{"b":102,"c":"4B","cr":"Pachanga Latino 90"},{"b":100,"c":"11B","cr":"Pop"},{"b":104,"c":"5A","cr":"Pop Latino"},{"b":105,"c":"8A","cr":"Pop Latino"},{"b":107,"c":"6A","cr":"Pop Latino"},{"b":107,"c":"9A","cr":"Pop Latino"},{"b":108,"c":"6A","cr":"Pop Latino"},{"b":108,"c":"8A","cr":"Pop Latino"},{"b":108,"c":"6A","cr":"Pop Latino"},{"b":108,"c":"8A","cr":"Pop Latino"},{"b":108,"c":"11A","cr":"Pop Latino"},{"b":111,"c":"9A","cr":"Pop Latino"},{"b":113,"c":"8A","cr":"Pop Latino"},{"b":113,"c":"8A","cr":"Pop Latino"},{"b":114,"c":"1A","cr":"Pop Latino"},{"b":116,"c":"9A","cr":"Pop Latino"},{"b":118,"c":"4A","cr":"Pop Latino"},{"b":119,"c":"7A","cr":"Pop Latino"},{"b":122,"c":"2A","cr":"Pop Latino"},{"b":123,"c":"6A","cr":"Pop Latino"},{"b":124,"c":"8A","cr":"Pop Latino"},{"b":124,"c":"10B","cr":"Pop Latino"},{"b":125,"c":"2A","cr":"Pop Latino"},{"b":124,"c":"10B","cr":"Pop Latino"},{"b":125,"c":"2A","cr":"Pop Latino"},{"b":125,"c":"4A","cr":"Pop Latino"},{"b":126,"c":"1A","cr":"Pop Latino"},{"b":126,"c":"5A","cr":"Pop Latino"},{"b":126,"c":"5A","cr":"Pop Latino"},{"b":127,"c":"2A","cr":"Pop Latino"},{"b":127,"c":"8A","cr":"Pop Latino"},{"b":127,"c":"8A","cr":"Pop Latino"},{"b":127,"c":"8A","cr":"Pop Latino"},{"b":100,"c":"2A","cr":"FUNKY"},{"b":100,"c":"8A","cr":"FUNKY"},{"b":105,"c":"4A","cr":"FUNKY"},{"b":105,"c":"9A","cr":"FUNKY"},{"b":106,"c":"9A","cr":"FUNKY"},{"b":109,"c":"7A","cr":"Disco Funk Clasicos"},{"b":103,"c":"6A","cr":"Funk Soul"},{"b":97,"c":"8A","cr":"Pop Latino"},{"b":97,"c":"8A","cr":"Pop Latino"},{"b":98,"c":"12A","cr":"Pop Latino"},{"b":99,"c":"9A","cr":"Pop Latino"},{"b":99,"c":"3A","cr":"Pop Latino"},{"b":100,"c":"8A","cr":"Pop Latino"},{"b":101,"c":"9A","cr":"Pop Latino"},{"b":102,"c":"5A","cr":"Pop Latino"},{"b":105,"c":"9A","cr":"Pop Latino"},{"b":107,"c":"7A","cr":"Pop Latino"},{"b":109,"c":"1A","cr":"Pop Latino"},{"b":173,"c":"1A","cr":"Rock Latino"},{"b":172,"c":"10A","cr":"Rock Latino"},{"b":172,"c":"8A","cr":"Rock Latino"},{"b":152,"c":"9A","cr":"Rock Latino"},{"b":163,"c":"10A","cr":"Rock Latino"},{"b":150,"c":"7A","cr":"Rock Latino"},{"b":148,"c":"1B","cr":"Rock Latino"},{"b":127,"c":"9A","cr":"Rock Latino"},{"b":146,"c":"12A","cr":"Rock Latino"},{"b":131,"c":"8A","cr":"Rock Latino"},{"b":130,"c":"1A","cr":"Rock Latino"}]};
+(function(){
+  const D = SETDATA, S = D.serie;
+  const fmtDur = "3h 09m";
+  // ---------- Reveal on scroll ----------
+  const io = new IntersectionObserver((es)=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{threshold:.15});
+  document.querySelectorAll('.rev').forEach(el=>io.observe(el));
+
+  // ---------- Stats ----------
+  const stats = [
+    {num:D.totalTracks, suf:'', l:'temas en la sesión', c:'c'},
+    {disp:fmtDur, l:'en vivo, sin parar', c:''},
+    {disp:D.bpmMin+'–'+Math.round(D.bpmMax), l:'rango de BPM', c:'b'},
+    {num:D.bpmAvg, suf:'', l:'BPM promedio', c:''},
+    {num:D.harmonicPct, suf:'%', l:'mezclas en tono', c:'c'},
+    {disp:'x'+D.maxStreak, l:'racha armónica máx', c:'a'},
+  ];
+  document.getElementById('stats').innerHTML = stats.map(function(s){
+    var inner = (s.num!=null)
+      ? '<div class="n '+s.c+'" data-num="'+s.num+'" data-suf="'+s.suf+'">0'+s.suf+'</div>'
+      : '<div class="n '+s.c+'">'+s.disp+'</div>';
+    return '<div class="stat rev">'+inner+'<div class="l">'+s.l+'</div></div>';
+  }).join('');
+  document.querySelectorAll('#stats .rev').forEach(function(el){io.observe(el);});
+
+  // ---------- Arco 3 actos ----------
+  const acts = [
+    {ph:'Acto 1 · Apertura', bpm:D.arc[0], p:'Entraste fuerte. Marcaste el piso de energía de la noche desde el primer tema.'},
+    {ph:'Acto 2 · Trabajo de pista', bpm:D.arc[1], p:'Bajaste a construir. Le diste aire a la pista para después volver a subir — puro control.'},
+    {ph:'Acto 3 · Cierre', bpm:D.arc[2], p:'Levantaste de nuevo hasta el punto más alto de la noche: '+D.peakVal+' BPM. Cerraste arriba.'},
+  ];
+  const mx = Math.max.apply(null, D.arc);
+  document.getElementById('acts').innerHTML = acts.map(a=>
+    `<div class="act rev"><div class="ph">${a.ph}</div><div class="bpm">${a.bpm} <span style="font-size:13px;color:var(--dim)">BPM</span></div><p>${a.p}</p><div class="bar" style="width:${Math.round(a.bpm/mx*100)}%"></div></div>`).join('');
+  document.querySelectorAll('#acts .rev').forEach(el=>io.observe(el));
+
+  // ---------- Armonía ----------
+  document.getElementById('harmTxt').textContent =
+    `${D.harmonicPct}% de tus mezclas fueron a un tono compatible, y encadenaste hasta ${D.maxStreak} seguidas en armonía perfecta. El resto lo sostuvo Live Pitch por BPM.`;
+  document.getElementById('chips').innerHTML = D.moves.map(m=>
+    `<div class="chip"><b>${m[0]}</b><span>×${m[1]}</span></div>`).join('');
+
+  // ---------- Estilos: limpiar y agrupar nombres ----------
+  function normStyle(cr){var s=(cr||'').toLowerCase();
+    function has(){for(var i=0;i<arguments.length;i++){if(s.indexOf(arguments[i])>=0)return true;}return false;}
+    if(has('funk','disco'))return 'Funky';
+    if(has('rock'))return 'Rock';
+    if(has('reggaeton','reggaetón','regg','perreo','rgt','dembow','urban'))return 'Reggaetón';
+    if(has('hip hop','hiphop','hip-hop','rap','old school'))return 'Hip Hop';
+    if(has('cumbia'))return 'Cumbias';
+    if(has('merengue'))return 'Merengue';
+    if(has('bachata'))return 'Bachata';
+    if(has('salsa'))return 'Salsa';
+    if(has('dancehall'))return 'Dancehall';
+    if(has('axe','axé'))return 'Axé';
+    if(has('house'))return 'House';
+    if(has('techno','tech'))return 'Techno';
+    if(has('electro','edm','dance'))return 'Electrónica';
+    if(has('pachanga','cachengue','fiesta','webeo'))return 'Pachanga';
+    if(has('pop'))return 'Pop';
+    if(has('latino','latin'))return 'Latino';
+    return (cr||'SET').toUpperCase();}
+
+  // ---------- Crates (agrupados por estilo limpio) ----------
+  var crM={}; S.forEach(function(t){ if(t.cr){ var gn=normStyle(t.cr); crM[gn]=(crM[gn]||0)+1; } });
+  const crates = Object.keys(crM).map(function(k){return [k,crM[k]];}).sort(function(a,b){return b[1]-a[1];}).slice(0,6);
+  const maxc = crates[0][1];
+  document.getElementById('crates').innerHTML = crates.map(c=>
+    `<div class="row"><span>${c[0]}</span><div class="track"><div class="fill" data-w="${Math.round(c[1]/maxc*100)}"></div></div><span class="val">${c[1]}</span></div>`).join('');
+  const crObs = new IntersectionObserver((es)=>es.forEach(e=>{if(e.isIntersecting){e.target.querySelectorAll('.fill').forEach(f=>f.style.width=f.dataset.w+'%');crObs.unobserve(e.target);}}),{threshold:.3});
+  crObs.observe(document.getElementById('crates'));
+
+  // ---------- Insights ----------
+  const ins = [
+    {h:'Abriste a '+D.arc[0]+' BPM', p:'Sin pedir permiso. Los primeros temas ya marcaron una energía alta — la pista supo de inmediato a qué venías.'},
+    {h:'Bajaste a mitad de noche', p:'El tramo medio cayó a '+D.arc[1]+' BPM. No fue un bajón: fue leer la pista y dejarla respirar para el golpe final.'},
+    {h:'El punto más alto fue el tema '+(D.peakIdx+1), p:'Llegaste a '+D.peakVal+' BPM cerca del cierre. Ese fue el clímax de toda la noche.'},
+    {h:D.maxStreak+' mezclas en tono seguidas', p:'Tu racha armónica más larga. Cuatro transiciones encadenadas en tonos compatibles: eso se siente aunque nadie lo sepa nombrar.'},
+    {h:'Cruzaste mundos sin caerte', p:'Pasaste de '+crates[0][0]+' a '+crates[1][0]+' sin perder la pista. Live Pitch mantuvo el BPM aunque cambiaras de género.'},
+  ];
+  document.getElementById('insights').innerHTML = ins.map(i=>
+    `<div class="card rev"><div class="ai"><span class="sp"></span> Análisis IA</div><h4>${i.h}</h4><p>${i.p}</p></div>`).join('');
+  document.querySelectorAll('#insights .rev').forEach(el=>io.observe(el));
+
+  // ---------- Contadores ----------
+  const cObs = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if(!en.isIntersecting) return;
+      cObs.unobserve(en.target);
+      var el = en.target.querySelector('[data-num]');
+      if(!el) return;
+      var target = parseFloat(el.dataset.num)||0, suf = el.dataset.suf||'';
+      var n = 0, step = Math.max(target/32, 0.5);
+      var timer = setInterval(function(){
+        n += step;
+        if(n>=target){ n=target; clearInterval(timer); }
+        el.textContent = Math.round(n) + suf;
+      }, 26);
+    });
+  }, {threshold:.5});
+  document.querySelectorAll('#stats .stat').forEach(function(c){ cObs.observe(c); });
+
+  // ---------- LIVE PITCH canvas ----------
+  const cv=document.getElementById('lp'), ctx=cv.getContext('2d');
+  const bpmNow=document.getElementById('bpmNow'), crateNow=document.getElementById('crateNow');
+  const vals=S.map(s=>s.b), lo=Math.min.apply(null,vals)-6, hi=Math.max.apply(null,vals)+6;
+  let W=0,H=0,DPR=Math.min(window.devicePixelRatio||1,2);
+  function resize(){W=cv.clientWidth;H=cv.clientHeight;cv.width=W*DPR;cv.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,1,1);}
+  window.addEventListener('resize',resize); resize();
+  const padL=8,padR=8,padT=18,padB=18;
+  const x=i=>padL+(i/(S.length-1))*(W-padL-padR);
+  const y=v=>padT+(1-(v-lo)/(hi-lo))*(H-padT-padB);
+  const peak=D.peakIdx;
+  function draw(prog){
+    ctx.clearRect(0,0,W,H);
+    // zonas de energía (3 actos)
+    const t1=Math.floor(S.length/3), t2=Math.floor(2*S.length/3);
+    const zcol=['rgba(47,128,237,.06)','rgba(55,214,195,.05)','rgba(255,86,120,.06)'];
+    [[0,t1],[t1,t2],[t2,S.length-1]].forEach((z,zi)=>{ctx.fillStyle=zcol[zi];ctx.fillRect(x(z[0]),0,x(z[1])-x(z[0]),H);});
+    // área bajo la curva
+    const grad=ctx.createLinearGradient(0,padT,0,H);
+    grad.addColorStop(0,'rgba(55,214,195,.28)');grad.addColorStop(1,'rgba(55,214,195,0)');
+    ctx.beginPath();ctx.moveTo(x(0),H-padB);
+    for(let i=0;i<S.length;i++)ctx.lineTo(x(i),y(vals[i]));
+    ctx.lineTo(x(S.length-1),H-padB);ctx.closePath();ctx.fillStyle=grad;ctx.fill();
+    // línea neón
+    ctx.beginPath();for(let i=0;i<S.length;i++){const px=x(i),py=y(vals[i]);i?ctx.lineTo(px,py):ctx.moveTo(px,py);}
+    ctx.lineWidth=2.4;ctx.strokeStyle='#37d6c3';ctx.shadowColor='#37d6c3';ctx.shadowBlur=12;ctx.stroke();ctx.shadowBlur=0;
+    // marca del punto más alto
+    ctx.beginPath();ctx.arc(x(peak),y(vals[peak]),4,0,7);ctx.fillStyle='#ff5678';ctx.fill();
+    ctx.strokeStyle='rgba(255,86,120,.5)';ctx.beginPath();ctx.moveTo(x(peak),y(vals[peak]));ctx.lineTo(x(peak),padT-6);ctx.stroke();
+    // bola viajera
+    const fi=prog*(S.length-1), i0=Math.floor(fi), i1=Math.min(i0+1,S.length-1), f=fi-i0;
+    const bx=x(i0)+(x(i1)-x(i0))*f, by=y(vals[i0])+(y(vals[i1])-y(vals[i0]))*f;
+    const g2=ctx.createRadialGradient(bx,by,0,bx,by,22);g2.addColorStop(0,'rgba(55,214,195,.9)');g2.addColorStop(1,'rgba(55,214,195,0)');
+    ctx.fillStyle=g2;ctx.beginPath();ctx.arc(bx,by,22,0,7);ctx.fill();
+    ctx.fillStyle='#eef2f8';ctx.beginPath();ctx.arc(bx,by,4.5,0,7);ctx.fill();
+    // readout
+    const cur=S[Math.round(fi)]||S[0];
+    bpmNow.textContent=Math.round(vals[Math.round(fi)]);
+    crateNow.textContent=cur.cr||' ';
+  }
+  let start=null;const DUR=14000;
+  function loop(ts){if(!start)start=ts;let p=((ts-start)%DUR)/DUR;draw(p);requestAnimationFrame(loop);}
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

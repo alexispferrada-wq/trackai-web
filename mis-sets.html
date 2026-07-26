@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="favicon.ico">
+<title>Mis Sets · TrackAI (privado)</title>
+<style>
+  body{background:#0c0d12;color:#dfe3ec;font:14px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;margin:0;padding:18px}
+  h1{font-size:18px;margin:0 0 4px}
+  .muted{color:#8a90a2;font-size:12px}
+  .bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:14px 0;padding:12px;background:#12141c;border:1px solid #232634;border-radius:8px}
+  .bar label{font-size:12px;color:#8a90a2}
+  input,select,button{background:#0c0d12;color:#dfe3ec;border:1px solid #2b2f3d;border-radius:6px;padding:7px 9px;font:inherit}
+  button{cursor:pointer}
+  button:hover{border-color:#37d6c3}
+  input[type=file]{border:none;padding:0}
+  table{width:100%;border-collapse:collapse;margin-top:8px}
+  th,td{text-align:left;padding:8px 10px;border-bottom:1px solid #1c1f2a;white-space:nowrap}
+  th{color:#8a90a2;font-weight:600;font-size:12px;cursor:pointer;user-select:none}
+  tr:hover td{background:#12141c}
+  .flow{font-weight:700;color:#37d6c3}
+  .open{border-color:#37d6c3;color:#37d6c3}
+  .empty{padding:30px;text-align:center;color:#8a90a2}
+  code{background:#12141c;padding:2px 5px;border-radius:4px;color:#9ad}
+</style>
+</head>
+<body>
+  <h1>🎧 Mis Sets <span class="muted">— privado · TrackAI</span></h1>
+  <div class="muted">Elige tu carpeta <code>Documents/TrackAI-Logs</code> (lee tus sets reales desde los .log) o <code>TrackAI-Sets</code> (.json). Todo se procesa en tu equipo, nada se sube.</div>
+
+  <div class="bar">
+    <div><label>Carpeta / archivos</label><br><input type="file" id="pick" webkitdirectory directory multiple></div>
+    <div><label>Buscar (local o género)</label><br><input id="q" placeholder="ej: comadre, funky..."></div>
+    <div><label>Mín. tracks</label><br><input id="minT" type="number" value="8" style="width:80px"></div>
+    <div><label>Mín. minutos</label><br><input id="minM" type="number" value="20" style="width:80px"></div>
+    <div><label>Ordenar</label><br>
+      <select id="sort">
+        <option value="rec">Más reciente</option>
+        <option value="flow">Flow (mayor)</option>
+        <option value="tracks">Tracks (mayor)</option>
+        <option value="min">Duración (mayor)</option>
+      </select>
+    </div>
+    <div style="align-self:flex-end"><span class="muted" id="count">0 sets</span></div>
+  </div>
+
+  <table id="tbl">
+    <thead><tr>
+      <th>Fecha</th><th>Local</th><th>Tracks</th><th>Min</th><th>Género top</th><th>Flow</th><th>En tono</th><th>BPM</th><th></th>
+    </tr></thead>
+    <tbody id="rows"><tr><td colspan="9" class="empty">Sin sets cargados. Elige la carpeta TrackAI-Sets arriba.</td></tr></tbody>
+  </table>
+
+<script>
+var SETS=[];
+
+function parseCam(c){var m=/^(\d{1,2})([AB])$/.exec(c||'');return m?{n:+m[1],l:m[2]}:null;}
+function harmonic(a,b){var x=parseCam(a),y=parseCam(b);if(!x||!y)return false;if(x.n===y.n)return true;var d=Math.abs(x.n-y.n);return (d===1||d===11)&&x.l===y.l;}
+function normStyle(cr){var s=(cr||'').toLowerCase();function has(){for(var i=0;i<arguments.length;i++){if(s.indexOf(arguments[i])>=0)return true;}return false;}
+  if(has('funk','disco'))return'Funky';if(has('rock'))return'Rock';if(has('reggaeton','reggaetón','regg','perreo','rgt','dembow','urban'))return'Reggaetón';
+  if(has('hip hop','hiphop','hip-hop','rap','old school'))return'Hip Hop';if(has('cumbia'))return'Cumbias';if(has('merengue'))return'Merengue';
+  if(has('bachata'))return'Bachata';if(has('salsa'))return'Salsa';if(has('dancehall'))return'Dancehall';if(has('axe','axé'))return'Axé';
+  if(has('house'))return'House';if(has('techno','tech'))return'Techno';if(has('electro','edm','dance'))return'Electrónica';
+  if(has('pachanga','cachengue','fiesta','webeo'))return'Pachanga';if(has('pop'))return'Pop';if(has('latino','latin'))return'Latino';
+  return (cr||'SET').toUpperCase();}
+
+function fmtDate(iso){var t=Date.parse(iso);if(!t)return '';try{return new Date(t).toLocaleDateString('es-CL',{day:'2-digit',month:'short',year:'numeric'});}catch(e){return '';}}
+// Reconstruye un set desde un archivo .log de TrackAI (eventos TRACK/PLAYED).
+function parseLog(txt,fname){
+  var lines=txt.split('\n');
+  var usePlayed=txt.indexOf('] [PLAYED]')>=0;
+  var tag=usePlayed?'] [PLAYED]':'] [TRACK]';
+  var serie=[],firstTs=null,lastTs=null,lastName='';
+  for(var i=0;i<lines.length;i++){var ln=lines[i];var ti=ln.indexOf(tag);if(ti<0)continue;
+    var ts=ln.slice(1,ln.indexOf(']'));
+    var jm=ln.match(/(\{.*\})\s*$/);if(!jm)continue;var j;try{j=JSON.parse(jm[1]);}catch(e){continue;}
+    var nm=ln.substring(ti+tag.length).replace(/^[\s▶♪]+/,'');var sp=nm.indexOf(' {');if(sp>=0)nm=nm.slice(0,sp);
+    if(nm&&nm===lastName){lastTs=ts;continue;}lastName=nm;
+    var bpm=+j.bpm||0;if(!bpm)continue;
+    serie.push({b:Math.round(bpm),c:j.camelot||'',cr:j.carpeta||j.genero||''});
+    if(!firstTs)firstTs=ts;lastTs=ts;}
+  if(!serie.length)return null;
+  var mins=0,best=null;
+  for(var k=0;k<lines.length;k++){var m=lines[k].match(/\[SESSION\][^{]*(\{.*\})\s*$/);if(m){try{best=JSON.parse(m[1]);}catch(e){}}}
+  if(best){if(best.minutos)mins=best.minutos;else if(best.inicio&&best.fin)mins=Math.round((Date.parse(best.fin)-Date.parse(best.inicio))/60000);}
+  if(!mins&&firstTs&&lastTs)mins=Math.round((Date.parse(lastTs)-Date.parse(firstTs))/60000);
+  return {venue:'(desde log)',date:fmtDate(firstTs),durationMin:mins||0,sessionId:Date.parse(firstTs)||0,serie:serie};
+}
+
+function analyze(d){
+  var S=(d.serie||[]).filter(function(t){return t&&t.b>0;});
+  var bpms=S.map(function(t){return t.b;});
+  var comp=0,tot=0;for(var i=1;i<S.length;i++){tot++;if(harmonic(S[i-1].c,S[i].c))comp++;}
+  var harmonicPct=tot?Math.round(comp/tot*100):0;
+  var deltas=[];for(var k=1;k<S.length;k++)deltas.push(Math.abs(bpms[k]-bpms[k-1]));
+  var avgD=deltas.length?deltas.reduce(function(a,b){return a+b;},0)/deltas.length:0;
+  var peakIdx=0,pv=0;for(var j=0;j<bpms.length-4;j++){var w=bpms.slice(j,j+5).reduce(function(a,b){return a+b;},0)/5;if(w>pv){pv=w;peakIdx=j;}}
+  var late=peakIdx/Math.max(1,S.length-1);var range=(bpms.length?Math.max.apply(null,bpms)-Math.min.apply(null,bpms):0);
+  var smooth=Math.max(0,100-avgD*4);var energy=Math.min(100,late*70+Math.min(range,60)/60*30);
+  var flow=Math.max(40,Math.min(99,Math.round(0.45*harmonicPct+0.35*smooth+0.20*energy)));
+  var crM={};S.forEach(function(t){if(t.cr){var g=normStyle(t.cr);crM[g]=(crM[g]||0)+1;}});
+  var top=Object.keys(crM).map(function(k){return [k,crM[k]];}).sort(function(a,b){return b[1]-a[1];})[0];
+  return {date:d.date||'', venue:d.venue||'(sin nombre)', sid:+d.sessionId||0, tracks:S.length,
+    min:d.durationMin||0, genre:top?top[0]:'—', flow:flow, harmonicPct:harmonicPct,
+    bpmMin:bpms.length?Math.min.apply(null,bpms):0, bpmMax:bpms.length?Math.max.apply(null,bpms):0, raw:d};
+}
+
+function render(){
+  var q=document.getElementById('q').value.toLowerCase().trim();
+  var minT=+document.getElementById('minT').value||0;
+  var minM=+document.getElementById('minM').value||0;
+  var sort=document.getElementById('sort').value;
+  var list=SETS.filter(function(s){
+    if(s.tracks<minT)return false; if(s.min<minM)return false;
+    if(q&&(s.venue.toLowerCase().indexOf(q)<0 && s.genre.toLowerCase().indexOf(q)<0))return false;
+    return true;
+  });
+  list.sort(function(a,b){
+    if(sort==='flow')return b.flow-a.flow;
+    if(sort==='tracks')return b.tracks-a.tracks;
+    if(sort==='min')return b.min-a.min;
+    return b.sid-a.sid;
+  });
+  document.getElementById('count').textContent=list.length+' set'+(list.length===1?'':'s');
+  var tb=document.getElementById('rows');
+  if(!list.length){tb.innerHTML='<tr><td colspan="9" class="empty">'+(SETS.length?'Nada coincide con el filtro.':'Sin sets cargados. Elige la carpeta TrackAI-Sets arriba.')+'</td></tr>';return;}
+  tb.innerHTML=list.map(function(s,i){
+    return '<tr>'+
+      '<td>'+s.date+'</td>'+
+      '<td>'+esc(s.venue)+'</td>'+
+      '<td>'+s.tracks+'</td>'+
+      '<td>'+s.min+'</td>'+
+      '<td>'+esc(s.genre)+'</td>'+
+      '<td class="flow">'+s.flow+'</td>'+
+      '<td>'+s.harmonicPct+'%</td>'+
+      '<td>'+s.bpmMin+'–'+s.bpmMax+'</td>'+
+      '<td><button class="open" data-i="'+SETS.indexOf(s)+'">Abrir análisis →</button></td>'+
+    '</tr>';
+  }).join('');
+  Array.prototype.forEach.call(tb.querySelectorAll('.open'),function(b){
+    b.addEventListener('click',function(){openSet(SETS[+b.dataset.i]);});
+  });
+}
+function esc(s){return String(s).replace(/[<>&]/g,function(c){return c==='<'?'&lt;':c==='>'?'&gt;':'&amp;';});}
+function openSet(s){
+  try{
+    var payload=JSON.stringify(s.raw);
+    try{ localStorage.setItem('trackai_set', payload); }catch(_){}
+    // el hash lleva los datos reales del set (robusto en file://)
+    window.open('analisis-set-template.html#set='+encodeURIComponent(payload),'_blank');
+  }catch(e){ alert('No se pudo abrir: '+e.message); }
+}
+
+document.getElementById('pick').addEventListener('change',function(ev){
+  var files=Array.prototype.slice.call(ev.target.files).filter(function(f){return /\.(json|log)$/i.test(f.name);});
+  if(!files.length){return;}
+  SETS=[]; var pending=files.length;
+  files.forEach(function(f){
+    var r=new FileReader();
+    r.onload=function(){ try{
+        var d;
+        if(/\.log$/i.test(f.name)) d=parseLog(r.result,f.name);
+        else d=JSON.parse(r.result);
+        if(d&&d.serie&&d.serie.length) SETS.push(analyze(d));
+      }catch(_){}
+      if(--pending===0)render(); };
+    r.onerror=function(){ if(--pending===0)render(); };
+    r.readAsText(f);
+  });
+});
+['q','minT','minM','sort'].forEach(function(id){document.getElementById(id).addEventListener('input',render);});
+</script>
+</body>
+</html>
