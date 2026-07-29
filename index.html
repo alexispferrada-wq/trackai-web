@@ -88,59 +88,156 @@
     </div>
     <div style="font-size:12.5px;color:#d0cce0;margin-top:14px;animation:rise 0.8s 0.6s both">Sin tarjeta · La cuenta se crea sola con tu email · Solo lectura de tu Serato</div>
 
-    <div style="margin-top:64px;position:relative;border-radius:20px;overflow:hidden;border:1px solid rgba(242,238,250,0.1);background:linear-gradient(170deg,rgba(47,128,237,0.09),rgba(8,7,12,0.6));padding:26px;animation:rise 1s 0.55s both">
-      <div style="position:absolute;top:0;bottom:0;width:30%;background:linear-gradient(90deg,transparent,rgba(47,128,237,0.13),transparent);animation:sweep 5.5s linear infinite;pointer-events:none"></div>
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px">
-        <span style="width:8px;height:8px;border-radius:50%;background:#37d6c3;animation:breathe 1.6s ease-in-out infinite"></span>
-        <span style="font-size:11.5px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:#37d6c3">Leyendo el deck en vivo</span>
-        <span style="margin-left:auto;font-size:11.5px;color:#d0cce0">se actualiza cada 3 s</span>
-      </div>
-      <div id="bars" style="display:flex;gap:3px;align-items:flex-end;height:96px;margin-bottom:22px"></div>
-      <div style="display:grid;grid-template-columns:1fr 1.25fr;gap:16px">
-        <div style="border-radius:14px;border:1px solid rgba(242,238,250,0.1);padding:16px">
-          <div style="font-size:10.5px;letter-spacing:1.5px;text-transform:uppercase;color:#d0cce0;margin-bottom:8px">Sonando ahora</div>
-          <div style="font-family:'Archivo Black',sans-serif;font-size:17px;letter-spacing:-0.5px">ARTE ELEGANTE</div>
-          <div style="font-size:12.5px;color:#e8e4f0;margin-bottom:12px">FT MARCIANEKE</div>
-          <div style="display:flex;gap:6px;flex-wrap:wrap">
-            <span style="font-size:11px;font-weight:600;padding:3px 9px;border-radius:6px;border:1px solid #2f80ed;color:#2f80ed">11A</span>
-            <span style="font-size:11px;font-weight:600;padding:3px 9px;border-radius:6px;border:1px solid rgba(242,238,250,0.18);color:#e8e4f0">90 BPM</span>
-            <span style="font-size:11px;font-weight:600;padding:3px 9px;border-radius:6px;border:1px solid #e8862a;color:#e8862a">SUPER ROS</span>
-          </div>
-          <div style="margin-top:16px;padding-top:14px;border-top:1px solid rgba(242,238,250,0.1)">
-            <div style="display:flex;align-items:baseline;gap:8px">
-              <span style="font-size:10.5px;letter-spacing:1.5px;text-transform:uppercase;color:#37d6c3">Live Pitch®</span>
-              <span style="margin-left:auto;font-family:'Archivo Black',sans-serif;font-size:24px" id="pitchNum">93.6</span>
-              <span style="font-size:12px;font-weight:600;color:#37d6c3">+4.0%</span>
-            </div>
-            <div style="display:flex;gap:2px;margin-top:8px;height:6px;border-radius:4px;overflow:hidden"><i style="flex:1;background:#ff5678"></i><i style="flex:1;background:#f2c14e"></i><i style="flex:2;background:#37d6c3"></i><i style="flex:1;background:#f2c14e"></i><i style="flex:1;background:#ff5678"></i></div>
-            <div style="font-size:11.5px;color:#e8e4f0;margin-top:8px">🔥 Peak · mantén la pista arriba</div>
-          </div>
+    <!-- === REPLICA EXACTA DE LA APP TRACKAI === -->
+    <div style="margin-top:64px;position:relative;border-radius:16px;overflow:hidden;border:1px solid rgba(242,238,250,0.12);background:rgba(20,21,24,0.88);backdrop-filter:blur(26px) saturate(1.2);box-shadow:0 10px 34px rgba(0,0,0,0.45),inset 0 1px 0 rgba(255,255,255,0.06);padding:0;animation:rise 1s 0.55s both;max-width:780px;margin-left:auto;margin-right:auto">
+      <div style="position:absolute;top:0;bottom:0;width:30%;background:linear-gradient(90deg,transparent,rgba(47,128,237,0.1),transparent);animation:sweep 5.5s linear infinite;pointer-events:none"></div>
+
+      <!-- HEADER -->
+      <div style="display:flex;align-items:center;padding:7px 12px;border-bottom:1px solid rgba(242,238,250,0.08);background:rgba(19,20,23,0.95)">
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="width:22px;height:22px;border-radius:6px;border:1.5px solid #2f80ed;background:rgba(47,128,237,0.12);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#2f80ed">T</div>
+          <span style="font-size:14px;font-weight:900;letter-spacing:-0.5px">Track<span style="color:#2f80ed">AI</span></span>
+          <span style="font-size:9px;font-weight:700;color:#2f80ed;padding:1px 5px;border-radius:4px;border:1px solid rgba(47,128,237,0.3)">v4.4.0</span>
         </div>
-        <div style="display:grid;gap:10px;align-content:start">
-          <div style="border-radius:14px;border:1px solid rgba(55,214,195,0.35);padding:14px 16px">
-            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-              <div style="font-size:14px;font-weight:600">DREFQUILA — Autos, Bikes...</div>
-              <span style="margin-left:auto;font-size:11px;font-weight:700;padding:3px 8px;border-radius:6px;background:#2f80ed;color:#08070c">⬇A</span>
-              <span style="font-size:11px;font-weight:700;padding:3px 8px;border-radius:6px;border:1px solid rgba(242,238,250,0.18);color:#e8e4f0">⬇B</span>
-            </div>
-            <div style="display:flex;gap:6px;flex-wrap:wrap">
-              <span style="font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:5px;border:1px solid #37d6c3;color:#37d6c3">🎯 Perfecta</span>
-              <span style="font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:5px;border:1px solid #37d6c3;color:#37d6c3">✨ Nueva</span>
-              <span style="font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:5px;border:1px solid #37d6c3;color:#37d6c3">⚡ +3.1%</span>
-              <span style="font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:5px;border:1px solid #e8862a;color:#e8862a">✅ crate</span>
-            </div>
-          </div>
-          <div style="border-radius:14px;border:1px solid rgba(242,238,250,0.1);padding:14px 16px">
-            <div style="font-size:14px;font-weight:600;margin-bottom:8px">EL FUTURO FONDEADO</div>
-            <div style="display:flex;gap:6px;flex-wrap:wrap">
-              <span style="font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:5px;border:1px solid #2f80ed;color:#2f80ed">🔄 Relativa</span>
-              <span style="font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:5px;border:1px solid #f2c14e;color:#f2c14e">💎 Probada</span>
-              <span style="font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:5px;border:1px solid #2f80ed;color:#2f80ed">🧠 sueles seguirla</span>
-            </div>
-          </div>
-          <div style="border-radius:14px;border:1px dashed rgba(242,238,250,0.14);padding:14px 16px;color:#d0cce0;font-size:12.5px">↩ Y una tercera para cambiar de ritmo, de otro crate.</div>
+        <div style="margin-left:auto;display:flex;align-items:center;gap:10px">
+          <span style="font-size:12px;font-weight:800;color:#e8e4f0">🕒 09:29</span>
+          <span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:999px;border:1px solid #2f80ed;color:#2f80ed;background:rgba(47,128,237,0.08)">👑 FUNDADOR PRO</span>
+          <span style="display:inline-flex;align-items:center;gap:4px">
+            <span style="font-size:12px;font-weight:700;padding:3px 7px;border-radius:5px;border:1px solid rgba(242,238,250,0.1);color:#e8e4f0;background:rgba(30,32,37,0.5)">📂</span>
+            <span style="font-size:12px;font-weight:700;padding:3px 7px;border-radius:5px;border:1px solid rgba(242,238,250,0.1);color:#e8e4f0;background:rgba(30,32,37,0.5)">🔄</span>
+            <span style="font-size:12px;font-weight:700;padding:3px 7px;border-radius:5px;border:1px solid rgba(242,238,250,0.1);color:#e8862a;background:rgba(30,32,37,0.5)">🔥</span>
+            <span style="font-size:12px;font-weight:700;padding:3px 7px;border-radius:5px;border:1px solid rgba(242,238,250,0.1);color:#e8e4f0;background:rgba(30,32,37,0.5)">🌙</span>
+          </span>
+          <span style="font-size:12px;font-weight:700;padding:3px 7px;border-radius:5px;border:1px solid rgba(242,238,250,0.1);color:#e8e4f0;background:rgba(30,32,37,0.5)">−</span>
+          <span style="font-size:12px;font-weight:700;padding:3px 7px;border-radius:5px;border:1px solid rgba(242,238,250,0.1);color:#ff5a5f;background:rgba(255,90,95,0.1)">✕</span>
         </div>
       </div>
+
+      <!-- MODE BAR -->
+      <div style="display:flex;gap:3px;margin:7px 10px 0;padding:2px;background:rgba(30,32,37,0.5);border:1px solid rgba(242,238,250,0.08);border-radius:8px">
+        <span style="flex:1;text-align:center;padding:5px 4px;font-size:9px;font-weight:700;border-radius:6px;background:#2f80ed;color:#fff">⚖️ Auto</span>
+        <span style="flex:1;text-align:center;padding:5px 4px;font-size:9px;font-weight:700;border-radius:6px;color:#9aa7c4">🚀 Ultra IA</span>
+        <span style="flex:1;text-align:center;padding:5px 4px;font-size:9px;font-weight:700;border-radius:6px;color:#9aa7c4">📁 Estricto</span>
+        <span style="flex:1;text-align:center;padding:5px 4px;font-size:9px;font-weight:700;border-radius:6px;color:#9aa7c4">👀 Monitor</span>
+        <span style="flex:1;text-align:center;padding:5px 4px;font-size:9px;font-weight:700;border-radius:6px;color:#9aa7c4">🔥 Arriba</span>
+      </div>
+
+      <!-- SET DATA -->
+      <div style="display:flex;gap:5px;justify-content:center;margin:6px 10px 0;flex-wrap:wrap">
+        <span style="font-size:9px;font-weight:600;color:#d0cce0;background:rgba(30,32,37,0.5);border:1px solid rgba(242,238,250,0.06);border-radius:99px;padding:2px 8px">📍 Club 404</span>
+        <span style="font-size:9px;font-weight:600;color:#d0cce0;background:rgba(30,32,37,0.5);border:1px solid rgba(242,238,250,0.06);border-radius:99px;padding:2px 8px">⏱️ 42 min</span>
+        <span style="font-size:9px;font-weight:600;color:#46c37b;background:rgba(30,32,37,0.5);border:1px solid rgba(242,238,250,0.06);border-radius:99px;padding:2px 8px">📈 Energía sube</span>
+        <span style="font-size:9px;font-weight:600;color:#d0cce0;background:rgba(30,32,37,0.5);border:1px solid rgba(242,238,250,0.06);border-radius:99px;padding:2px 8px">🎵 14 tracks</span>
+      </div>
+
+      <!-- MAIN CONTENT: NOW PLAYING + LIVE PITCH -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:8px 10px 0">
+        <!-- NOW PLAYING -->
+        <div style="border-radius:12px;border:1px solid rgba(242,238,250,0.08);background:rgba(38,40,46,0.55);padding:10px 12px;box-shadow:inset 0 1px 0 rgba(255,255,255,0.04),0 4px 14px rgba(0,0,0,0.2)">
+          <div style="font-size:10px;letter-spacing:1.2px;text-transform:uppercase;color:#d0cce0;margin-bottom:6px">🎧 Sonando ahora</div>
+          <div style="display:flex;gap:6px;align-items:flex-end;height:14px;margin-bottom:6px">
+            <i style="flex:1;height:40%;border-radius:2px;background:#2f80ed;opacity:0.85;animation:bars 0.9s ease-in-out 0s infinite"></i>
+            <i style="flex:1;height:80%;border-radius:2px;background:#2f80ed;opacity:0.85;animation:bars 0.9s ease-in-out 0.1s infinite"></i>
+            <i style="flex:1;height:55%;border-radius:2px;background:#2f80ed;opacity:0.85;animation:bars 0.9s ease-in-out 0.2s infinite"></i>
+            <i style="flex:1;height:95%;border-radius:2px;background:#b877e0;opacity:0.85;animation:bars 0.9s ease-in-out 0.3s infinite"></i>
+            <i style="flex:1;height:60%;border-radius:2px;background:#2f80ed;opacity:0.85;animation:bars 0.9s ease-in-out 0.4s infinite"></i>
+          </div>
+          <div style="font-size:13px;font-weight:800;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">ARTE ELEGANTE</div>
+          <div style="font-size:10px;color:#d0cce0;font-weight:600">FT MARCIANEKE</div>
+          <div style="display:flex;justify-content:space-between;font-size:9px;color:#d0cce0;margin-top:4px">
+            <span>1:42</span>
+            <span>3:15</span>
+          </div>
+          <div style="height:4px;background:rgba(242,238,250,0.08);border-radius:99px;margin:4px 0 7px;overflow:hidden">
+            <div style="height:100%;width:52%;background:linear-gradient(90deg,#2f80ed,#b877e0);border-radius:99px"></div>
+          </div>
+          <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:5px">
+            <span style="font-size:8.5px;font-weight:700;border-radius:99px;padding:2px 7px;background:rgba(184,119,224,0.16);border:1px solid #b877e0;color:#b877e0">11A</span>
+            <span style="font-size:8.5px;font-weight:700;border-radius:99px;padding:2px 7px;background:rgba(242,238,250,0.06);border:1px solid rgba(242,238,250,0.12);color:#e8e4f0">90 BPM</span>
+            <span style="font-size:8.5px;font-weight:700;border-radius:99px;padding:2px 7px;background:rgba(232,134,42,0.16);border:1px solid #e8862a;color:#e8862a">🗂️ SUPER ROS</span>
+            <span style="font-size:8.5px;font-weight:700;border-radius:99px;padding:2px 7px;background:rgba(47,128,237,0.16);border:1px solid #2f80ed;color:#2f80ed">🎚️ Deck A</span>
+          </div>
+          <div style="font-size:8px;color:#e8862a;border-top:1px dashed rgba(242,238,250,0.08);padding-top:5px;margin-top:5px;font-weight:600">🎯 Primer beat (hot cue): 0:23 · 4 hot cues</div>
+        </div>
+
+        <!-- LIVE PITCH -->
+        <div style="border-radius:12px;padding:10px 12px;background:rgba(13,15,20,0.35);position:relative;overflow:hidden;border:1px solid rgba(242,238,250,0.08)">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+            <span style="font-size:9px;font-weight:900;letter-spacing:1px;color:#fff;text-shadow:0 2px 10px rgba(255,202,40,0.4),0 0 5px rgba(255,202,40,0.3)">⚡ LIVE PITCH<sup style="font-size:7px">®</sup></span>
+            <span style="font-size:8px;font-weight:900;padding:2px 7px;border-radius:999px;background:rgba(0,0,0,0.4);border:1px solid rgba(242,238,250,0.12);color:#ff5a5f">🚀 +2.3%</span>
+          </div>
+          <div style="padding:4px 14px;background:rgba(0,0,0,0.5);border:1px solid rgba(255,202,40,0.35);border-radius:9px;box-shadow:inset 0 0 10px rgba(0,0,0,0.8),0 0 12px rgba(255,202,40,0.12);text-align:center">
+            <div style="font-size:26px;font-weight:900;color:#ffca28;font-family:'SF Mono','Courier New',monospace;letter-spacing:-0.5px" id="pitchNum">93.6</div>
+            <div style="font-size:7.5px;color:#fff;opacity:0.85">BPM · +4.0% pitch · 🫀 prom 90.2</div>
+          </div>
+          <div style="display:flex;gap:3px;margin-top:6px;justify-content:center">
+            <span style="padding:4px 7px;font-size:9px;font-weight:800;border-radius:5px;background:rgba(242,238,250,0.04);border:1px solid rgba(242,238,250,0.08);color:#e8e4f0">−5</span>
+            <span style="padding:4px 7px;font-size:9px;font-weight:800;border-radius:5px;background:rgba(242,238,250,0.04);border:1px solid rgba(242,238,250,0.08);color:#e8e4f0">−1</span>
+            <span style="padding:4px 7px;font-size:9px;font-weight:800;border-radius:5px;background:rgba(242,238,250,0.04);border:1px solid rgba(242,238,250,0.08);color:#e8e4f0">+1</span>
+            <span style="padding:4px 7px;font-size:9px;font-weight:800;border-radius:5px;background:rgba(242,238,250,0.04);border:1px solid rgba(242,238,250,0.08);color:#e8e4f0">+5</span>
+          </div>
+          <div style="display:flex;gap:2px;margin-top:6px;height:5px;border-radius:3px;overflow:hidden">
+            <i style="flex:1;background:#ff5678"></i><i style="flex:1;background:#f2c14e"></i><i style="flex:2;background:#37d6c3"></i><i style="flex:1;background:#f2c14e"></i><i style="flex:1;background:#ff5678"></i>
+          </div>
+          <div style="font-size:8px;color:#ffd873;opacity:0.82;font-weight:600;text-align:center;margin-top:4px">🔥 Peak · mantén la pista arriba, cachai</div>
+        </div>
+      </div>
+
+      <!-- SUGGESTIONS -->
+      <div style="display:flex;align-items:center;gap:6px;margin:10px 10px 5px;padding-left:8px;border-left:3px solid #46c37b">
+        <span style="font-size:9px;font-weight:800;letter-spacing:0.3px;color:#46c37b">🎯 MEJORES COINCIDENCIAS</span>
+      </div>
+
+      <div style="margin:0 10px 2px;border-radius:10px;border:1px solid rgba(242,238,250,0.06);background:rgba(30,32,37,0.5);padding:7px 10px;transition:border-color 0.18s">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
+          <span style="font-size:11px;font-weight:700;line-height:1.2;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">DREFQUILA — Autos, Bikes...</span>
+          <span style="font-size:9px;font-weight:700;padding:2px 6px;border-radius:5px;background:rgba(70,195,123,0.12);border:1px solid rgba(70,195,123,0.35);color:#46c37b">⬇A</span>
+          <span style="font-size:9px;font-weight:700;padding:2px 6px;border-radius:5px;background:rgba(242,238,250,0.06);border:1px solid rgba(242,238,250,0.12);color:#e8e4f0">⬇B</span>
+        </div>
+        <div style="display:flex;gap:4px;flex-wrap:wrap">
+          <span style="font-size:7px;font-weight:800;border-radius:4px;padding:1px 5px;background:rgba(30,32,37,0.5);border:1px solid #46c37b;color:#46c37b;letter-spacing:0.2px">🎯 Perfecta</span>
+          <span style="font-size:7px;font-weight:800;border-radius:4px;padding:1px 5px;background:rgba(30,32,37,0.5);border:1px solid #46c37b;color:#46c37b;letter-spacing:0.2px">✨ Nueva</span>
+          <span style="font-size:7px;font-weight:800;border-radius:4px;padding:1px 5px;background:rgba(30,32,37,0.5);border:1px solid #ffca28;color:#ffca28;letter-spacing:0.2px">⚡ +3.1%</span>
+          <span style="font-size:7px;font-weight:800;border-radius:4px;padding:1px 5px;background:rgba(70,195,123,0.12);border:1px solid #46c37b;color:#46c37b;letter-spacing:0.2px">✅ crate</span>
+        </div>
+      </div>
+
+      <div style="margin:2px 10px;border-radius:10px;border:1px solid rgba(242,238,250,0.06);background:rgba(30,32,37,0.5);padding:7px 10px;transition:border-color 0.18s">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
+          <span style="font-size:11px;font-weight:700;line-height:1.2;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">EL FUTURO FONDEADO — DrefQuila</span>
+          <span style="font-size:9px;font-weight:700;padding:2px 6px;border-radius:5px;background:rgba(70,195,123,0.12);border:1px solid rgba(70,195,123,0.35);color:#46c37b">⬇A</span>
+          <span style="font-size:9px;font-weight:700;padding:2px 6px;border-radius:5px;background:rgba(242,238,250,0.06);border:1px solid rgba(242,238,250,0.12);color:#e8e4f0">⬇B</span>
+        </div>
+        <div style="display:flex;gap:4px;flex-wrap:wrap">
+          <span style="font-size:7px;font-weight:800;border-radius:4px;padding:1px 5px;background:rgba(30,32,37,0.5);border:1px solid #2f80ed;color:#2f80ed;letter-spacing:0.2px">🔄 Relativa</span>
+          <span style="font-size:7px;font-weight:800;border-radius:4px;padding:1px 5px;background:rgba(30,32,37,0.5);border:1px solid #f2c14e;color:#f2c14e;letter-spacing:0.2px">💎 Probada</span>
+          <span style="font-size:7px;font-weight:800;border-radius:4px;padding:1px 5px;background:rgba(30,32,37,0.5);border:1px solid #2f80ed;color:#2f80ed;letter-spacing:0.2px">🧠 sueles seguirla</span>
+          <span style="font-size:7px;font-weight:800;border-radius:4px;padding:1px 5px;background:rgba(30,32,37,0.5);border:1px solid rgba(242,238,250,0.12);color:#e8e4f0;letter-spacing:0.2px">11A · 87 BPM</span>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:6px;margin:8px 10px 5px;padding-left:8px;border-left:3px solid #e8862a">
+        <span style="font-size:9px;font-weight:800;letter-spacing:0.3px;color:#e8862a">🔀 BONUS TRACK · Cambio de ritmo</span>
+      </div>
+
+      <div style="margin:0 10px 2px;border-radius:10px;border:1px solid rgba(232,134,42,0.2);background:rgba(232,134,42,0.08);padding:7px 10px;box-shadow:0 0 0 1px rgba(232,134,42,0.08)">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
+          <span style="font-size:11px;font-weight:700;line-height:1.2;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">J BALVIN — Mujeres, Copas, Noche</span>
+          <span style="font-size:9px;font-weight:700;padding:2px 6px;border-radius:5px;background:rgba(70,195,123,0.12);border:1px solid rgba(70,195,123,0.35);color:#46c37b">⬇A</span>
+          <span style="font-size:9px;font-weight:700;padding:2px 6px;border-radius:5px;background:rgba(242,238,250,0.06);border:1px solid rgba(242,238,250,0.12);color:#e8e4f0">⬇B</span>
+        </div>
+        <div style="display:flex;gap:4px;flex-wrap:wrap">
+          <span style="font-size:7px;font-weight:800;border-radius:4px;padding:1px 5px;background:rgba(30,32,37,0.5);border:1px solid #6db6ff;color:#6db6ff;letter-spacing:0.2px">🌊 Energía −</span>
+          <span style="font-size:7px;font-weight:800;border-radius:4px;padding:1px 5px;background:rgba(30,32,37,0.5);border:1px solid #46c37b;color:#46c37b;letter-spacing:0.2px">✨ Nueva</span>
+          <span style="font-size:7px;font-weight:800;border-radius:4px;padding:1px 5px;background:rgba(30,32,37,0.5);border:1px solid #e8862a;color:#e8862a;letter-spacing:0.2px">🗂️ OTRO CRATE</span>
+        </div>
+      </div>
+
+      <!-- LEARNING FOOTER -->
+      <div style="text-align:center;font-size:8.5px;font-weight:600;color:#2f80ed;background:rgba(47,128,237,0.08);border-top:1px solid rgba(242,238,250,0.06);padding:4px 8px;margin-top:8px">🧠 La IA aprende de tu estilo para darte mejores consejos</div>
+
+      <!-- FOOT -->
+      <div style="font-size:8px;color:#62646d;text-align:center;padding:4px 6px 8px;opacity:0.75">🎧 TrackAI v4.4.0 | By DJ-Vlex ✦ Con tecnología Fable 5</div>
     </div>
   </header>
 
