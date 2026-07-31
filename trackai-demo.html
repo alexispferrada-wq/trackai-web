@@ -1,0 +1,2557 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<title>TrackAI v4.4.1</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root { color-scheme: dark; }
+  html, body { height: 100%; width: 100%; }
+
+  /* ============ PALETAS SERATO (variables) ============ */
+  /* NOCHE (default) — negro Serato + acentos */
+  body {
+    --bg-glass: #000000;
+    --bg-solid: #000000;
+    --panel: transparent;
+    --panel-solid: #000000;
+    --panel-hover: transparent;
+    --row: transparent;
+    --row-alt: transparent;
+    --border: rgba(255, 255, 255, 0.1);
+    --border-soft: rgba(255, 255, 255, 0.05);
+    --text: #e9eaee;
+    --text-dim: #9a9ca4;
+    --text-faint: #6c6e77;
+    --accent: #2f80ed;        /* azul selección Serato */
+    --accent-soft: rgba(47, 128, 237, 0.16);
+    --key: #b877e0;           /* morado tonalidad */
+    --key-soft: rgba(184, 119, 224, 0.16);
+    --bpm: #d7dbe2;
+    --crate: #e8862a;         /* naranja crates */
+    --crate-soft: rgba(232, 134, 42, 0.16);
+    --green: #46c37b;
+    --red: #ff5a5f;
+    --yellow: #f2c14e;
+    --shadow: 0 10px 34px rgba(0, 0, 0, 0.45);
+    --hi: rgba(255, 255, 255, 0.06);
+    --header-bg: rgba(19, 20, 23, 0.95);
+
+    font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+    background: transparent;
+    color: var(--text);
+    font-size: 12px;
+    overflow: hidden;
+    animation: dropIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  @keyframes dropIn {
+    0% { opacity: 0; transform: translateY(-150px) scale(0.5); filter: blur(15px); border-radius: 50%; }
+    60% { transform: translateY(15px) scale(1.02); filter: blur(3px); border-radius: 20px; }
+    100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); border-radius: 0; }
+  }
+
+  /* DÍA — blanco Serato + mismos acentos */
+  body.theme-day {
+    --bg-glass: rgba(244, 245, 247, 0.94);
+    --bg-solid: #f2f3f5;
+    --panel: rgba(255, 255, 255, 0.7);
+    --panel-solid: #ffffff;
+    --panel-hover: rgba(255, 255, 255, 0.92);
+    --row: rgba(255, 255, 255, 0.6);
+    --row-alt: rgba(236, 238, 241, 0.6);
+    --border: rgba(0, 0, 0, 0.1);
+    --border-soft: rgba(0, 0, 0, 0.06);
+    --text: #1c1d21;
+    --text-dim: #63656d;
+    --text-faint: #9a9ca4;
+    --accent: #2f6fed;
+    --accent-soft: rgba(47, 111, 237, 0.12);
+    --key: #9b4fc4;
+    --key-soft: rgba(155, 79, 196, 0.12);
+    --bpm: #2b2c31;
+    --crate: #d9761a;
+    --crate-soft: rgba(217, 118, 26, 0.14);
+    --green: #1f9d57;
+    --red: #e0484d;
+    --yellow: #c98a12;
+    --shadow: 0 10px 30px rgba(20, 22, 28, 0.18);
+    --hi: rgba(255, 255, 255, 0.6);
+    --header-bg: rgba(255, 255, 255, 0.95);
+    color-scheme: light;
+  }
+
+  /* ============ CONTENEDOR (glass sobre Serato) ============ */
+  .container {
+    width: 100%; height: 100vh;
+    background: var(--bg-glass);
+    display: flex; flex-direction: column;
+    overflow: hidden;
+    border: none;
+    border-radius: 12px;
+    -webkit-app-region: drag;   /* toda la ventana se puede arrastrar */
+  }
+  /* Header y pie no se comprimen; el centro (#app) hace scroll */
+  .header, .foot, .branding { flex-shrink: 0; }
+  #app { flex: 1 1 auto; min-height: 0; overflow-y: auto; }
+  /* Todo lo interactivo NO arrastra (así se puede clickear) */
+  button, a, input, select, textarea,
+  .close-btn, .theme-toggle, .mode-btn, .btn {
+    -webkit-app-region: no-drag;
+  }
+
+  /* ============ HEADER / barra superior estilo Serato ============ */
+  .header {
+    display: flex; align-items: center; justify-content: space-between; gap: 6px;
+    padding: 6px 10px;
+    border-bottom: 1px solid var(--border-soft);
+    background: #000000;
+    -webkit-app-region: drag; user-select: none; cursor: move;
+    overflow: visible;
+  }
+  .header-left { display: flex; align-items: center; gap: 6px; flex-shrink: 0; min-width: 0; }
+  .header-center { display: flex; align-items: center; gap: 6px; flex: 1 1 auto; min-width: 0; overflow: hidden; justify-content: center; }
+  .header-right { display: flex; align-items: center; gap: 4px; flex-shrink: 0; z-index: 10; margin-left: auto; }
+  .wordmark {
+    font-size: 12px; font-weight: 800; letter-spacing: 0.3px; color: var(--text);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .wordmark::after { content: ''; }
+  .header button { -webkit-app-region: no-drag; cursor: pointer; }
+  .header-left, .header-center, .header-right, .clock, .session-info, .vinyl-container, .vinyl { -webkit-app-region: drag; }
+
+  .vinyl-container { width: 22px; height: 22px; }
+  .vinyl {
+    width: 22px; height: 22px; border-radius: 50%;
+    background:
+      radial-gradient(circle at center, var(--accent) 0 3px, transparent 3.5px),
+      repeating-radial-gradient(circle at center, #0000 0 2px, rgba(255,255,255,0.06) 2px 3px),
+      #1c1d22;
+    border: 1px solid var(--border);
+    animation: spin 3.2s linear infinite;
+    box-shadow: 0 0 0 1px var(--border-soft);
+  }
+  body.theme-day .vinyl { background:
+      radial-gradient(circle at center, var(--accent) 0 3px, transparent 3.5px),
+      repeating-radial-gradient(circle at center, #0000 0 2px, rgba(0,0,0,0.08) 2px 3px),
+      #d7d9de; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .clock {
+    font-size: 13px; font-weight: 700; color: var(--text);
+    font-variant-numeric: tabular-nums; letter-spacing: 0.5px;
+  }
+  .session-info { display: flex; gap: 12px; font-size: 10px; color: var(--text-dim); font-weight: 600; }
+  .session-info > div { font-variant-numeric: tabular-nums; }
+
+  .close-btn, .theme-toggle, .min-btn {
+    background: var(--panel); border: 1px solid var(--border); color: var(--text-dim);
+    border-radius: 7px; font-size: 13px; font-weight: 600; cursor: pointer;
+    transition: all 0.2s; display: flex; align-items: center; justify-content: center;
+    width: 26px; height: 26px; flex-shrink: 0;
+  }
+  .min-btn:hover { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+  #layoutToggle svg { display: block; }
+  .close-btn:hover { background: rgba(255,90,95,0.16); border-color: var(--red); color: var(--red); }
+  .theme-toggle:hover { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+  .close-btn:active, .theme-toggle:active { transform: scale(0.94); }
+
+  .theme-overlay { display: none; }
+  .fire-btn:hover { background: rgba(255,110,64,0.18); border-color: var(--crate); color: var(--crate); }
+
+  /* ============ BARRA DE MODO (segmented control) ============ */
+  .mode-bar {
+    display: flex; gap: 3px; margin: 7px 10px 0; padding: 2px;
+    background: var(--panel); border: 1px solid var(--border); border-radius: 8px;
+  }
+  .mode-btn {
+    flex: 1; background: transparent; border: none; color: var(--text-dim);
+    border-radius: 6px; padding: 6px 4px; font-size: 9.5px; font-weight: 700;
+    cursor: pointer; transition: all 0.2s; -webkit-app-region: no-drag; letter-spacing: 0.2px;
+  }
+  .mode-btn:hover { color: var(--text); background: var(--hi); }
+  .mode-btn.active {
+    background: var(--accent); color: #fff;
+    box-shadow: 0 2px 8px var(--accent-soft);
+    animation: modeGlow 2s ease-in-out infinite alternate;
+  }
+  @keyframes modeGlow {
+    from { box-shadow: 0 2px 8px var(--accent-soft); }
+    to { box-shadow: 0 2px 16px rgba(47,128,237,0.35), inset 0 0 8px rgba(255,255,255,0.08); }
+  }
+  }
+
+  /* ============ BARRA DE PITCH EN VIVO ============ */
+  .pitch-bar { display: flex; gap: 4px; align-items: center; justify-content: center; margin-top: 6px; flex-wrap: wrap; -webkit-app-region: no-drag; }
+  .pitch-btn {
+    font-size: 9px; font-weight: 800; border-radius: 6px; padding: 3px 7px;
+    background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.1); color: var(--text);
+    cursor: pointer; transition: all 0.15s; -webkit-app-region: no-drag;
+  }
+  .pitch-btn:hover { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
+  .pitch-btn.reset { color: #ff5a5f; border-color: rgba(255, 90, 95, 0.4); }
+  .pitch-chip {
+    font-size: 10px; font-weight: 800; border-radius: 99px; padding: 3px 10px;
+    background: rgba(0, 255, 200, 0.1); border: 1px solid var(--accent); color: var(--accent);
+    cursor: pointer; font-variant-numeric: tabular-nums; transition: all 0.2s; -webkit-app-region: no-drag;
+  }
+  .pitch-chip.active {
+    background: rgba(255, 202, 40, 0.18); border-color: #ffca28; color: #ffca28;
+    box-shadow: 0 0 8px rgba(255, 202, 40, 0.3);
+  }
+
+  .badge.pitch-exact { color: var(--green); border-color: var(--green); background: rgba(0, 255, 128, 0.12); }
+  .badge.pitch-shift { color: #ffca28; border-color: #ffca28; background: rgba(255, 202, 40, 0.12); }
+
+  /* ============ TRACK ACTUAL (now playing) ============ */
+  /* ============ TRACK ACTUAL (now playing) ============ */
+  .now {
+    margin: 8px 10px 0; padding: 10px 12px;
+    background: var(--panel); border: 1px solid var(--border); border-radius: 14px;
+    box-shadow: inset 0 1px 0 var(--hi), 0 4px 14px rgba(0,0,0,0.2);
+    position: relative; overflow: hidden; min-height: 56px;
+  }
+  .now .title {
+    font-size: 14px; font-weight: 800; color: var(--text); line-height: 1.15;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .now .artist { font-size: 10.5px; color: var(--text-dim); margin-top: 1px; font-weight: 600; }
+
+  .audio-bars { display: flex; gap: 3px; align-items: flex-end; height: 16px; margin: 9px 0 4px; }
+  .audio-bars .bar {
+    width: 3px; border-radius: 99px; background: var(--accent);
+    animation: eq 0.9s ease-in-out infinite; opacity: 0.85;
+  }
+  .audio-bars .bar:nth-child(1){ height: 40%; animation-delay: 0s; }
+  .audio-bars .bar:nth-child(2){ height: 80%; animation-delay: 0.15s; }
+  .audio-bars .bar:nth-child(3){ height: 55%; animation-delay: 0.3s; }
+  .audio-bars .bar:nth-child(4){ height: 95%; animation-delay: 0.1s; }
+  .audio-bars .bar:nth-child(5){ height: 60%; animation-delay: 0.25s; }
+  @keyframes eq { 0%,100%{ transform: scaleY(0.5);} 50%{ transform: scaleY(1);} }
+
+  .timing { display: flex; justify-content: space-between; font-size: 10px; color: var(--text-dim); font-variant-numeric: tabular-nums; margin-bottom: 5px; }
+  .progress-bar { height: 5px; background: var(--border); border-radius: 99px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--key)); border-radius: 99px; transition: width 0.6s ease; }
+
+  .meta { display: flex; gap: 5px; margin-top: 7px; flex-wrap: wrap; }
+  .chip {
+    font-size: 9.5px; font-weight: 700; border-radius: 99px; padding: 3px 9px;
+    background: var(--panel-hover); border: 1px solid var(--border); color: var(--text);
+    font-variant-numeric: tabular-nums;
+  }
+  .chip.key { color: var(--key); border-color: var(--key); background: var(--key-soft); }
+  .chip.bpm { color: var(--bpm); }
+  .chip.deck { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+  .chip.crate-chip { color: var(--crate); border-color: var(--crate); background: var(--crate-soft); }
+  .chip.trend.up { color: var(--green); border-color: var(--green); }
+  .chip.trend.down { color: #6db6ff; border-color: #6db6ff; }
+  .chip.trend.flat { color: var(--text-dim); }
+
+  .cue-hint { margin-top: 9px; font-size: 9.5px; color: var(--crate); border-top: 1px dashed var(--border); padding-top: 7px; font-weight: 600; }
+
+  /* ============ BARRA DE SET ============ */
+  .set-bar { display: flex; gap: 5px; justify-content: center; margin: 6px 10px 0; flex-wrap: wrap; }
+  .set-chip {
+    font-size: 9.5px; font-weight: 600; color: var(--text-dim);
+    background: var(--panel); border: 1px solid var(--border-soft); border-radius: 99px; padding: 3px 9px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ============ GRÁFICO DE BPM COMO FONDO DEL TRACK ============ */
+  .now-chart { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+  .now > *:not(.now-chart) { position: relative; z-index: 1; }
+
+  /* ============ SECCIÓN "SIGUIENTES" ============ */
+  h2 {
+    margin: 9px 12px 5px; font-size: 9px; text-transform: uppercase; letter-spacing: 1.2px;
+    color: var(--text-faint); font-weight: 800;
+  }
+  .group-label {
+    margin: 10px 10px 5px; font-size: 10px; font-weight: 800; letter-spacing: 0.3px;
+    display: flex; align-items: center; justify-content: center; gap: 6px; text-align: center;
+  }
+  .group-label span { font-size: 9px; font-weight: 600; color: var(--text-faint); text-transform: none; letter-spacing: 0; }
+  .group-label.match { color: var(--green); }
+  .group-label.change { color: var(--crate); }
+  .tracks-container { padding: 0 10px 6px; display: flex; flex-direction: column; gap: 5px; }
+  .tracks-container:last-of-type { padding-bottom: 12px; }
+
+  /* ============ FILAS DE SUGERENCIAS (estilo Serato) ============ */
+  .track {
+    display: flex; flex-direction: column; align-items: stretch; gap: 2px;
+    padding: 7px 10px; border-radius: 12px;
+    background: var(--row); border: 1px solid var(--border-soft);
+    transition: all 0.18s; position: relative;
+    width: 100%; max-width: 100%; overflow: hidden;
+  }
+  .track:hover { background: var(--panel-hover); border-color: var(--accent); }
+  .track-comodin {
+    background: var(--crate-soft); border-color: var(--crate);
+    box-shadow: 0 0 0 1px var(--crate-soft), 0 0 20px rgba(232,134,42,0.15);
+  }
+  .track-comodin .tag-fase6 { display: inline-block; background: linear-gradient(135deg,rgba(232,134,42,0.2),rgba(255,202,40,0.1)); border: 1px solid rgba(232,134,42,0.4); border-radius: 4px; padding: 1px 6px; color: #ffca28; font-size: 7px; font-weight: 700; letter-spacing: 0.5px; margin-left: 6px; }
+  .track .t {
+    font-size: 12.5px; font-weight: 700; color: var(--text); line-height: 1.2;
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden; text-overflow: ellipsis; margin-bottom: 2px;
+  }
+  .track .a { font-size: 10px; color: var(--text-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .track-bottom { display: flex; align-items: center; gap: 6px; margin-top: 3px; }
+  .tb-left { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; flex: 1; min-width: 0; }
+  .track .info {
+    font-size: 10px; color: var(--key); font-weight: 800; white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+  .track-index {
+    font-size: 9px; font-weight: 800; color: var(--text-faint);
+    background: var(--panel); border: 1px solid var(--border); border-radius: 5px;
+    padding: 2px 5px; flex-shrink: 0;
+  }
+  .btn {
+    background: var(--panel); border: 1px solid var(--border); color: var(--text-dim);
+    border-radius: 6px; width: 26px; height: 26px; font-size: 12px; cursor: pointer;
+    transition: all 0.18s; flex-shrink: 0;
+  }
+  .btn:hover { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+  .actions { display: flex; gap: 4px; align-items: center; flex-shrink: 0; }
+  .load-btn { color: var(--green); border-color: rgba(70,195,123,0.4); width: auto; min-width: 80px; padding: 6px 12px; font-size: 12px; font-weight: 900; letter-spacing: 0.5px; }
+  .deck-btn { transition: all 0.2s cubic-bezier(0.175,0.885,0.32,1.275) !important; }
+  .deck-btn:hover { transform: scale(1.03); filter: brightness(1.2); }
+  body.layout-horizontal .deck-btn { padding: 5px 4px !important; font-size: 10px !important; }
+  /* 🔒 Bloqueo de la tarjeta mientras carga al plato (evita doble atajo) */
+  .card-lock { position: absolute; inset: 0; z-index: 30; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 8px; border-radius: 12px; background: rgba(9,11,16,0.9); backdrop-filter: blur(2px); border: 2px solid var(--green); box-shadow: inset 0 0 22px rgba(70,195,123,0.25); animation: cardLockIn 0.14s ease; }
+  .card-lock.err { border-color: #ff5a5f; box-shadow: inset 0 0 22px rgba(255,90,95,0.25); }
+  .card-lock .cl-spin { width: 22px; height: 22px; border: 3px solid rgba(70,195,123,0.25); border-top-color: var(--green); border-radius: 50%; animation: spin 0.8s linear infinite; }
+  .card-lock.ok .cl-spin, .card-lock.err .cl-spin { display: none; }
+  .card-lock .cl-txt { font-size: 11px; font-weight: 800; color: #fff; padding: 0 10px; letter-spacing: 0.1px; line-height: 1.3; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+  @keyframes cardLockIn { from { opacity: 0; } to { opacity: 1; } }
+  .load-btn:hover { background: rgba(70,195,123,0.15); border-color: var(--green); color: var(--green); }
+
+  /* Botones CARGAR estilo captura: texto + flecha */
+  body.layout-horizontal .load-btn {
+    font-size: 10px; font-weight: 900; padding: 4px 10px; border-radius: 6px; letter-spacing: 0.3px;
+    background: rgba(70,195,123,0.12); border: 1px solid rgba(70,195,123,0.5); color: var(--green);
+  }
+  body.layout-horizontal .load-btn:hover { background: rgba(70,195,123,0.25); border-color: var(--green); }
+  body.layout-horizontal .swap-btn {
+    font-size: 10px; font-weight: 900; padding: 4px 8px; border-radius: 6px;
+  }
+
+  /* ============ 2 DISEÑOS DE VENTANA ============ */
+  /* HORIZONTAL: barra ancha para pegar ABAJO de Serato (~178px de alto).
+     Truco clave: display:contents aplana los contenedores para que TODAS las
+     tarjetas (modos, actual, sugerencias) queden en una sola fila. */
+  body.layout-horizontal .container { border-radius: 10px; }
+  body.layout-horizontal .header { padding: 5px 10px; }
+  body.layout-horizontal #app {
+    display: flex; flex-direction: row; align-items: stretch; gap: 8px;
+    padding: 8px 10px; overflow-x: auto; overflow-y: hidden;
+  }
+  /* Ocultar lo que no aporta en la barra */
+  body.layout-horizontal .set-bar, body.layout-horizontal h2, body.layout-horizontal .group-label,
+  body.layout-horizontal .learning, body.layout-horizontal .foot, body.layout-horizontal .branding { display: none; }
+  /* Aplanar SOLO los contenedores → sus .track pasan a la fila principal.
+     El slot del comodín queda como UNA tarjeta (así el 'buscando…' no aplasta a las otras). */
+  body.layout-horizontal .tracks-container { display: contents; }
+  body.layout-horizontal #comodin-slot { flex: 1 1 240px; min-width: 220px; margin: 0; display: flex; align-items: stretch; }
+  body.layout-horizontal #comodin-slot .searching { align-self: center; }
+  body.layout-horizontal #comodin-slot .track {
+    border-color: rgba(232,134,42,0.35);
+    box-shadow: 0 0 0 1px rgba(232,134,42,0.15);
+  }
+  body.layout-horizontal #comodin-slot .track::before {
+    background: linear-gradient(160deg, rgba(232,134,42,0.08) 0%, rgba(255,202,40,0.05) 60%, transparent 100%);
+  }
+  /* Modos: columna compacta a la izquierda */
+  body.layout-horizontal .mode-bar { flex-direction: column; width: 72px; margin: 0; padding: 3px; gap: 3px; flex-shrink: 0; }
+  body.layout-horizontal .mode-btn { font-size: 9px; padding: 7px 4px; }
+  /* Secciones con etiquetas de título superiores */
+  .card-section-tag {
+    font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.8px;
+    color: var(--accent); margin-bottom: 4px; display: flex; align-items: center; gap: 4px;
+  }
+  .card-section-tag.pitch { color: #ffca28; }
+
+  body.layout-horizontal .card-section-tag {
+    font-size: 10px; font-weight: 900; letter-spacing: 1px; margin-bottom: 5px;
+  }
+  body.layout-horizontal .card-section-tag.match { color: var(--green); }
+  body.layout-horizontal .card-section-tag.change { color: var(--crate); }
+
+  body.layout-horizontal .pitch-bar {
+    width: 220px; flex: 0 0 220px; margin: 0; padding: 10px 14px;
+    background: linear-gradient(145deg, rgba(255,202,40,0.06), rgba(255,202,40,0.02));
+    border: 1px solid rgba(255, 202, 40, 0.2); border-radius: 12px;
+    display: flex; flex-direction: column; justify-content: flex-start; align-items: center; gap: 8px;
+    box-shadow: 0 4px 14px rgba(255, 202, 40, 0.05);
+  }
+  body.layout-horizontal .pitch-grid {
+    display: grid;
+    grid-template-areas: 
+      "m5 bpm p5"
+      "m1 rst p1";
+    gap: 6px 4px;
+    align-items: center;
+    justify-items: center;
+    width: 100%;
+  }
+  body.layout-horizontal .pitch-help {
+    display: block; font-size: 8.5px; color: rgba(255,255,255,0.6); text-align: center; line-height: 1.35; margin-top: auto;
+  }
+  body:not(.layout-horizontal) .pitch-help { display: none; }
+
+  /* ============ LIVE PITCH® — el cerebro de TrackAI (rediseño) ============ */
+  .livepitch { position: relative; overflow: hidden; border-radius: 16px; margin-top: 6px; -webkit-app-region: no-drag; }
+  .livepitch > #pulseChart { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; opacity: 0.62; pointer-events: none; }
+  .lp-veil { position: absolute; inset: 0; z-index: 0; pointer-events: none; background: radial-gradient(130% 100% at 50% 0%, rgba(13,15,20,0.22), rgba(13,15,20,0.62)); }
+  .lp-fg { position: relative; z-index: 1; padding: 9px 12px 9px; }
+  .lp-topline { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+  .lp-brand { font-size: 10.5px; font-weight: 900; letter-spacing: 1.2px; color: #fff; text-shadow: 0 2px 10px #ffca28, 0 0 5px #ffca28; }
+  .lp-brand sup { font-size: 6.5px; opacity: 0.9; }
+  .lp-trend-pill { font-size: 10px; font-weight: 900; padding: 3px 9px; border-radius: 999px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.14); white-space: nowrap; }
+  .lp-controls { display: flex; flex-direction: column; align-items: center; gap: 7px; }
+  .lp-bpmbig { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 5px 18px; background: rgba(0,0,0,0.55); border: 1px solid rgba(255,202,40,0.45); border-radius: 11px; cursor: pointer; box-shadow: inset 0 0 12px rgba(0,0,0,0.85), 0 0 16px rgba(255,202,40,0.18); transition: transform 0.15s; }
+  .lp-bpmbig:hover { transform: translateY(-1px); }
+  .lp-bpmbig.active { border-color: #ffca28; box-shadow: inset 0 0 12px rgba(0,0,0,0.85), 0 0 22px rgba(255,202,40,0.4); }
+  .lp-bpmbig > b { font-size: 26px; font-weight: 900; color: #ffca28; font-family: 'SF Mono', ui-monospace, monospace; letter-spacing: -0.5px; line-height: 1; }
+  .lp-bpmbig .sub { font-size: 9px; color: #fff; opacity: 0.88; font-weight: 700; margin-top: 3px; white-space: nowrap; letter-spacing: 0.2px; }
+  .lp-bpmbig .sub b { font-size: 9px; font-weight: 800; }
+  .lp-bpmbig .bpm-label { font-size: 10px; color: #ffca28; font-weight: 800; letter-spacing: 1px; }
+  /* 🔴 Alarma de pitch forzado (>8%): el cerebro llama la atención */
+  @keyframes lpAlarm {
+    0%,100% { box-shadow: inset 0 2px 4px rgba(255,255,255,0.1), 0 8px 16px rgba(0,0,0,0.6), 0 0 14px rgba(255,90,95,0.4); border-color: rgba(255,90,95,0.55); }
+    50% { box-shadow: inset 0 2px 4px rgba(255,255,255,0.1), 0 8px 16px rgba(0,0,0,0.6), 0 0 34px rgba(255,90,95,0.95); border-color: #ff5a5f; }
+  }
+  @keyframes lp-heartbeat {
+    0%,100% { transform:scale(1); }
+    14% { transform:scale(1.12); }
+    28% { transform:scale(1); }
+    42% { transform:scale(1.08); }
+    56% { transform:scale(1); }
+  }
+  @keyframes lp-neural-spin { from { transform:rotate(0deg); } to { transform:rotate(360deg); } }
+  @keyframes lp-pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.6; transform:scale(0.9); } }
+  @keyframes lp-bpm-shimmer { 0% { background-position:0% 50%; } 50% { background-position:100% 50%; } 100% { background-position:0% 50%; } }
+  @keyframes lp-float { 0%,100% { transform:translateY(0) translateZ(0); } 50% { transform:translateY(0) translateZ(8px); } }
+  @keyframes lp-particle-float { 0% { transform:translateY(80%) scale(0); opacity:0; } 10% { opacity:1; } 90% { opacity:1; } 100% { transform:translateY(-80%) scale(1); opacity:0; } }
+  .live-pitch-ai { animation:lp-float 6s ease-in-out infinite; }
+  .livepitch.lp-alarm { animation: lpAlarm 0.7s ease-in-out infinite; }
+  @keyframes lpBlink { 50% { opacity: 0.45; } }
+  .lp-btn-solid { width:44px;height:44px;min-width:44px;border-radius:12px;font-size:13px;font-weight:800;font-family:'SF Mono',monospace;cursor:pointer;transition:all 0.25s cubic-bezier(0.175,0.885,0.32,1.275);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;border:none;}
+  .lp-btn-solid::before { content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent 40%,rgba(255,255,255,0.1) 50%,transparent 60%);transform:translateX(-100%);transition:transform 0.4s ease; }
+  .lp-btn-solid:hover { transform:translateY(-3px) scale(1.05); }
+  .lp-btn-solid:hover::before { transform:translateX(100%); }
+  .lp-btn-solid:active { transform:translateY(-1px) scale(0.98); transition:all 0.1s; }
+  .lp-alarmbar { background: rgba(255,90,95,0.18); border: 1px solid rgba(255,90,95,0.65); color: #ff9a9e; font-weight: 900; font-size: 9.5px; text-align: center; padding: 5px 6px; border-radius: 8px; margin-bottom: 8px; letter-spacing: 0.3px; animation: lpBlink 0.7s steps(1) infinite; }
+  .lp-zonebar { display: flex; align-items: center; gap: 6px; justify-content: center; }
+  .lp-zbar { position: relative; height: 6px; width: 120px; border-radius: 99px; overflow: hidden; background: linear-gradient(90deg,#46c37b 0 33.3%,#f2c14e 33.3% 66.6%,#ff5a5f 66.6% 100%); box-shadow: inset 0 0 4px rgba(0,0,0,0.6); }
+  .lp-zmark { position: absolute; top: -2px; transform: translateX(-50%); width: 3px; height: 10px; background: #fff; border-radius: 2px; box-shadow: 0 0 5px #fff; transition: left 0.25s ease; }
+  /* 🎛️ Fader de pitch vertical estilo Serato / CDJ */
+  .lp-controls-row { display: flex; align-items: center; justify-content: center; gap: 14px; }
+  .lp-fader { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+  .lp-fader-cap { font-size: 7px; color: #8a8f98; font-weight: 800; letter-spacing: 1px; }
+  .lp-fader-track { position: relative; width: 13px; height: 92px; border-radius: 7px; overflow: hidden; border: 1px solid rgba(255,255,255,0.16); box-shadow: inset 0 0 6px rgba(0,0,0,0.75); background: linear-gradient(180deg,#ff5a5f 0 16.6%,#f2c14e 16.6% 33.3%,#46c37b 33.3% 66.6%,#f2c14e 66.6% 83.3%,#ff5a5f 83.3% 100%); }
+  .lp-fader-center { position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: rgba(255,255,255,0.55); }
+  .lp-fader-handle { position: absolute; left: -3px; right: -3px; height: 7px; background: #fff; border-radius: 3px; box-shadow: 0 0 8px rgba(255,255,255,0.9), 0 1px 3px rgba(0,0,0,0.8); transform: translateY(-50%); transition: top 0.25s ease; }
+  .lp-fader-val { font-size: 9px; font-weight: 900; font-family: 'SF Mono', ui-monospace, monospace; white-space: nowrap; }
+  .lp-btnrow { display: flex; gap: 5px; align-items: center; justify-content: center; flex-wrap: wrap; }
+  .lp-btnrow .pitch-btn { padding: 6px 9px; font-size: 11px; -webkit-app-region: no-drag; }
+  .lp-help { text-align: center; margin-top: 9px; font-size: 9px; color: #ffca28; opacity: 0.82; font-weight: 600; line-height: 1.3; }
+  /* Horizontal: el cerebro es una tarjeta más ancha y de alto completo, compacto pa' que no se corte */
+  body.layout-horizontal .livepitch { width: 270px; flex: 0 0 270px; margin: 0; align-self: stretch; position: relative; }
+  body.layout-horizontal .livepitch::before {
+    display: none;
+  }
+  body.layout-horizontal .livepitch > * { position: relative; z-index: 1; }
+  body.layout-horizontal .hero-wrapper { display: flex; flex-direction: row; gap: 10px; align-items: stretch; }
+  body.layout-horizontal .lp-fg { display: flex; flex-direction: column; justify-content: center; height: 100%; padding: 8px 12px; }
+  body.layout-horizontal .lp-help { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 3px; max-width: 100%; }
+  body.layout-horizontal .lp-controls-row { gap: 8px; }
+  body.layout-horizontal .lp-bpmbig > b { font-size: 36px; line-height: 1; margin-top: 2px; display: block; }
+  body.layout-horizontal .lp-bpmbig { min-width: 180px; padding: 6px 14px 5px; }
+  body.layout-horizontal .lp-fader-track { height: 50px; width: 10px; }
+  body.layout-horizontal .lp-topline { margin-bottom: 4px; }
+  body.layout-horizontal .lp-controls { gap: 4px; }
+
+  /* Track actual: tarjeta ancha alineada con sugerencias */
+  body.layout-horizontal .now {
+    width: 260px; flex: 0 0 260px; margin: 0; padding: 10px 14px;
+    display: flex; flex-direction: column; justify-content: space-between; gap: 3px;
+    background: transparent; overflow: hidden; position: relative;
+    border-radius: 0; border: none; border-right: 1px solid var(--border-soft);
+  }
+  body.layout-horizontal .now::before {
+    display: none;
+  }
+  body.layout-horizontal .now > * { position: relative; z-index: 1; }
+  body.layout-horizontal .now .cue-hint, body.layout-horizontal .now .timing, body.layout-horizontal .now .progress-bar { display: none; }
+  body.layout-horizontal .now .title {
+    font-size: 17px; font-weight: 900; line-height: 1.1; text-transform: uppercase; letter-spacing: -0.3px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  body.layout-horizontal .now .artist {
+    font-size: 11px; color: var(--text-dim); margin-top: 1px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 600;
+  }
+  body.layout-horizontal .now .meta .chip {
+    padding: 2px 6px; font-size: 9px; font-weight: 800;
+  }
+
+  /* Sugerencias: tarjetas con líneas degradadas difuminadas, sin bordes duros */
+  body.layout-horizontal .track {
+    flex: 1 1 240px; min-width: 220px; max-width: none; margin: 0;
+    padding: 8px 10px 6px; gap: 2px; justify-content: space-between;
+    border-radius: 0; display: flex; flex-direction: column; overflow: hidden;
+    position: relative; border: none; border-right: 1px solid var(--border-soft);
+    background: transparent;
+  }
+  body.layout-horizontal .track::before {
+    display: none;
+  }
+  body.layout-horizontal .track > * { position: relative; z-index: 1; }
+  body.layout-horizontal .track .t {
+    font-size: 17px; font-weight: 900; line-height: 1.1; text-transform: uppercase; letter-spacing: -0.3px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 0;
+  }
+  body.layout-horizontal .track .a {
+    display: flex; font-size: 10px; color: var(--text-dim); margin-top: 1px;
+    white-space: nowrap; align-items: center; gap: 4px; font-weight: 600;
+  }
+  body.layout-horizontal .track .a .artist-name {
+    overflow: hidden; text-overflow: ellipsis; flex-shrink: 1;
+  }
+  body.layout-horizontal .track .a .crate {
+    flex-shrink: 0; margin: 0;
+  }
+  body.layout-horizontal .track-bottom { margin-top: auto; flex-wrap: nowrap; align-items: center; justify-content: space-between; padding-top: 5px; border-top: 1px solid var(--border-soft); }
+  body.layout-horizontal .tb-left { flex-wrap: wrap; gap: 3px; max-width: calc(100% - 110px); }
+
+  /* ============ BADGES (Sin recortes) ============ */
+  .badges { display: flex; gap: 3px 4px; margin-top: 3px; flex-wrap: wrap; align-items: center; max-height: 36px; overflow: hidden; }
+  .badge {
+    font-size: 8px; font-weight: 800; border-radius: 4px; padding: 2px 6px;
+    background: var(--panel); border: 1px solid var(--border-soft); color: var(--text-dim);
+    white-space: nowrap; letter-spacing: 0.2px; line-height: 1;
+  }
+  .badge.trans.perfect     { color: var(--green);  border-color: var(--green); }
+  .badge.trans.relative    { color: var(--accent); border-color: var(--accent); }
+  .badge.trans.energy_up   { color: var(--yellow); border-color: var(--yellow); }
+  .badge.trans.energy_down { color: #6db6ff; border-color: #6db6ff; }
+  .badge.trans.boost       { color: #ff7ac0; border-color: #ff7ac0; }
+  .badge.trans.dominant    { color: var(--crate); border-color: var(--crate); }
+  .badge.trans.mood        { color: var(--key); border-color: var(--key); }
+  .badge.creative { color: #00ffc8; border-color: rgba(0, 255, 200, 0.5); background: rgba(0, 255, 200, 0.15); font-weight: 800; }
+  .badge.bpmx  { color: var(--accent); border-color: var(--accent); }
+  .badge.fresh.new         { color: var(--green); border-color: var(--green); }
+  .badge.fresh.fresh       { color: var(--green); }
+  .badge.fresh.proven      { color: var(--yellow); border-color: var(--yellow); }
+  .badge.fresh.overplayed  { color: var(--red); }
+  .badge.crate { color: var(--crate); border-color: var(--crate); }
+  .badge.crate.same-crate { color: var(--green); border-color: var(--green); background: rgba(70,195,123,0.15); font-weight: 800; }
+  .badge.warn { color: var(--red); border-color: var(--red); background: rgba(255,90,95,0.1); }
+
+  /* ============ BUSCANDO / ERROR ============ */
+  .searching { color: var(--text-dim); font-size: 11px; font-weight: 600; }
+  .searching-dots::after { content: ''; animation: dots 1.4s steps(4, end) infinite; }
+  @keyframes dots { 0%{content:'';} 25%{content:'.';} 50%{content:'..';} 75%{content:'...';} }
+  .searching-anim { display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .searching-spinner { width: 14px; height: 14px; border-radius: 50%; border: 2px solid rgba(255,202,40,0.25); border-top-color: #ffca28; animation: spin 0.7s linear infinite; flex-shrink: 0; }
+  .searching-text { animation: searchingPulse 1.2s ease-in-out infinite; }
+  @keyframes searchingPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.45; } }
+  .err { color: var(--text-dim); font-size: 12px; text-align: center; padding: 30px 16px; }
+
+  /* ============ FOOTER ============ */
+  .learning {
+    flex-shrink: 0; text-align: center; font-size: 9.5px; font-weight: 600;
+    color: var(--accent); background: var(--accent-soft);
+    border-top: 1px solid var(--border-soft); padding: 5px 8px;
+  }
+  body.layout-horizontal .learning { display: none; }
+  .foot { font-size: 9px; color: var(--text-faint); text-align: center; padding: 6px; }
+  .branding { font-size: 9px; color: var(--text-faint); text-align: center; padding: 4px 6px 10px; opacity: 0.75; }
+
+  /* ============ COMPACT MODE ============ */
+  body.compact-mode .now, body.compact-mode h2, body.compact-mode .branding { display: none; }
+  body.compact-mode .container { min-height: auto; }
+  body.compact-mode .tracks-container { padding: 8px 12px; }
+
+  /* Scroll sutil */
+  #app::-webkit-scrollbar { width: 7px; }
+  #app::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  /* ============ MODO TRANSITION OVERLAY ============ */
+  .mode-transition-overlay {
+    position: fixed; inset: 0; z-index: 9999;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(0,0,0,0.88), rgba(0,0,0,0.97));
+    pointer-events: none; opacity: 0;
+    transition: opacity 0.35s cubic-bezier(0.16,1,0.3,1);
+  }
+  .mode-transition-overlay.show { opacity: 1; }
+  .mode-transition-overlay .emoji-3d {
+    font-size: 96px; line-height: 1;
+    animation: emojiPulse 1.6s cubic-bezier(0.16,1,0.3,1) both;
+    filter: drop-shadow(0 0 40px currentColor);
+  }
+  .mode-transition-overlay .mode-label {
+    font-size: 18px; font-weight: 900; letter-spacing: 2px;
+    text-transform: uppercase; margin-top: 16px;
+    opacity: 0; animation: labelSlide 0.6s 0.2s cubic-bezier(0.16,1,0.3,1) forwards;
+  }
+  /* 🚀 Cohete despegando con humo */
+  .mt-rocket-wrapper { position:relative; width:120px; height:140px; display:flex; align-items:center; justify-content:center; }
+  .mt-rocket { font-size:72px; position:absolute; bottom:10px; left:50%; transform:translateX(-50%); animation:mtRocketLaunch 1.8s cubic-bezier(0.16,1,0.3,1) both; filter:drop-shadow(0 0 40px rgba(255,202,40,0.6)); }
+  .mt-smoke { position:absolute; left:50%; transform:translateX(-50%); width:14px; height:14px; background:radial-gradient(circle,rgba(255,255,255,0.5),transparent); border-radius:50%; bottom:25px; }
+  .mt-smoke.s1 { animation:mtSmoke 1.8s ease-out both; }
+  .mt-smoke.s2 { animation:mtSmoke 1.8s ease-out 0.15s both; }
+  .mt-smoke.s3 { animation:mtSmoke 1.8s ease-out 0.3s both; }
+  .mt-smoke.s4 { animation:mtSmoke 1.8s ease-out 0.45s both; }
+  @keyframes mtRocketLaunch {
+    0% { transform:translateX(-50%) translateY(0) scale(1); opacity:1; }
+    60% { transform:translateX(-50%) translateY(-50px) scale(0.6); opacity:1; }
+    100% { transform:translateX(-50%) translateY(-90px) scale(0.2); opacity:0; }
+  }
+  @keyframes mtSmoke {
+    0% { transform:translateX(-50%) translateY(0) scale(0); opacity:0.5; }
+    40% { transform:translateX(-50%) translateY(5px) scale(1.5); opacity:0.25; }
+    100% { transform:translateX(-50%) translateY(15px) scale(3); opacity:0; }
+  }
+  /* ⚖️ Equalizador flat (Auto) */
+  .mt-eq { display:flex; gap:5px; align-items:center; height:80px; padding:10px 0; }
+  .mt-bar { width:10px; border-radius:3px 3px 0 0; background:linear-gradient(180deg,#2f80ed,#4fc3f7); animation:mtEqFlat 1.4s ease-in-out infinite; }
+  @keyframes mtEqFlat { 0%,100% { height:28px; } 50% { height:32px; } }
+  @keyframes emojiPulse {
+    0% { transform: scale(0.3) rotate(-15deg); opacity: 0; }
+    30% { transform: scale(1.2) rotate(5deg); opacity: 1; }
+    50% { transform: scale(1) rotate(0deg); opacity: 1; }
+    100% { transform: scale(1.8) rotate(0deg); opacity: 0; }
+  }
+  @keyframes labelSlide {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  /* Líneas degradadas difuminadas para fondos de secciones */
+  .gradient-streak {
+    position: absolute; border-radius: 50%; filter: blur(60px); opacity: 0.12;
+    pointer-events: none; z-index: 0;
+  }
+  .gradient-streak.green { background: linear-gradient(135deg, #46c37b, #00ffc8); }
+  .gradient-streak.amber { background: linear-gradient(135deg, #ffca28, #ff9100); }
+  .gradient-streak.purple { background: linear-gradient(135deg, #b877e0, #7c4dff); }
+  .gradient-streak.blue { background: linear-gradient(135deg, #2f80ed, #00b0ff); }
+
+  /* ============ RESPONSIVE: ventana angosta ============ */
+  @media (max-width: 360px) {
+    .now { margin: 8px; padding: 11px; }
+    .now .title { font-size: 14px; }
+    .mode-bar, .set-bar { margin-left: 8px; margin-right: 8px; }
+    .mode-btn { font-size: 9px; padding: 5px 2px; }
+    .tracks-container { padding: 0 8px 14px; }
+    .track { padding: 8px; gap: 7px; }
+    h2 { margin: 10px 10px 5px; }
+  }
+  /* Ventana muy baja: compacta aún más el track actual */
+  @media (max-height: 460px) {
+    .audio-bars { display: none; }
+    .now { padding: 10px 12px; }
+    .branding { display: none; }
+  }
+  /* Marquee animation for titles */
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(calc(-100% + 150px)); }
+  }
+  .marquee-text {
+    display: inline-block;
+    white-space: nowrap;
+    animation: marquee 8s linear infinite alternate;
+  }
+  
+  /* Modo Monitor (Pantalla Completa) */
+  body.mode-monitor .tracks-container, body.mode-monitor .group-label {
+    display: none !important;
+  }
+
+  /* Estilos Responsivos y Paleta Serato Pro para #founderModal */
+  #founderModal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+    background: rgba(5, 7, 15, 0.94);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    overflow-y: auto;
+    padding: 14px;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: center;
+  }
+  #founderModalCard {
+    background: rgba(14, 17, 28, 0.98);
+    border: 1.5px solid #007dff;
+    border-radius: 20px;
+    max-width: 640px;
+    width: 100%;
+    max-height: 90vh; /* Para que no se pase de la pantalla */
+    overflow-y: auto; /* Scroll interno si es necesario */
+    padding: 22px 26px;
+    margin: auto;
+    box-shadow: 0 20px 80px rgba(0, 0, 0, 0.95), 0 0 30px rgba(0, 125, 255, 0.25);
+    position: relative;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    box-sizing: border-box;
+  }
+  @media (max-height: 480px), body.layout-horizontal {
+    #founderModal { padding: 6px !important; }
+    #founderModalCard {
+      padding: 10px 14px !important;
+      gap: 6px !important;
+      max-width: 98% !important;
+      border-radius: 14px !important;
+    }
+    #founderModalCard h2 { font-size: 15px !important; margin-top: 2px !important; }
+    #founderModalDesc { font-size: 11px !important; padding-bottom: 3px !important; }
+    #founderModalCard .grid-benefits {
+      grid-template-columns: 1fr 1fr !important;
+      gap: 4px 10px !important;
+      padding: 6px 10px !important;
+      border-radius: 10px !important;
+    }
+    #founderModalCard .grid-benefits div { font-size: 10.5px !important; }
+    #founderModalCard .modal-btn-action { padding: 8px 14px !important; font-size: 11.5px !important; }
+  }
+
+  .custom-tooltip-btn {
+    position: relative;
+  }
+  .custom-tooltip-btn:hover::after {
+    content: attr(data-info);
+    position: absolute;
+    right: 0;
+    top: 120%;
+    background: rgba(10, 14, 24, 0.95);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1.5px solid #007dff;
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: #ffffff;
+    font-size: 10px;
+    white-space: pre-wrap;
+    z-index: 100000;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.8);
+    pointer-events: none;
+    text-align: left;
+    line-height: 1.4;
+    font-weight: 600;
+    width: max-content;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="header-left" style="display: flex; align-items: center; gap: 8px;">
+        <div class="logo-brand-icon" style="width: 24px; height: 24px; border-radius: 7px; overflow: hidden; border: 1.5px solid #007dff; box-shadow: 0 0 10px rgba(0,125,255,0.4); flex-shrink: 0; background: #0c0d12;">
+          <img id="headerLogoImg" src="assets/logo_pro_azul.jpg" alt="TrackAI Logo" style="width: 100%; height: 100%; object-fit: cover; display: block;" />
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <div class="wordmark" title="TrackAI Versión 4.4.1" style="display: flex; flex-direction: column; align-items: flex-start; gap: 2px; cursor: help;">
+            <div style="font-weight: 900; letter-spacing: -0.5px; font-size: 15px; color: #ffffff; line-height: 1;">
+              Track<span style="color: #007dff;" id="wordmarkAi">AI</span>
+            </div>
+            <div style="font-weight: 900; letter-spacing: -0.5px; font-size: 15px; color: #ffffff; line-height: 1;">
+              <span style="color: #007dff;">PRO</span> EDITION
+            </div>
+          </div>
+          <span id="missingFilesBadge" style="display: none; font-size: 9px; background: rgba(255,160,0,0.15); border: 1px solid #ffa000; color: #ffd54f; padding: 2px 6px; border-radius: 99px; font-weight: 800; cursor: help;" title="TrackAI descartó canciones porque no encontró el MP3. Usa Relocate Lost Files en Serato.">⚠️ Faltan MP3s</span>
+          <span id="analyzeBadge" style="display: none; font-size: 9px; padding: 2px 6px; border-radius: 99px; font-weight: 800; cursor: help;"></span>
+        </div>
+      </div>
+
+      <div class="header-center" style="display: flex; align-items: center; gap: 14px;">
+        <div class="clock" id="clock" style="font-weight: 800; color: var(--text);">🕒 00:00</div>
+        <button id="planToggleBtn" onclick="window.api && window.api.toggleTestPlan && window.api.toggleTestPlan()" style="display:flex; align-items:center; padding:3px 8px; font-size:11px; border:1px solid #00ff66; color:#00ff66; background:rgba(0, 255, 102, 0.18); border-radius:99px; cursor:pointer; gap:4px; box-shadow: 0 0 12px rgba(0,255,102,0.3); transition: all 0.2s;" title="Plan actual"><span style="font-size:11px;">🌿</span> <b style="white-space:nowrap;">CARGANDO...</b></button>
+        <div class="session-info" id="sessionInfo" style="display:none;">
+          <div id="sessionTime">—</div>
+          <div id="trackCount">—</div>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <div id="licenseHeaderInfo" style="display:flex; align-items:center; gap: 4px; font-size:9.5px; color:var(--text-dim); margin-right:8px; user-select:text; -webkit-app-region:no-drag;">
+          <div id="daysLeftBadge" style="display:none; color:var(--accent); font-weight:800; background:var(--accent-soft); padding:3px 6px; border-radius:4px; border:1px solid var(--accent);">LICENCIA: <span id="daysLeftCounter"></span></div>
+          <button class="theme-toggle custom-tooltip-btn" id="licenseOwnerBtn" style="display:none; font-size: 12px; cursor: help; padding: 2px; border:none; background:transparent;"></button>
+        </div>
+        <button class="theme-toggle" id="mySetsBtn" onclick="openMySetsModal()" title="Mis Sets Guardados">📂</button>
+        <button class="theme-toggle" id="refreshSuggBtn" onclick="refreshSuggestionsUI()" title="Refrescar sugerencias (mostrar otras opciones sin repetir)">🔄</button>
+        <button class="theme-toggle fire-btn" id="fireBtn" onclick="markFire()" title="Marcar que esta mezcla funcionó (enseña al cerebro)">🔥</button>
+        <button class="theme-toggle" id="layoutToggle" onclick="cycleLayout()" title="Cambiar diseño (vertical / horizontal)"></button>
+        <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Día / Noche">🌙</button>
+        <button class="min-btn" onclick="minimizeApp()" title="Minimizar">–</button>
+        <button class="close-btn" onclick="closeApp()" title="Cerrar">✕</button>
+      </div>
+    </div>
+    <div class="theme-overlay" id="themeOverlay"></div>
+
+    <!-- ⚡ NOTIFICACIÓN FLOTANTE AL CAMBIAR MODO DE DJ -->
+    <div id="modeToast" style="display: none; position: fixed; top: 46px; left: 50%; transform: translateX(-50%) translateY(-10px); z-index: 99995; background: rgba(10, 14, 24, 0.95); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1.5px solid #007dff; border-radius: 99px; padding: 7px 18px; box-shadow: 0 12px 40px rgba(0,0,0,0.8), 0 0 25px rgba(0, 125, 255, 0.4); opacity: 0; transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275); pointer-events: none;">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <span id="modeToastIcon" style="font-size: 18px;">⚖️</span>
+        <div>
+          <div id="modeToastTitle" style="font-size: 12px; font-weight: 900; color: #ffffff; letter-spacing: 0.5px; text-transform: uppercase;">MODO AUTO ACTIVADO</div>
+          <div id="modeToastSub" style="font-size: 9.5px; color: #a0b0d8; font-weight: 600;">Balance & Algoritmo Armónico Clásico</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="liveTelemetryBar" style="display: none !important;">
+      <span id="telemetryDot">🟢</span>
+      <b id="telemetryPathText">Detectando...</b>
+      <span id="telemetryTimeText">—</span>
+    </div>
+
+    <style>.dbg{display:none !important} body.debug .dbg{display:block !important}</style>
+    <div id="app"><div class="err">⏳ Esperando Serato…<span class="dbg" style="margin-top:6px;font-size:12px;color:#ffca28;font-weight:800;">#1 · <span id="hbCount">onState x0</span></span><span class="dbg" style="margin-top:6px;font-size:11px;color:#00ff9d;font-weight:800;letter-spacing:1px;">BUILD v4.4.1 · DEBUG ON</span></div></div>
+    <div class="learning">🧠 La IA aprende de tu estilo para darte mejores consejos</div>
+    <div class="foot" id="foot"></div>
+    <div class="branding" style="font-weight: 700;">🎧 TrackAI PRO<br><span style="opacity:0.85; font-weight:600;">✦ Con tecnología Fable 5</span></div>
+  </div>
+
+  <div id="deckLoadingOverlay" style="display: none; position: fixed; inset: 0; z-index: 99999; background: rgba(0,0,0,0.65); backdrop-filter: blur(8px); align-items: center; justify-content: center; flex-direction: column;">
+    <div style="font-size: 32px; font-weight: 900; color: #ffca28; text-shadow: 0 4px 15px rgba(255,202,40,0.5);" id="deckLoadingText">Cargando...</div>
+  </div>
+
+  <div id="founderModal" onclick="if(event.target === this) closeFounderModal()">
+    <div id="founderModalCard">
+      <!-- HEADER CON TITULO Y BOTÓN DE CERRAR INTEGRADO -->
+      <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 10px;" class="modal-header-row">
+        <div>
+          <span style="background: linear-gradient(135deg, #007dff, #00ff66); color: #04040c; font-weight: 900; font-size: 11px; padding: 3px 10px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.8px; box-shadow: 0 0 12px rgba(0, 125, 255, 0.4);">🔥 ¡SOLO 50 CUPOS FUNDADOR!</span>
+          <h2 style="color: #ffffff; font-size: 20px; font-weight: 900; margin-top: 6px; letter-spacing: -0.5px;">Desbloquea el Poder PRO — Oferta Fundador</h2>
+        </div>
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="text-align: right;">
+            <div style="font-size: 22px; font-weight: 900; color: #00ff66; line-height: 1;">$30.000</div>
+            <div style="font-size: 10.5px; color: #a0b0d8; font-weight: 700;">CLP × 6 meses</div>
+          </div>
+          <button onclick="closeFounderModal()" style="background: rgba(255, 90, 95, 0.15); border: 1px solid #ff5a5f; color: #ff5a5f; border-radius: 99px; font-weight: 900; font-size: 12px; padding: 5px 12px; cursor: pointer; transition: all 0.15s; white-space: nowrap;" title="Cerrar ventana">✕ VOLVER</button>
+        </div>
+      </div>
+
+      <p id="founderModalDesc" style="color: #c4d2eb; font-size: 13px; line-height: 1.4; margin: 0; padding-bottom: 4px; border-bottom: 1px solid rgba(255,255,255,0.08);"></p>
+      
+      <div class="grid-benefits" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 8px; background: rgba(0, 125, 255, 0.08); border: 1px solid rgba(0, 125, 255, 0.3); border-radius: 12px; padding: 10px 14px;">
+        <div style="font-size: 12px; color: #ffffff;">⚡ <b>Cargas Automáticas Ilimitadas</b> al plato (sin copiar/pegar)</div>
+        <div style="font-size: 12px; color: #ffffff;">🚀 <b>Modo Ultra IA:</b> Saltos creativos y puentes armónicos</div>
+        <div style="font-size: 12px; color: #ffffff;">🧠 <b>Live Pitch® Personalizado:</b> Aprende de tus mezclas</div>
+        <div style="font-size: 12px; color: #ffffff;">🎯 <b>Coach y Anti-Repetición:</b> Hot cues y avisos en vivo</div>
+      </div>
+
+      <div class="actions-row" style="display: flex; gap: 10px; align-items: center; justify-content: flex-end; margin-top: 2px; flex-wrap: wrap;">
+        <button onclick="closeFounderModal()" class="modal-btn-action" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.2); color: #e0e5ff; font-weight: 800; font-size: 13px; padding: 10px 18px; border-radius: 10px; cursor: pointer; transition: all 0.15s;">← Volver y Seguir en LITE</button>
+        <button onclick="openPurchaseLink()" class="modal-btn-action" style="background: linear-gradient(135deg, #007dff 0%, #00ff66 100%); border: none; color: #04040c; font-weight: 900; font-size: 13.5px; padding: 10px 22px; border-radius: 10px; cursor: pointer; box-shadow: 0 6px 20px rgba(0, 255, 102, 0.35); text-transform: uppercase; letter-spacing: 0.5px; flex: 1; text-align: center; min-width: 200px;">💎 Actualizar a PRO</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 📂 MODAL DE MIS SETS GUARDADOS -->
+  <div id="mySetsModal" style="display: none; position: fixed; inset: 0; z-index: 99990; background: rgba(8, 9, 14, 0.85); backdrop-filter: blur(12px); align-items: center; justify-content: center; padding: 16px;" onclick="if(event.target === this) closeMySetsModal()">
+    <div style="background: #141622; border: 1.5px solid rgba(55, 214, 195, 0.35); border-radius: 18px; width: 100%; max-width: 540px; max-height: 85vh; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.8);">
+      <div style="display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(0,0,0,0.2);">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 20px;">🎧</span>
+          <h3 style="margin: 0; font-size: 17px; font-weight: 900; color: #ffffff; letter-spacing: -0.3px;">Mis Sets Guardados</h3>
+          <span id="mySetsCount" style="font-size: 10px; font-weight: 800; background: rgba(55, 214, 195, 0.15); color: #37d6c3; border: 1px solid rgba(55, 214, 195, 0.4); padding: 2px 8px; border-radius: 99px;">0 sets</span>
+        </div>
+        <button onclick="closeMySetsModal()" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: #fff; border-radius: 99px; width: 28px; height: 28px; font-weight: 900; font-size: 13px; cursor: pointer;">✕</button>
+      </div>
+
+      <div style="padding: 12px 20px; background: rgba(0,0,0,0.15); border-bottom: 1px solid rgba(255,255,255,0.05);">
+        <input type="text" id="mySetsSearch" placeholder="🔍 Buscar por fecha, género o local..." oninput="filterMySetsUI()" style="width: 100%; background: #0c0d12; border: 1px solid rgba(255,255,255,0.15); color: #fff; border-radius: 8px; padding: 8px 12px; font-size: 12.5px; box-sizing: border-box;" />
+      </div>
+
+      <div id="mySetsList" style="flex: 1; overflow-y: auto; padding: 12px 20px; display: flex; flex-direction: column; gap: 10px;">
+        <div style="text-align: center; color: #8a90a2; padding: 30px; font-size: 13px;">Cargando tus sets...</div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  // ===== SHIM DEMO: simula la API de Electron + datos de Serato para la landing =====
+  (function () {
+    var states = [
+      {
+        current: { title: "TITÍ ME PREGUNTÓ", artist: "Bad Bunny", bpmNum: 111.0, camelot: "5A", folder: "REGGAETON", path: "/demo/titi.mp3", deck: "PLATO A", startTime: Math.floor(Date.now()/1000)-240, endTime: Math.floor(Date.now()/1000), length_ms: 240000, firstCueMs: 9500, hotCueCount: 3 },
+        suggestions: [
+          { title: "Classy 101", artist: "Feid · Young Miko", bpmNum: 113.6, camelot: "5A", phase: 1, path: "/demo/classy.mp3", crates: ["HITS 2023"], sharedCrates: ["REGGAETON"], pitchShiftPct: 1.2, transition: { type: 'perfect', emoji: '🎯', label: 'Match perfecto' }, freshness: 'fresh', freshnessMeta: { emoji: '✨', label: 'Reciente' } },
+          { title: "Desesperados", artist: "Rauw Alejandro · Chencho", bpmNum: 116.0, camelot: "6A", phase: 1, path: "/demo/desesperados.mp3", crates: ["PERREO"], pitchShiftPct: 4.1, transition: { type: 'relative', emoji: '🔀', label: 'Sube energía' } },
+          { title: "Danza Kuduro", artist: "Don Omar · Lucenzo", bpmNum: 98.4, camelot: "6A", phase: 2, path: "/demo/danza.mp3", crates: ["CLASICOS"], pitchShiftPct: -3.5 },
+          { title: "Rakata", artist: "Wisin & Yandel", bpmNum: 96.0, camelot: "6A", phase: 2, path: "/demo/rakata.mp3", crates: ["PERREO"], pitchShiftPct: -2.0 }
+        ],
+        mode: 'auto', isPro: true, liveBpm: 113.0, pitchOffset: 1.2, email: 'demo@trackai.cl',
+        bpmSeries: [ {bpm:110}, {bpm:111}, {bpm:112}, {bpm:111}, {bpm:113}, {bpm:112}, {bpm:113}, {bpm:114}, {bpm:113}, {bpm:113}, {bpm:114}, {bpm:114} ],
+        setDurationMin: 24, sessionTracksCount: 9, historyCount: 9, avgPartyPulse: 112.6, energyTrend: 'up',
+        venue: 'Club Amanda', currentCrates: ["REGGAETON"], librarySize: 1842, missingMp3s: 0, targetCrate: "REGGAETON",
+        libraryAnalyzed: { total: 1842, pct: 92, lastAddedDays: 3 }, activeDbPath: '/Users/tu/Music/_Serato_/master.sqlite', dbSource: 'demo', lastCheck: 'hace 1s'
+      },
+      {
+        current: { title: "GASOLINA", artist: "Daddy Yankee", bpmNum: 96.0, camelot: "6A", folder: "OLD SCHOOL", path: "/demo/gasolina.mp3", deck: "PLATO B", startTime: Math.floor(Date.now()/1000)-300, endTime: Math.floor(Date.now()/1000), length_ms: 300000, firstCueMs: 7200, hotCueCount: 2 },
+        suggestions: [
+          { title: "Danza Kuduro", artist: "Don Omar · Lucenzo", bpmNum: 98.4, camelot: "6A", phase: 1, path: "/demo/danza.mp3", crates: ["CLASICOS"], sharedCrates: ["OLD SCHOOL"], pitchShiftPct: 2.1, transition: { type: 'perfect', emoji: '🎯', label: 'Match perfecto' }, freshness: 'old', freshnessMeta: { emoji: '🔥', label: 'Clásico' } },
+          { title: "Rakata", artist: "Wisin & Yandel", bpmNum: 96.0, camelot: "6A", phase: 1, path: "/demo/rakata.mp3", crates: ["PERREO"], pitchShiftPct: 0.0, transition: { type: 'none' } },
+          { title: "Mi Gente", artist: "J Balvin · Willy William", bpmNum: 125.2, camelot: "4A", phase: 2, path: "/demo/migente.mp3", crates: ["LATINO"], pitchShiftPct: 6.8 },
+          { title: "TODO DE TI", artist: "Rauw Alejandro", bpmNum: 128.0, camelot: "4A", phase: 2, path: "/demo/tododeti.mp3", crates: ["DANCE POP"], pitchShiftPct: 7.2 }
+        ],
+        mode: 'auto', isPro: true, liveBpm: 98.0, pitchOffset: 2.1, email: 'demo@trackai.cl',
+        bpmSeries: [ {bpm:96}, {bpm:97}, {bpm:96}, {bpm:98}, {bpm:97}, {bpm:99}, {bpm:98}, {bpm:98}, {bpm:99}, {bpm:100}, {bpm:99}, {bpm:100} ],
+        setDurationMin: 32, sessionTracksCount: 12, historyCount: 12, avgPartyPulse: 98.4, energyTrend: 'up',
+        venue: 'Club Amanda', currentCrates: ["OLD SCHOOL"], librarySize: 1842, missingMp3s: 0, targetCrate: "OLD SCHOOL",
+        libraryAnalyzed: { total: 1842, pct: 92, lastAddedDays: 3 }, activeDbPath: '/Users/tu/Music/_Serato_/master.sqlite', dbSource: 'demo', lastCheck: 'hace 1s'
+      },
+      {
+        current: { title: "TODO DE TI", artist: "Rauw Alejandro", bpmNum: 128.0, camelot: "4A", folder: "DANCE POP", path: "/demo/tododeti.mp3", deck: "PLATO A", startTime: Math.floor(Date.now()/1000)-180, endTime: Math.floor(Date.now()/1000), length_ms: 180000, firstCueMs: 11000, hotCueCount: 4 },
+        suggestions: [
+          { title: "Mi Gente", artist: "J Balvin · Willy William", bpmNum: 125.2, camelot: "4A", phase: 1, path: "/demo/migente.mp3", crates: ["LATINO"], sharedCrates: ["DANCE POP"], pitchShiftPct: -2.0, transition: { type: 'relative', emoji: '🔀', label: 'Baja energía' }, freshness: 'fresh', freshnessMeta: { emoji: '✨', label: 'Reciente' } },
+          { title: "Shakira: Bzrp 53", artist: "Bizarrap · Shakira", bpmNum: 130.0, camelot: "5A", phase: 1, path: "/demo/shakira.mp3", crates: ["POP"], pitchShiftPct: 1.6 },
+          { title: "TITÍ ME PREGUNTÓ", artist: "Bad Bunny", bpmNum: 111.0, camelot: "5A", phase: 2, path: "/demo/titi.mp3", crates: ["REGGAETON"], pitchShiftPct: -4.2 },
+          { title: "Classy 101", artist: "Feid · Young Miko", bpmNum: 113.6, camelot: "5A", phase: 2, path: "/demo/classy.mp3", crates: ["HITS 2023"], pitchShiftPct: -3.8 }
+        ],
+        mode: 'auto', isPro: true, liveBpm: 127.5, pitchOffset: -2.0, email: 'demo@trackai.cl',
+        bpmSeries: [ {bpm:124}, {bpm:125}, {bpm:126}, {bpm:125}, {bpm:127}, {bpm:126}, {bpm:127}, {bpm:128}, {bpm:127}, {bpm:128}, {bpm:129}, {bpm:128} ],
+        setDurationMin: 41, sessionTracksCount: 15, historyCount: 15, avgPartyPulse: 127.8, energyTrend: 'flat',
+        venue: 'Club Amanda', currentCrates: ["DANCE POP"], librarySize: 1842, missingMp3s: 0, targetCrate: "DANCE POP",
+        libraryAnalyzed: { total: 1842, pct: 92, lastAddedDays: 3 }, activeDbPath: '/Users/tu/Music/_Serato_/master.sqlite', dbSource: 'demo', lastCheck: 'hace 1s'
+      }
+    ];
+
+    // Pool extra para que las sugerencias puedan rotar (los 2 slots + comodín)
+    var extraSug = [
+      { title: "Borro Cassette", artist: "Maluma", bpmNum: 94.0, camelot: "8A", phase: 1, path: "/demo/borro.mp3", crates: ["REGGAETON"], pitchShiftPct: 1.4 },
+      { title: "Despacito", artist: "Luis Fonsi · Daddy Yankee", bpmNum: 89.0, camelot: "8A", phase: 1, path: "/demo/despacito.mp3", crates: ["LATINO"], pitchShiftPct: 0.8 },
+      { title: "Safaera", artist: "Bad Bunny · Jowell & Randy", bpmNum: 120.0, camelot: "4A", phase: 1, path: "/demo/safaera.mp3", crates: ["PERREO"], pitchShiftPct: 3.2 },
+      { title: "Me Porto Bonito", artist: "Bad Bunny · Chencho", bpmNum: 92.0, camelot: "9A", phase: 2, path: "/demo/meporto.mp3", crates: ["REGGAETON"], pitchShiftPct: -1.2 },
+      { title: "DÁKITI", artist: "Bad Bunny", bpmNum: 112.0, camelot: "5A", phase: 2, path: "/demo/dakiti.mp3", crates: ["REGGAETON"], pitchShiftPct: 1.1 }
+    ];
+    for (var i = 0; i < states.length; i++) {
+      var seen = {};
+      states[i].suggestions.forEach(function (x) { seen[x.path] = 1; });
+      for (var j = 0; j < extraSug.length; j++) {
+        if (!seen[extraSug[j].path]) states[i].suggestions.push(extraSug[j]);
+      }
+    }
+
+    var idx = 0;
+    var api = {
+      onState: function (cb) {
+        api._cb = cb;
+        cb(states[idx]);
+        setInterval(function () {
+          idx = (idx + 1) % states.length;
+          if (api._cb) api._cb(states[idx]);
+        }, 45000);
+      },
+      getMachineInfo: function () { return Promise.resolve({ os: 'darwin', arch: 'arm64', model: 'Mac Apple Silicon' }); },
+      getSavedSets: function () { return Promise.resolve([]); },
+      getVenue: function () { return Promise.resolve('Club Amanda'); },
+      setVenue: function () { return Promise.resolve(); },
+      loadToSerato: function () { return Promise.resolve({ ok: true, deck: 'A' }); },
+      markFire: function () { return Promise.resolve({ ok: true }); },
+      refreshSuggestions: function () { return Promise.resolve(); },
+      rejectSuggestion: function () { return Promise.resolve(); },
+      setMode: function () { return Promise.resolve(); },
+      setPitchOffset: function () { return Promise.resolve(); },
+      setLiveBpm: function () { return Promise.resolve(); },
+      setLayout: function () { return Promise.resolve(); },
+      setVenue: function () { return Promise.resolve(); },
+      reconnectSerato: function () { return Promise.resolve(); },
+      selectCustomSeratoPath: function () { return Promise.resolve(); },
+      resetSeratoPath: function () { return Promise.resolve(); },
+      closeWindow: function () {},
+      minimizeWindow: function () {},
+      openFullDiskSettings: function () {},
+      openHelpWhatsApp: function () {},
+      openMacSystemSettings: function () {},
+      openSetAnalysis: function () {},
+      toggleDebug: function () {},
+      toggleTestPlan: function () {}
+    };
+    window.api = api;
+  })();
+</script>
+
+<script>
+  // ===== MODO DEPURACIÓN SECRETO =====
+  // Se activa/desactiva con  Cmd/Ctrl + Shift + D  (persistente). Por defecto: OFF (versión limpia).
+  window.__DBG = false;
+  try { window.__DBG = (localStorage.getItem('trackai_debug') === '1'); } catch (_) {}
+  (function(){
+    function applyDbg(on){
+      window.__DBG = on;
+      try { localStorage.setItem('trackai_debug', on ? '1' : '0'); } catch (_) {}
+      if (document.body) document.body.classList.toggle('debug', on);
+      if (window.api && window.api.toggleDebug) { try { window.api.toggleDebug(on); } catch (_) {} }
+    }
+    window.addEventListener('DOMContentLoaded', function(){ if (window.__DBG && document.body) document.body.classList.add('debug'); });
+    window.addEventListener('keydown', function(e){
+      if ((e.metaKey || e.ctrlKey) && e.shiftKey && (e.key === 'D' || e.key === 'd')) { e.preventDefault(); applyDbg(!window.__DBG); }
+    });
+    // 🛟 Captador global de errores: nunca quedarse pegado en silencio.
+    function showErr(title, msg, extra){
+      try{ var a=document.getElementById('app'); if(!a) return;
+        if (window.__DBG) {
+          a.innerHTML='<div class="err" style="padding:14px;text-align:left;font-size:12px;line-height:1.55;color:#ff8a8a;">💥 <b>'+title+'</b><br>'+String(msg||'?')+(extra?('<br><span style="color:#8891a5;font-size:11px;">'+extra+'</span>'):'')+'</div>';
+        } else {
+          a.innerHTML='<div class="err" style="padding:18px;text-align:center;line-height:1.5;">⚠️ Ups, algo falló al dibujar la interfaz.<br>Reinicia TrackAI.<br><span style="font-size:10.5px;opacity:.5;">(⌘⇧D para ver el detalle técnico)</span></div>';
+        }
+      }catch(_){}
+    }
+    window.addEventListener('error', function(ev){ var f=((ev.filename||'')+'').split('/').pop(); showErr('Error JS en la UI', (ev.message||(ev.error&&ev.error.message)||'?'), f+' : línea '+(ev.lineno||'?')); });
+    window.addEventListener('unhandledrejection', function(ev){ showErr('Promesa sin manejar', (ev.reason&&ev.reason.message)||ev.reason||'?', ''); });
+  })();
+
+  let _rawSavedSets = [];
+
+  async function openMySetsModal() {
+    const modal = document.getElementById('mySetsModal');
+    if (modal) modal.style.display = 'flex';
+    if (window.api && window.api.getSavedSets) {
+      _rawSavedSets = await window.api.getSavedSets();
+      renderMySetsUI(_rawSavedSets);
+    }
+  }
+
+  function closeMySetsModal() {
+    const modal = document.getElementById('mySetsModal');
+    if (modal) modal.style.display = 'none';
+  }
+
+  function filterMySetsUI() {
+    const q = (document.getElementById('mySetsSearch')?.value || '').toLowerCase().trim();
+    if (!q) return renderMySetsUI(_rawSavedSets);
+    const filtered = _rawSavedSets.filter(s => 
+      (s.date || '').toLowerCase().includes(q) || 
+      (s.genre || '').toLowerCase().includes(q) ||
+      (s.venue || '').toLowerCase().includes(q)
+    );
+    renderMySetsUI(filtered);
+  }
+
+  function renderMySetsUI(list) {
+    const container = document.getElementById('mySetsList');
+    const countBadge = document.getElementById('mySetsCount');
+    if (countBadge) countBadge.textContent = list.length + (list.length === 1 ? ' set' : ' sets');
+    if (!container) return;
+
+    if (!list || !list.length) {
+      container.innerHTML = `<div style="text-align: center; color: #8a90a2; padding: 30px; font-size: 13px;">No hay sets guardados aún.<br><span style="font-size:11px; opacity:0.8;">Toca con Serato un set de al menos 8 tracks y se guardará automáticamente.</span></div>`;
+      return;
+    }
+
+    container.innerHTML = list.map((s, idx) => `
+      <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 12px 14px; display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+        <div style="display: flex; flex-direction: column; gap: 3px; min-width: 0;">
+          <div style="font-size: 13px; font-weight: 800; color: #ffffff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+            📅 ${s.date} <span style="font-size: 11px; color: #37d6c3; font-weight: 700; margin-left: 6px;">${s.genre}</span>
+          </div>
+          <div style="font-size: 11px; color: #9aa7c4; display: flex; gap: 10px;">
+            <span>🎵 ${s.tracks} temas</span>
+            <span>⏱️ ${s.min} min</span>
+            <span style="color: #66b5ff; font-weight: 800;">🎯 Flow ${s.flow}%</span>
+          </div>
+        </div>
+        <button onclick="viewSetAnalysis(${idx})" style="background: rgba(55, 214, 195, 0.15); border: 1px solid #37d6c3; color: #37d6c3; font-weight: 800; font-size: 11.5px; padding: 6px 12px; border-radius: 8px; cursor: pointer; white-space: nowrap; transition: all 0.15s;">👁️ Ver Reporte 3D</button>
+      </div>
+    `).join('');
+  }
+
+  function viewSetAnalysis(idx) {
+    const s = _rawSavedSets[idx];
+    if (s && window.api && window.api.openSetAnalysis) {
+      window.api.openSetAnalysis(s);
+    }
+  }
+
+  window.openMySetsModal = openMySetsModal;
+  window.closeMySetsModal = closeMySetsModal;
+  window.filterMySetsUI = filterMySetsUI;
+  window.viewSetAnalysis = viewSetAnalysis;
+
+  let _currentVenue = '';
+  async function promptVenueName() {
+    const val = prompt('📍 Nombre del local o fiesta (ej: Club Amanda, Matrimonio X, Ensayos Casa):', _currentVenue || '');
+    if (val !== null) {
+      _currentVenue = val.trim();
+      if (window.api && window.api.setVenue) {
+        await window.api.setVenue(_currentVenue);
+      }
+      const el = document.getElementById('venueNameText');
+      if (el) el.textContent = _currentVenue || 'Local/Fiesta';
+    }
+  }
+  window.promptVenueName = promptVenueName;
+
+  // Cargar venue previo al inicio
+  if (window.api && window.api.getVenue) {
+    window.api.getVenue().then(v => {
+      if (v) {
+        _currentVenue = v;
+        const el = document.getElementById('venueNameText');
+        if (el) el.textContent = v;
+      }
+    }).catch(() => {});
+  }
+  function refreshSuggestionsUI() {
+    const btn = document.getElementById('refreshSuggBtn');
+    if (btn) {
+      btn.style.transform = 'rotate(180deg)';
+      setTimeout(() => { btn.style.transform = ''; }, 300);
+    }
+    if (window.api && window.api.refreshSuggestions) {
+      window.api.refreshSuggestions().catch(console.error);
+    }
+  }
+  window.refreshSuggestionsUI = refreshSuggestionsUI;
+  const app = document.getElementById('app');
+  const foot = document.getElementById('foot');
+  const clock = document.getElementById('clock');
+  const sessionTime = document.getElementById('sessionTime');
+  const trackCount = document.getElementById('trackCount');
+  const themeOverlay = document.getElementById('themeOverlay');
+
+  let currentSuggestionIndex = 0;
+  let allSuggestions = [];
+  let isSearching = false;
+  let lastRenderedPath = null; // Guardar último path renderizado
+
+  const esc = (s) => {
+    if (s == null || s === 'undefined' || s === 'null' || s === 'NaN') return '';
+    return String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  };
+
+  // Limpia el título para mostrar: quita [🔥🔥], [000], emojis y guiones colgando.
+  // Limpia el título para mostrar: quita [🔥🔥], emojis y separa los tags (REMIX, INTRO, etc)
+  function parseTitleAndTags(s) {
+    if (s == null || s === 'undefined' || s === 'null' || s === 'NaN') return { title: '', tag: '' };
+    let text = String(s)
+      .replace(/\[[^\]]*\]/g, ' ')
+      .replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{2190}-\u{21FF}\u{2B00}-\u{2BFF}]/gu, ' ')
+      .replace(/^(?:\d{1,4}\s*[-–—_]\s*)+/, '') // quita prefijos numericos
+      .replace(/^[\s\-–—_.]+/, '');
+
+    let tags = [];
+    
+    // Etiquetas entre paréntesis o corchetes
+    const bracketMatch = text.match(/[([{\s]*(remix|extended mix|extended|intro|clean edit|edit|version|radio edit|original mix|mashup|bootleg)[^\])}]*[\])}]/i);
+    if (bracketMatch) {
+      tags.push(bracketMatch[0].replace(/[()\[\]{}]/g, '').trim().toUpperCase());
+      text = text.replace(bracketMatch[0], '');
+    }
+
+    // Etiquetas al final (con guión o espacio)
+    const endMatch = text.match(/(?:\s+[-–—_]\s+|\s+)(remix|extended mix|extended|intro|clean edit|edit|version|radio edit|original mix|mashup|bootleg)$/i);
+    if (endMatch) {
+      tags.push(endMatch[1].trim().toUpperCase());
+      text = text.replace(endMatch[0], '');
+    }
+
+    // Etiquetas DH XXX o DJ XXX
+    const matchDjDh = text.match(/[([{]?\b((?:DH|DJ)[-\s]?[\w]+)\b[\])}]?/i);
+    if (matchDjDh) {
+      tags.push(matchDjDh[1].replace(/[()\[\]{}]/g, '').trim().toUpperCase());
+      text = text.replace(matchDjDh[0], '');
+    }
+
+    let tag = tags.join(' · ');
+
+    text = text.replace(/[\s\-–—_.]+$/, '').replace(/\s+/g, ' ').trim();
+    if (text.length <= 2 || ['TRACK', 'AUDIO', 'UNTITLED', 'PISTA'].includes(text.toUpperCase())) {
+      text = '—'; // Titulo basura, usar guión
+    }
+    return { title: text, tag: tag };
+  }
+
+  function cleanTitle(s) { return parseTitleAndTags(s).title; }
+
+  function renderSuggestions(s, c, progressWidth, deckChip, timingHtml, bpm) {
+    updatePlanBadge(s);
+    // FASE 1: 2 sugerencias principales (rotan: slot 1 cada 15s, slot 2 cada 12s)
+    const phase1Tracks = (s.suggestions || []).filter(t => t.phase === 1).slice(0, 2);
+    const phase1Pool = (s.suggestions || []).filter(t => t.phase === 1);
+    const phase1Html = phase1Tracks.map((t, idx) => {
+      const customTag = idx === 0 ? '🏆 FASE 4 · SUGERENCIA PRINCIPAL' : '🥈 FASE 5 · OPCIÓN ALTERNATIVA';
+      return trackRow(t, true, idx + 1, false, customTag, 'sugg-slot-' + (idx + 1));
+    }).join('');
+
+    // Manejo de errores leves (Notificación superior)
+    const errorCount = s.missingMp3s || 0;
+    const errorBanner = errorCount > 0 
+      ? `<span class="set-chip" style="color: var(--yellow); border-color: rgba(255,202,40,0.3); margin-left: 8px;">⚠️ ${errorCount} MP3s sin analizar</span>`
+      : '';
+
+    // Barra de modo de mezcla + Botón Refrescar
+    const mode = s.mode || 'auto';
+    if (mode === 'monitor') document.body.classList.add('mode-monitor');
+    else document.body.classList.remove('mode-monitor');
+    const uiaBtn = !s.isPro 
+      ? `<button class="mode-btn" style="color:#ffca28;" onclick="openFounderModal('ultra_ia')" title="🔒 Solo PRO / Fundador: Creatividad máxima y saltos de energía">🚀 Ultra IA 🔒</button>`
+      : `<button class="mode-btn ${mode === 'ultra_ia' ? 'active' : ''}" onclick="setMode('ultra_ia')" title="Creatividad máxima: Saltos de energía locos y puentes largos">🚀 Ultra IA</button>`;
+    const modeBar = `
+      <div class="mode-bar">
+        <button class="mode-btn ${mode === 'auto' ? 'active' : ''}" onclick="setMode('auto')" title="Balance / Modo Clásico">⚖️ Auto</button>
+        ${uiaBtn}
+        <button class="mode-btn ${mode === 'estricto' ? 'active' : ''}" onclick="setMode('estricto')" title="ESTRICTO: Sugerencias 100% de la misma carpeta actual. Ideal para Rock Latino, etc.">${mode === 'estricto' ? esc('📁 ' + (c.folder || 'Estricto')) : '📁 Estricto'}</button>
+        <button class="mode-btn ${mode === 'monitor' ? 'active' : ''}" onclick="setMode('monitor')" title="MONITOR: Oculta sugerencias, protagonista Live Pitch y estadísticas del set.">👀 Monitor</button>
+        <button class="mode-btn ${mode === 'up_only' ? 'active' : ''}" onclick="setMode('up_only')" title="SIEMPRE ARRIBA: Solo sugiere canciones que debas acelerar (Pitch Positivo). NUNCA frenar.">🔥 Arriba</button>
+      </div>`;
+
+    // Info de set: timer + energía + tracks (con tooltips explicativos)
+    const energyLabel = s.energyTrend === 'up' ? '📈 Energía sube'
+                      : s.energyTrend === 'down' ? '📉 Energía baja'
+                      : '➡️ Energía estable';
+    const energyTip = 'Tendencia de energía del set según el BPM de los últimos temas.';
+    const venueLabel = s.venue || _currentVenue || 'Local/Fiesta';
+    const setBar = `
+      <div class="set-bar">
+        <span class="set-chip" onclick="promptVenueName()" style="cursor:pointer;" title="Clic para definir o cambiar el nombre del local/fiesta">📍 <span id="venueNameText">${esc(venueLabel)}</span></span>
+        <span class="set-chip" title="Tiempo que llevas tocando">⏱️ ${s.setDurationMin || 0} min tocando</span>
+        <span class="set-chip" title="${energyTip}">${energyLabel}</span>
+        <span class="set-chip" title="Tracks en esta sesión">🎵 ${s.sessionTracksCount || 0} tracks</span>
+      </div>`;
+
+    // Crates del track actual
+    // 🗂️ Muestra la CARPETA FINAL (la subcarpeta donde vive el archivo, ej. "SUPER ROS"),
+    // no la ruta/crate padre. Los crates completos quedan en el tooltip.
+    const cratesTip = (s.currentCrates && s.currentCrates.length) ? esc(s.currentCrates.join(', ')) : '';
+    const curFolderName = c.folder || (s.currentCrates && s.currentCrates.length ? s.currentCrates[s.currentCrates.length - 1] : '');
+    const curCratesHtml = curFolderName
+      ? `<span class="chip crate-chip" title="${cratesTip}">🗂️ ${esc(curFolderName)}</span>` : '';
+
+    // % de BPM: cuánto subió/bajó la energía desde que empezó el set
+    let bpmTrendHtml = '';
+    const bs = (s.bpmSeries || []).map(function (p) { return p.bpm; }).filter(function (v) { return v > 0; });
+    if (bs.length >= 2 && bs[0] > 0) {
+      const pct = Math.round((bs[bs.length - 1] - bs[0]) / bs[0] * 100);
+      const cls = pct > 2 ? 'up' : pct < -2 ? 'down' : 'flat';
+      const arrow = pct > 2 ? '📈' : pct < -2 ? '📉' : '➡️';
+      const sign = pct > 0 ? '+' : '';
+      bpmTrendHtml = `<span class="chip trend ${cls}" title="Cambio de BPM desde que empezó el set (sube = más energía)">${arrow} ${sign}${pct}%</span>`;
+    }
+
+    // [BETA] Hint de hot cues: primer beat (dónde entra el beat) + cantidad (Función PRO)
+    let cueHint = '';
+    if (!s.isPro && c.firstCueMs != null) {
+      cueHint = `<div class="cue-hint" onclick="openFounderModal('general')" style="cursor:pointer; opacity:0.85; border-color: rgba(255,202,40,0.4); color:#ffca28;">🎯 🔒 Primer beat y Hot Cues es solo para <b>PRO / Fundador</b></div>`;
+    } else if (c.firstCueMs != null) {
+      const secs = Math.floor(c.firstCueMs / 1000);
+      const mm = Math.floor(secs / 60), ss = String(secs % 60).padStart(2, '0');
+      const n = c.hotCueCount ? ` · ${c.hotCueCount} hot cues` : '';
+      cueHint = `<div class="cue-hint">🎯 Primer beat (hot cue): ${mm}:${ss}${n}</div>`;
+    }
+
+    const pitchOffset = s.pitchOffset || 0;
+    // 🧠 Aprende el pitch NORMAL de este DJ (por email) para adaptar las zonas a su estilo
+    loadPitchProfile(s.email);
+    if (pitchOffset) recordPitch(s.email, pitchOffset);
+    const baseBpmVal = c.bpmNum ? Number(c.bpmNum).toFixed(1) : (bpm ? Number(bpm).toFixed(1) : '—');
+    const liveBpmVal = s.liveBpm ? Number(s.liveBpm).toFixed(1) : baseBpmVal;
+    const pitchSign = pitchOffset >= 0 ? '+' : '';
+    const pitchLabel = pitchOffset === 0 ? '0.0%' : `${pitchSign}${pitchOffset.toFixed(1)}%`;
+
+    const isHoriz = document.body.classList.contains('layout-horizontal');
+    // 🫀 Pulso de la fiesta: promedio + tendencia inteligente (¿bajé la intensidad?)
+    const avgPulse = s.avgPartyPulse ? Number(s.avgPartyPulse).toFixed(1) : liveBpmVal;
+    let heroTrend = '<span style="color:#9ccc65;font-weight:800;">➡️ estable</span>';
+    if (bs.length >= 2 && bs[0] > 0) {
+      const p = Math.round((bs[bs.length - 1] - bs[0]) / bs[0] * 100);
+      if (p < -2) heroTrend = `<span style="color:#4fc3f7;font-weight:900;">📉 bajaste ${p}%</span>`;
+      else if (p > 2) heroTrend = `<span style="color:#ff6b6b;font-weight:900;">📈 subiste +${p}%</span>`;
+    }
+    const lpActive = (pitchOffset !== 0 || s.customLiveBpm) ? 'active' : '';
+    const resetInline = ''; // User request: remove the reset button to make it visually cleaner
+
+    // 🎚️ Zona segura del pitch actual + posición del fader vertical (-12%..+12% → 0..100%)
+    const curZone = pitchZone(pitchOffset);
+    const pClamp = Math.max(-12, Math.min(12, pitchOffset));
+    const faderTop = ((12 - pClamp) / 24 * 100).toFixed(1);
+    // 🔴 Alarma: si te pasás de la zona segura (>8%), el cerebro avisa fuerte
+    const isDanger = curZone.key === 'danger';
+    const alarmClass = isDanger ? 'lp-alarm' : '';
+    const alarmBar = isDanger
+      ? `<div class="lp-alarmbar">🔴 MUY ARRIBA ${pitchLabel} — más de lo tuyo, ojo que se empieza a notar</div>` : '';
+    // 🚀 Momentum: pendiente corta del pulso (últimos ~3 temas) = ¿acelerás/frenás rápido?
+    let momentumHtml = '';
+    if (bs.length >= 3) {
+      const rec = bs.slice(-3);
+      const dm = rec[0] > 0 ? Math.round((rec[rec.length - 1] - rec[0]) / rec[0] * 100) : 0;
+      if (dm >= 3) momentumHtml = `<span class="lp-trend-pill" style="color:#ff6b6b;">🚀 +${dm}%</span>`;
+      else if (dm <= -3) momentumHtml = `<span class="lp-trend-pill" style="color:#4fc3f7;">🧊 ${dm}%</span>`;
+    }
+    // 🎯 Coach de energía por arco del set (agnóstico al género: usa tiempo + tendencia)
+    const setMin = s.setDurationMin || 0;
+    const trendP = (bs.length >= 2 && bs[0] > 0) ? Math.round((bs[bs.length - 1] - bs[0]) / bs[0] * 100) : 0;
+    let coachTxt;
+    if (setMin < 20) {
+      const msgs = ['🔥 Calentando motores, sube de a poco', '🎶 Seteando el mood, sin prisa', '🌅 Partida · sube de a poco, en bloques de 3-4 temas'];
+      coachTxt = msgs[Math.floor(Math.random() * msgs.length)];
+    } else if (setMin < 75) {
+      if (trendP > 2) {
+        const msgs = ['🚀 Subiendo la energía, mantenlos arriba!', '🔥 Prendiendo pista, no los dejes caer', '📈 Sube un escalón más si la pista lo pide'];
+        coachTxt = msgs[Math.floor(Math.random() * msgs.length)];
+      } else {
+        const msgs = ['🧊 Manteniendo el groove constante', '🌊 Deja que respiren un rato con este beat', '🎯 Clavado en el ritmo, buena base'];
+        coachTxt = msgs[Math.floor(Math.random() * msgs.length)];
+      }
+    } else {
+      if (trendP < -2) {
+        const msgs = ['🌊 Aterrizando el set con estilo', '🧊 Enfriando intencionalmente para el cierre', '📉 Bajando revoluciones con clase'];
+        coachTxt = msgs[Math.floor(Math.random() * msgs.length)];
+      } else {
+        const msgs = ['🔥 Peak time absoluto, tírale con todo', '🚀 Pista en llamas, sostén el voltaje', '💥 Cierre explosivo, no bajes'];
+        coachTxt = msgs[Math.floor(Math.random() * msgs.length)];
+      }
+    }
+
+    // 💓 Heartbeat sincronizado con el BPM de la fiesta
+    const heartbeatDuration = 60 / Math.max(Number(s.avgPartyPulse || liveBpmVal || 100), 30);
+    // Partículas doradas flotantes (sin template literals anidados para evitar bugs de backticks)
+    const particlesHtml = '<div style="position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0;opacity:0.4;">'
+      + '<div style="position:absolute;width:4px;height:4px;background:#ffd873;border-radius:50%;left:10%;top:25%;-webkit-animation:lp-particle-float 3s ease-in-out infinite;animation:lp-particle-float 3s ease-in-out infinite;animation-delay:0s;filter:blur(1px);box-shadow:0 0 6px #ffd873;"></div>'
+      + '<div style="position:absolute;width:3px;height:3px;background:#ffd873;border-radius:50%;left:28%;top:60%;animation:lp-particle-float 3.7s ease-in-out infinite;animation-delay:0.5s;filter:blur(1px);box-shadow:0 0 6px #ffd873;"></div>'
+      + '<div style="position:absolute;width:3px;height:3px;background:#ffca28;border-radius:50%;left:55%;top:20%;animation:lp-particle-float 4.2s ease-in-out infinite;animation-delay:1s;filter:blur(1px);box-shadow:0 0 6px #ffca28;"></div>'
+      + '<div style="position:absolute;width:5px;height:5px;background:#ffd873;border-radius:50%;left:75%;top:50%;animation:lp-particle-float 3.4s ease-in-out infinite;animation-delay:1.5s;filter:blur(1.5px);box-shadow:0 0 8px #ffd873;"></div>'
+      + '<div style="position:absolute;width:3px;height:3px;background:#ffca28;border-radius:50%;left:88%;top:35%;animation:lp-particle-float 4s ease-in-out infinite;animation-delay:0.8s;filter:blur(1px);box-shadow:0 0 6px #ffca28;"></div>'
+      + '<div style="position:absolute;width:4px;height:4px;background:#ffd873;border-radius:50%;left:42%;top:70%;animation:lp-particle-float 3.9s ease-in-out infinite;animation-delay:2s;filter:blur(1.5px);box-shadow:0 0 8px #ffd873;"></div>'
+      + '</div>';
+    // 🧠 FASE 3 — LIVE PITCH AI (NEURAL ENGINE · holographic BPM · partículas · botones sólidos)
+    const liveBpmBar = `
+      <div class="livepitch live-pitch-ai ${alarmClass}" style="position:relative;border-radius:0;overflow:hidden;background:transparent;border:none;border-right:1px solid rgba(255,255,255,0.04);padding:0 10px;">
+        ${particlesHtml}
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px 0;position:relative;z-index:1;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="position:relative;width:28px;height:28px;flex-shrink:0;">
+              <div style="position:absolute;inset:0;border:2px solid rgba(0,210,255,0.6);border-radius:50%;border-top-color:transparent;animation:lp-neural-spin 2s linear infinite;"></div>
+              <div style="position:absolute;inset:3px;border:1.5px solid rgba(0,210,255,0.3);border-radius:50%;border-bottom-color:transparent;animation:lp-neural-spin 3s linear infinite reverse;"></div>
+              <span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12px;">🧠</span>
+            </div>
+            <div>
+              <div style="font-size:11px;font-weight:900;letter-spacing:1.5px;color:#fff;text-shadow:0 0 10px #ffca28,0 0 5px #ffca28;">LIVE PITCH<span style="font-size:7px;opacity:0.7;">®</span></div>
+              <div style="font-size:7px;font-weight:600;color:rgba(0,210,255,0.7);letter-spacing:2px;text-transform:uppercase;">Neural Engine</div>
+            </div>
+          </div>
+          <span style="font-size:7px;font-weight:700;color:#00e676;background:rgba(0,230,118,0.12);border:1px solid rgba(0,230,118,0.3);border-radius:4px;padding:2px 7px;letter-spacing:0.5px;animation:lp-pulse 2s ease-in-out infinite;">● ACTIVE</span>
+        </div>
+        <div style="padding:6px 14px 8px;position:relative;z-index:1;text-align:center;">
+          <div style="display:flex;align-items:center;justify-content:center;gap:6px;">
+            <span onclick="editLiveBpmDirectly()" title="Toca pa' fijar el BPM de la fiesta" style="display:inline-flex;align-items:baseline;gap:4px;cursor:pointer;animation:lp-heartbeat ${heartbeatDuration}s ease-in-out infinite;">
+              <b style="font-size:30px;font-weight:900;line-height:1;background:linear-gradient(135deg,#ffd873,#ffca28,#ffe082,#ffca28,#ffd873);background-size:300% 300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 12px rgba(255,202,40,0.25));animation:lp-bpm-shimmer 3s ease infinite;">${liveBpmVal}</b>
+              <span style="font-size:11px;color:#ffca28;font-weight:800;letter-spacing:1px;opacity:0.8;">BPM</span>
+            </span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:center;gap:6px;margin-top:2px;">
+            <span style="color:${curZone.color};font-weight:800;font-size:9px;background:rgba(0,0,0,0.4);padding:2px 8px;border-radius:4px;border:1px solid ${curZone.color}33;">${curZone.emoji} ${curZone.label}</span>
+            <span style="color:rgba(160,176,216,0.7);font-size:8px;font-weight:600;">Set ${s.setDurationMin || 0} min · ${s.sessionTracksCount || 0} tracks</span>
+          </div>
+          ${s.isPro 
+            ? `<div style="margin-top:4px;font-size:8px;color:#ffd873;font-weight:600;opacity:0.85;">🧠 ${coachTxt}</div>`
+            : `<div onclick="openFounderModal('live_pitch')" style="margin-top:4px;font-size:8px;color:#e8e8f2;cursor:pointer;background:rgba(123,127,255,0.12);border:1px solid rgba(123,127,255,0.3);border-radius:6px;padding:3px 8px;display:inline-block;">🔒 Solo PRO · <b style="color:#00ffc8;">Ver Planes</b></div>`
+          }
+          <div style="display:flex;gap:6px;justify-content:center;margin-top:8px;">
+            <button class="lp-btn-solid" onclick="adjustPitch(-5)" style="background:linear-gradient(135deg,rgba(255,90,95,0.2),rgba(255,90,95,0.05));color:#ff6b6b;box-shadow:0 2px 12px rgba(255,90,95,0.15);">-5</button>
+            <button class="lp-btn-solid" onclick="adjustPitch(-1)" style="background:linear-gradient(135deg,rgba(255,202,40,0.2),rgba(255,202,40,0.05));color:#ffca28;box-shadow:0 2px 12px rgba(255,202,40,0.1);">-1</button>
+            <button class="lp-btn-solid" onclick="adjustPitch(1)" style="background:linear-gradient(135deg,rgba(0,230,118,0.2),rgba(0,230,118,0.05));color:#00e676;box-shadow:0 2px 12px rgba(0,230,118,0.1);">+1</button>
+            <button class="lp-btn-solid" onclick="adjustPitch(5)" style="background:linear-gradient(135deg,rgba(0,210,255,0.2),rgba(0,210,255,0.05));color:#00d2ff;box-shadow:0 2px 12px rgba(0,210,255,0.15);">+5</button>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.05);font-size:7px;color:rgba(160,176,216,0.5);font-weight:600;">
+            <span>🎵 ${s.sessionTracksCount || 0} tracks</span>
+            <span>❤️ ${avgPulse} avg</span>
+            <span>⚡ ${s.previousTrackBpm || '--'} BPM</span>
+          </div>
+        </div>
+      </div>`;
+
+    const app = document.getElementById('app');
+    
+    // Preparar el bloque central (Sonando Ahora + Live Pitch con canvas de fondo)
+    const parsedNow = parseTitleAndTags(c.title);
+    const nowMixTag = parsedNow.tag ? `<span style="font-size: 9px; padding: 2px 6px; background: rgba(47,128,237,0.15); border: 1px solid rgba(47,128,237,0.4); border-radius: 4px; font-weight: 800; color: #a0b0d8; margin-left: 8px; vertical-align: middle;">${esc(parsedNow.tag)}</span>` : '';
+    const headerWrapperHTML = `
+      <div class="hero-wrapper" style="position: relative; overflow: hidden;">
+        <div class="now" style="position: relative; z-index: 1; padding-right: 10px;">
+          <div class="card-section-tag" style="color: var(--accent);">🎧 SONANDO AHORA</div>
+          <div class="title" style="overflow: hidden; font-size: 17px; font-weight: 900; text-transform: uppercase; letter-spacing: -0.3px; line-height: 1.1;"><div class="marquee-text">${esc(parsedNow.title) || '—'}${nowMixTag}</div></div>
+          <div class="artist" style="font-size: 11px; font-weight: 600;">${esc(c.artist) || ''}</div>
+          <div style="display: flex; gap: 6px; align-items: center; margin-top: 6px; flex-wrap: wrap;">
+            ${bpm ? `<span style="font-size: 13px; font-weight: 900; color: #ffca28; background: rgba(255,202,40,0.12); padding: 3px 8px; border-radius: 6px; border: 1px solid rgba(255,202,40,0.3);">${bpm} BPM</span>` : ''}
+            ${c.camelot ? `<span style="font-size: 11px; font-weight: 800; color: var(--key); background: var(--key-soft); padding: 3px 8px; border-radius: 6px; border: 1px solid rgba(184,119,224,0.3);">${esc(c.camelot)}</span>` : ''}
+            ${c.folder ? `<span style="font-size: 10px; font-weight: 700; color: var(--crate); background: var(--crate-soft); padding: 2px 7px; border-radius: 5px; border: 1px solid rgba(232,134,42,0.25);">📁 ${esc(c.folder)}</span>` : ''}
+          </div>
+          ${cueHint}
+        </div>
+        ${liveBpmBar}
+      </div>
+    `;
+
+    if (isHoriz) {
+      app.innerHTML = `
+        ${modeBar}
+        ${headerWrapperHTML}
+        ${mode === 'monitor' ? getMonitorDashboardHTML(s) : `
+        <div class="tracks-container">
+          ${phase1Html || '<div class="err">Sin matches</div>'}
+        </div>
+        <div class="tracks-container">
+          <div id="comodin-slot" style="min-height: 60px;"></div>
+        </div>
+        `}
+      `;
+    } else {
+      app.innerHTML = `
+        ${modeBar}
+        ${headerWrapperHTML}
+        ${mode === 'monitor' ? getMonitorDashboardHTML(s) : `
+        <div class="group-label match">🎯 Mejores coincidencias <span>para seguir la vibra</span></div>
+        <div class="tracks-container">
+          ${phase1Html || '<div class="err">Sin matches</div>'}
+        </div>
+        <div class="group-label change">🔀 Cambio de ritmo <span>para variar la fiesta</span></div>
+        <div class="tracks-container">
+          <div id="comodin-slot" style="min-height: 60px;"></div>
+        </div>
+        `}
+      `;
+    }
+
+    // Actualizar datos del gráfico y asegurar el loop de animación (ecografía)
+    latestBpm = s.bpmSeries || [];
+    startChartAnim();
+    
+    // Si estamos en Monitor, dibujar el Heatmap
+    if (mode === 'monitor') {
+      setTimeout(() => {
+        drawSessionHeatmap(s.bpmSeries);
+      }, 50); // Pequeño retraso para que el DOM pinte y el SVG tome dimensiones
+    }
+
+    // Iniciar rotación de las 2 sugerencias principales (slot 1 cada 15s, slot 2 cada 12s)
+    // Se llama primero: limpia timers viejos y agenda sus propios ciclos
+    startSuggestionRotation(phase1Pool);
+
+    // Iniciar rotación del comodín (cambio de ritmo cada 6s)
+    const comodines = (s.suggestions || []).filter(t => t.phase === 2);
+    const hasComodin = comodines.length > 0;
+    if (hasComodin) {
+      scheduleRot(() => {
+        startComodinRotation(comodines);
+      }, 1000);
+    }
+    
+    // 🧪 Badge permanente: biblioteca sin analizar (BPM/tono). Recordatorio aunque esté tocando.
+    const aBadge = document.getElementById('analyzeBadge');
+    if (aBadge) {
+      const la = s.libraryAnalyzed;
+      const dias = la ? la.lastAddedDays : null;
+      const viejo = dias != null && dias > 30;
+      if (la && la.total > 0 && (la.pct < 70 || viejo)) {
+        const grave = la.pct < 20;
+        aBadge.style.display = 'inline-block';
+        aBadge.style.background = grave ? 'rgba(255,90,95,0.15)' : 'rgba(255,202,40,0.15)';
+        aBadge.style.border = '1px solid ' + (grave ? '#ff5a5f' : '#ffca28');
+        aBadge.style.color = grave ? '#ff5a5f' : '#ffd54f';
+        aBadge.textContent = (viejo && la.pct >= 70)
+          ? `⚠️ ${dias} días sin actualizar`
+          : `⚠️ Analiza tu biblioteca — ${la.pct}%`;
+        const diasTxt = dias != null ? ` Última música hace ${dias} días.` : '';
+        aBadge.title = (grave
+          ? `Solo ${la.pct}% de tus temas tiene BPM y tono. En Serato: selecciona todo → Analyze Files.`
+          : `${la.pct}% analizado. Analiza el resto en Serato (Analyze Files).`) + diasTxt;
+      } else {
+        aBadge.style.display = 'none';
+      }
+    }
+
+    // Notificación de archivos perdidos en el Header (Solo si es > 50% de la biblioteca)
+    const badge = document.getElementById('missingFilesBadge');
+    if (badge) {
+      const errorCount = s.missingMp3s || 0;
+      const librarySize = s.librarySize || 1;
+      if (errorCount / librarySize > 0.5) {
+        badge.style.display = 'inline-block';
+        badge.style.background = 'rgba(255,90,95,0.15)';
+        badge.style.borderColor = '#ff5a5f';
+        badge.style.color = '#ff5a5f';
+        badge.innerHTML = `⚠️ ${errorCount} MP3s sin analizar (¡GRAVE!)`;
+      } else {
+        badge.style.display = 'none';
+      }
+    }
+  }
+
+  // Timers de rotación de slots (se limpian en cada render para no duplicar ciclos)
+  var _rotTimers = [];
+  function clearRotTimers() {
+    for (var i = 0; i < _rotTimers.length; i++) clearTimeout(_rotTimers[i]);
+    _rotTimers = [];
+  }
+  function scheduleRot(fn, ms) {
+    var t = setTimeout(fn, ms);
+    _rotTimers.push(t);
+    return t;
+  }
+
+  // Dibujo "buscando" reutilizable: 🧠 (cambio de ritmo) o ⚡ (sugerencia principal)
+  function searchingHTML(emoji, titleHtml, subText) {
+    return `
+      <div class="searching searching-ai" style="width: 100%; text-align: center; padding: 18px 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;">
+        <div style="position: relative; width: 72px; height: 72px; flex-shrink: 0;">
+          <div style="position:absolute; inset:0; border:2.5px solid rgba(0,210,255,0.55); border-radius:50%; border-top-color:transparent; animation:lp-neural-spin 1.6s linear infinite; box-shadow:0 0 18px rgba(0,210,255,0.25) inset;"></div>
+          <div style="position:absolute; inset:7px; border:2px solid rgba(255,202,40,0.45); border-radius:50%; border-bottom-color:transparent; animation:lp-neural-spin 2.4s linear infinite reverse;"></div>
+          <div style="position:absolute; inset:14px; border:1.5px solid rgba(184,119,224,0.5); border-radius:50%; border-left-color:transparent; animation:lp-neural-spin 3.2s linear infinite;"></div>
+          <div style="position:absolute; inset:22px; border-radius:50%; background:radial-gradient(circle, rgba(0,210,255,0.15), transparent 70%); animation:lp-pulse 1.4s ease-in-out infinite;"></div>
+          <span style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:32px; animation:lp-heartbeat 1.4s ease-in-out infinite; filter:drop-shadow(0 0 12px rgba(255,202,40,0.5));">${emoji}</span>
+        </div>
+        <div style="font-size:13px; font-weight:900; color:#fff; letter-spacing:0.5px; text-transform:uppercase; line-height:1.3;">${titleHtml}<span class="searching-dots"></span></div>
+        <div style="font-size:8.5px; color:rgba(0,210,255,0.8); font-weight:700; letter-spacing:2px; text-transform:uppercase; animation:searchingPulse 1.2s ease-in-out infinite;">${subText}</div>
+      </div>
+    `;
+  }
+
+  // Cambio de ritmo (comodín): ciclo cada 6s (buscando 🧠 2s → bonus track 4s)
+  function startComodinRotation(comodines) {
+    const comodinSlot = document.getElementById('comodin-slot');
+    if (!comodinSlot || comodines.length === 0) return;
+    var offset = 0;
+    function cycle() {
+      var slot = document.getElementById('comodin-slot');
+      if (!slot) return;
+      slot.innerHTML = searchingHTML('🧠', 'Buscando sugerencias<br>para cambiar el ritmo', '● Neural Engine escaneando');
+      var t = comodines[offset % comodines.length];
+      offset = (offset + 1) % comodines.length;
+      scheduleRot(function () {
+        var slot2 = document.getElementById('comodin-slot');
+        if (!slot2) return;
+        slot2.innerHTML = trackRow(t, true, 3, true, '🔮 FASE 6 · BONUS TRACK <span class="tag-fase6">DESTACADO</span>');
+        scheduleRot(cycle, 4000);
+      }, 2000);
+    }
+    scheduleRot(cycle, 2000);
+  }
+
+  // Rotación de un slot de sugerencia (buscando ⚡ 2s → track (interval-2s) → loop)
+  function rotateSlot(slotId, pool, intervalMs, emoji, titleHtml, subText, tag) {
+    if (!pool || pool.length === 0) return;
+    var offset = 1;
+    function cycle() {
+      var slot = document.getElementById(slotId);
+      if (!slot) return;
+      slot.innerHTML = searchingHTML(emoji, titleHtml, subText);
+      var t = pool[offset % pool.length];
+      offset = (offset + 1) % pool.length;
+      scheduleRot(function () {
+        var slot2 = document.getElementById(slotId);
+        if (!slot2) return;
+        slot2.outerHTML = trackRow(t, true, 0, false, tag, slotId);
+        scheduleRot(cycle, intervalMs - 2000);
+      }, 2000);
+    }
+    scheduleRot(cycle, 2000);
+  }
+
+  // 2 sugerencias principales: slot 1 rota cada 15s, slot 2 cada 12s (con ⚡)
+  function startSuggestionRotation(pool) {
+    if (!pool || pool.length < 2) return;
+    clearRotTimers();
+    var pool2 = pool.slice(1).concat(pool.slice(0, 1));
+    rotateSlot('sugg-slot-1', pool, 15000, '⚡', 'Buscando una nueva<br>sugerencia', '● Analizando tu librería', '🏆 FASE 4 · SUGERENCIA PRINCIPAL');
+    rotateSlot('sugg-slot-2', pool2, 12000, '⚡', 'Buscando una nueva<br>sugerencia', '● Analizando tu librería', '🥈 FASE 5 · OPCIÓN ALTERNATIVA');
+  }
+
+  // Tema Serato fijo (sin cambios)
+  // Solo Glassmorphism + Serato colors
+
+  // Reloj en vivo
+  setInterval(() => {
+    const now = new Date();
+    clock.innerHTML = '🕒 ' + String(now.getHours()).padStart(2, '0') + ':' +
+                        String(now.getMinutes()).padStart(2, '0');
+  }, 30000);
+  // Llamar inmediatamente para inicializar
+  (function initClock(){
+    const now = new Date();
+    clock.innerHTML = '🕒 ' + String(now.getHours()).padStart(2, '0') + ':' +
+                        String(now.getMinutes()).padStart(2, '0');
+  })();
+
+  function formatTime(ms) {
+    if (!ms) return '0:00';
+    const s = Math.floor(ms / 1000);
+    const m = Math.floor(s / 60);
+    return `${m}:${String(s % 60).padStart(2, '0')}`;
+  }
+
+  function creativeBadge(t) {
+    const cb = t.creativeBadge;
+    if (!cb || !cb.label) return '';
+    if (cb.type === 'bpm_mult' || cb.type === 'mood_shift') return '';
+    return `<span class="badge creative ${esc(cb.type)}" title="Técnica creativa: ${esc(cb.label)}">${cb.emoji} ${esc(cb.label)}</span>`;
+  }
+  function transitionBadge(t) {
+    const tr = t.transition;
+    if (!tr || !tr.type || tr.type === 'none' || tr.type === 'unknown') return '';
+    return `<span class="badge trans ${esc(tr.type)}">${tr.emoji} ${esc(tr.label)}</span>`;
+  }
+  function freshBadge(t) {
+    const m = t.freshnessMeta;
+    if (!m || !m.label) return '';
+    return `<span class="badge fresh ${esc(t.freshness)}">${m.emoji} ${esc(m.label)}</span>`;
+  }
+  // 🧠 PERFIL DE PITCH POR DJ: aprende el rango NORMAL de cada usuario (por email) y guarda
+  // el estándar en localStorage. MVP en HTML; más adelante lo hace la API/agente pagado.
+  var _pitchProfile = { key: null, samples: [], normal: null };
+  function recomputeNormal() {
+    var s = _pitchProfile.samples.filter(function (x) { return x > 0; }).slice().sort(function (a, b) { return a - b; });
+    // Necesita al menos 8 muestras para "aprender"; si no, usa umbrales realistas por defecto.
+    _pitchProfile.normal = s.length >= 8 ? s[Math.floor(s.length * 0.75)] : null; // percentil 75 = tope de tu rango habitual
+  }
+  function loadPitchProfile(email) {
+    var key = 'trackai-pitchprofile-' + (email || 'anon');
+    if (_pitchProfile.key === key) return _pitchProfile;
+    _pitchProfile.key = key;
+    try { var d = JSON.parse(localStorage.getItem(key) || 'null'); _pitchProfile.samples = (d && d.samples) || []; }
+    catch (_) { _pitchProfile.samples = []; }
+    recomputeNormal();
+    return _pitchProfile;
+  }
+  function recordPitch(email, pitch) {
+    var a = Math.abs(Number(pitch) || 0);
+    if (a < 0.3) return; // ignora ~0 (no aporta a tu "normal")
+    loadPitchProfile(email);
+    var last = _pitchProfile.samples[_pitchProfile.samples.length - 1];
+    if (last != null && Math.abs(last - a) < 0.2) return; // no duplicar el mismo valor
+    _pitchProfile.samples.push(Math.round(a * 10) / 10);
+    if (_pitchProfile.samples.length > 80) _pitchProfile.samples = _pitchProfile.samples.slice(-80);
+    recomputeNormal();
+    try { localStorage.setItem(_pitchProfile.key, JSON.stringify({ samples: _pitchProfile.samples, normal: _pitchProfile.normal, updated: Date.now() })); } catch (_) {}
+  }
+
+  // 🎚️ ZONA DE PITCH — ADAPTADA A TU ESTILO:
+  //   Si TrackAI ya aprendió tu rango normal, las zonas se centran en TI (tu +7% habitual = verde).
+  //   Si aún no aprende (pocas muestras), usa umbrales realistas (verde ≤7, amarillo 7-11, rojo >11).
+  //   Tope duro de calidad: sobre ~14% siempre rojo (ahí sí se degrada de verdad).
+  function pitchZone(pct) {
+    const a = Math.abs(Number(pct) || 0);
+    const base = (_pitchProfile && _pitchProfile.normal) ? _pitchProfile.normal : null;
+    const greenMax = base ? Math.max(7, base + 2) : 7;
+    const yellowMax = greenMax + 4;
+    if (a > 14) return { key: 'danger', color: '#ff5a5f', emoji: '🔴', label: 'Muy arriba' };
+    if (a <= greenMax) return { key: 'safe', color: '#46c37b', emoji: '🟢', label: base ? 'Tu rango' : 'Bien' };
+    if (a <= yellowMax) return { key: 'warn', color: '#f2c14e', emoji: '🟡', label: 'Ojo, más de lo tuyo' };
+    return { key: 'danger', color: '#ff5a5f', emoji: '🔴', label: 'Muy arriba' };
+  }
+  function bpmxBadge(t) {
+    if (!t.bpmCompat) return '';
+    const bc = t.bpmCompat;
+    // Para x2 / mitad / tresillo mostramos el pitch del múltiplo (vs BPM real del track).
+    if (bc.type === 'double' || bc.type === 'half' || bc.type === 'triplet') {
+      const s2 = t.pitchShiftPct != null ? t.pitchShiftPct : bc.pitchShiftPct;
+      if (s2 == null) return '';
+      const f2 = `${s2 >= 0 ? '+' : ''}${s2.toFixed(1)}%`;
+      const lbl = bc.type === 'double' ? 'x2' : bc.type === 'half' ? 'x0.5' : 'x1.5';
+      return `<span class="badge bpmx">🧮 ${lbl} (Pitch ${f2})</span>`;
+    }
+    const shift = t.liveShiftPct != null ? t.liveShiftPct : (t.pitchShiftPct != null ? t.pitchShiftPct : bc.pitchShiftPct);
+    if (shift == null) return '';
+    const currentPitchOffset = (window.lastState && window.lastState.liveBpmOffsetPct) || 0;
+    
+    // Si el shift sugerido es casi identico a donde ya tienes clavado el fader, no lo mostramos para evitar ruido visual
+    if (Math.abs(shift - currentPitchOffset) < 0.2) return '';
+    
+    const sign = shift >= 0 ? '+' : '';
+    const formattedShift = `${sign}${shift.toFixed(1)}%`;
+
+    if (Math.abs(shift) <= 0.1) {
+      return `<span class="badge pitch-exact">🎯 Pitch 0.0%</span>`;
+    }
+    // 🎚️ Color por zona segura: verde/amarillo/rojo según cuánto hay que forzar el pitch
+    const z = pitchZone(shift);
+    return `<span class="badge" style="color:${z.color};border-color:${z.color};" title="Zona ${z.label}: pitch ${formattedShift} (≤4% invisible · 4-8% audible · >8% suena forzado)">${z.emoji} Pitch ${formattedShift}</span>`;
+  }
+  function crateBadge(t) {
+    // 🗂️ Si comparte crate con lo que estás tocando, mostramos ESE crate primero
+    // (es tu mismo grupo curado) con un check, para que quede claro que es "misma carpeta".
+    if (t.sharedCrates && t.sharedCrates.length) {
+      const name = t.sharedCrates[0];
+      const extra = t.sharedCrates.length > 1 ? ` +${t.sharedCrates.length - 1}` : '';
+      return `<span class="badge crate same-crate" title="Mismo crate que estás tocando: ${esc(t.sharedCrates.join(', '))}">✅ ${esc(name)}${extra}</span>`;
+    }
+    if (t.crates && t.crates.length) {
+      const extra = t.crates.length > 1 ? ` +${t.crates.length - 1}` : '';
+      return `<span class="badge crate" title="${esc(t.crates.join(', '))}">🗂️ ${esc(t.crates[0])}${extra}</span>`;
+    }
+    return '';
+  }
+  function repeatBadge(t) {
+    if (!t.repeatWarn) return '';
+    return `<span class="badge warn" title="Ya tocaste este tema o una versión/remix">${esc(t.repeatWarn.label)}</span>`;
+  }
+
+  // ---- Gráfico de BPM tipo ECOGRAFÍA (animado) como fondo del track ----
+  var latestBpm = [];
+  var chartRAF = null;
+  function startChartAnim() {
+    if (chartRAF) return;
+    var loop = function (ts) {
+      try {
+        var cs = document.querySelectorAll('canvas.bpm-ecg');
+        for (var i = 0; i < cs.length; i++) drawBpmChart(cs[i], latestBpm, ts);
+      } catch (_) {}
+      chartRAF = requestAnimationFrame(loop);
+    };
+    chartRAF = requestAnimationFrame(loop);
+  }
+
+  function drawBpmChart(c, series, ts) {
+    if (!c) return;
+    const wrap = c.parentElement; // contenedor del lienzo
+    if (!wrap) return;
+    ts = ts || 0;
+    const cs = getComputedStyle(document.body);
+    const accent = (cs.getPropertyValue('--accent') || '#2f80ed').trim();
+    const key = (cs.getPropertyValue('--key') || '#b877e0').trim();
+    const W = Math.max(120, wrap.clientWidth);
+    const H = Math.max(48, wrap.clientHeight);
+    const dpr = window.devicePixelRatio || 1;
+    if (c.width !== Math.round(W * dpr)) { c.width = W * dpr; c.height = H * dpr; c.style.width = W + 'px'; c.style.height = H + 'px'; }
+    const ctx = c.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W, H);
+
+    const data = (series || []).slice(-30).map(function (p) { return p.bpm; }).filter(function (v) { return v > 0; });
+    if (data.length < 1) return;
+
+    // Rejilla sutil de fondo
+    ctx.strokeStyle = 'rgba(255,255,255,0.04)'; ctx.lineWidth = 1;
+    for (let gy = 0; gy < 3; gy++) { const y = 8 + gy * (H - 16) / 2; ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
+
+    if (data.length < 2) return;
+
+    // Escala Y amplificada
+    let lo = Math.min.apply(null, data), hi = Math.max.apply(null, data);
+    if (hi - lo < 4) { const mid = (hi + lo) / 2; lo = mid - 3; hi = mid + 3; } else { lo -= 1; hi += 1; }
+    const range = Math.max(1, hi - lo);
+    const padBot = 10, padTop = 12;
+    const stepX = W / (data.length - 1);
+    
+    // Obtener array de puntos 2D [[x0, y0], [x1, y1], ...]
+    const points = data.map(function (v, i) {
+      return [i * stepX, H - padBot - ((v - lo) / range) * (H - padTop - padBot)];
+    });
+
+    // Función para trazar curva suave redondeada (Bezier spline)
+    function traceSmoothPath(pList) {
+      if (!pList || pList.length < 2) return;
+      ctx.moveTo(pList[0][0], pList[0][1]);
+      if (pList.length === 2) {
+        ctx.lineTo(pList[1][0], pList[1][1]);
+        return;
+      }
+      for (let i = 0; i < pList.length - 1; i++) {
+        const p0 = pList[i === 0 ? i : i - 1];
+        const p1 = pList[i];
+        const p2 = pList[i + 1];
+        const p3 = pList[i + 2 < pList.length ? i + 2 : i + 1];
+
+        const cp1x = p1[0] + (p2[0] - p0[0]) / 6;
+        const cp1y = p1[1] + (p2[1] - p0[1]) / 6;
+        const cp2x = p2[0] - (p3[0] - p1[0]) / 6;
+        const cp2y = p2[1] - (p3[1] - p1[1]) / 6;
+
+        ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, p2[0], p2[1]);
+      }
+    }
+
+    // 1. Área de fondo sombreada con curva suave
+    const firstP = points[0];
+    const lastP = points[points.length - 1];
+    ctx.beginPath();
+    traceSmoothPath(points);
+    ctx.lineTo(lastP[0], H); ctx.lineTo(firstP[0], H); ctx.closePath();
+    const areaGrad = ctx.createLinearGradient(0, 0, 0, H);
+    areaGrad.addColorStop(0, 'rgba(47,128,237,0.22)');
+    areaGrad.addColorStop(1, 'rgba(47,128,237,0.02)');
+    ctx.fillStyle = areaGrad; ctx.fill();
+
+    // 2. Línea suavizada con resplandor neón (latido pulsante)
+    const pulse = 0.5 + 0.5 * Math.sin(ts / 320);
+    const lineGrad = ctx.createLinearGradient(0, 0, W, 0);
+    lineGrad.addColorStop(0, accent); lineGrad.addColorStop(1, key);
+
+    ctx.save();
+    ctx.shadowColor = key; ctx.shadowBlur = 6 + pulse * 8;
+    ctx.beginPath();
+    traceSmoothPath(points);
+    ctx.globalAlpha = 0.95; ctx.strokeStyle = lineGrad; ctx.lineWidth = 2.6; ctx.lineJoin = 'round'; ctx.lineCap = 'round'; ctx.stroke();
+    ctx.restore();
+
+    // 3. Barrido sutil tipo ecografía
+    const sweepX = (ts / 16) % W;
+    const sg = ctx.createLinearGradient(sweepX - 25, 0, sweepX + 25, 0);
+    sg.addColorStop(0, 'rgba(255,255,255,0)'); sg.addColorStop(0.5, 'rgba(255,255,255,0.08)'); sg.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = sg; ctx.fillRect(sweepX - 25, 0, 50, H);
+
+    // 4. Puntos pequeños de cada tema en la curva
+    ctx.globalAlpha = 0.8;
+    points.forEach(function (p) {
+      ctx.beginPath(); ctx.arc(p[0], p[1], 1.8, 0, Math.PI * 2); ctx.fillStyle = accent; ctx.fill();
+    });
+
+    // 5. 🔮 PUNTO VIAJERO QUE SE MUEVE CONTINUAMENTE POR LA LÍNEA
+    const travelProgress = 0.5 + 0.5 * Math.sin(ts / 1600); // 0 a 1 ida y vuelta suave
+    
+    function getPointOnCurve(pList, u) {
+      if (pList.length < 2) return pList[0] || [0, 0];
+      const targetX = u * (pList[pList.length - 1][0] - pList[0][0]) + pList[0][0];
+      let idx = 0;
+      while (idx < pList.length - 2 && pList[idx + 1][0] < targetX) {
+        idx++;
+      }
+      const p0 = pList[idx === 0 ? idx : idx - 1];
+      const p1 = pList[idx];
+      const p2 = pList[idx + 1];
+      const p3 = pList[idx + 2 < pList.length ? idx + 2 : idx + 1];
+
+      const segW = p2[0] - p1[0];
+      const t = segW > 0 ? (targetX - p1[0]) / segW : 0;
+
+      const cp1x = p1[0] + (p2[0] - p0[0]) / 6;
+      const cp1y = p1[1] + (p2[1] - p0[1]) / 6;
+      const cp2x = p2[0] - (p3[0] - p1[0]) / 6;
+      const cp2y = p2[1] - (p3[1] - p1[1]) / 6;
+
+      const cx = Math.pow(1 - t, 3) * p1[0] + 3 * Math.pow(1 - t, 2) * t * cp1x + 3 * (1 - t) * t * t * cp2x + Math.pow(t, 3) * p2[0];
+      const cy = Math.pow(1 - t, 3) * p1[1] + 3 * Math.pow(1 - t, 2) * t * cp1y + 3 * (1 - t) * t * t * cp2y + Math.pow(t, 3) * p2[1];
+      return [cx, cy];
+    }
+
+    const traveler = getPointOnCurve(points, travelProgress);
+
+    // 🔮 LA BOLITA VIAJERA (recomendación de estabilidad del Live Pitch): más grande y brillante
+    ctx.save();
+    ctx.shadowColor = '#ffca28'; ctx.shadowBlur = 18;
+    ctx.beginPath(); ctx.arc(traveler[0], traveler[1], 6, 0, Math.PI * 2);
+    ctx.fillStyle = '#fff8e6'; ctx.fill();
+    ctx.restore();
+    // núcleo dorado
+    ctx.beginPath(); ctx.arc(traveler[0], traveler[1], 3, 0, Math.PI * 2);
+    ctx.fillStyle = '#ffca28'; ctx.fill();
+
+    // Anillo expansivo dorado sobre la bolita viajera
+    const travelPulse = 0.5 + 0.5 * Math.cos(ts / 200);
+    ctx.beginPath(); ctx.arc(traveler[0], traveler[1], 7 + travelPulse * 7, 0, Math.PI * 2);
+    ctx.strokeStyle = `rgba(255,202,40,${0.6 * (1 - travelPulse) + 0.2})`; ctx.lineWidth = 1.6; ctx.stroke();
+
+    // 6. Punto ACTUAL (último tema) pulsante con anillo
+    ctx.beginPath(); ctx.arc(lastP[0], lastP[1], 3 + pulse * 1.5, 0, Math.PI * 2); ctx.fillStyle = key; ctx.fill();
+    ctx.beginPath(); ctx.arc(lastP[0], lastP[1], 4.5 + pulse * 5, 0, Math.PI * 2);
+    ctx.strokeStyle = key; ctx.globalAlpha = 0.4 * (1 - pulse); ctx.lineWidth = 1.6; ctx.stroke();
+    ctx.globalAlpha = 1;
+  }
+
+  function trackRow(t, isSuggestion = false, index = 0, isComodin = false, customTag = '', slotId = '') {
+    const formattedBpm = t.bpmNum ? (Number.isInteger(t.bpmNum) ? t.bpmNum + ' BPM' : Number(t.bpmNum).toFixed(1) + ' BPM') : null;
+    const info = [t.camelot || t.key, formattedBpm].filter(Boolean).join(' · ');
+    const parsed = parseTitleAndTags(t.title);
+    const fullCleanTitle = parsed.title;
+    const mixTag = parsed.tag ? `<span style="font-size: 8.5px; padding: 2px 4px; background: rgba(255,255,255,0.1); border-radius: 3px; font-weight: 800; color: #a0b0d8;">${esc(parsed.tag)}</span>` : '';
+    const fullTooltip = (t.artist && t.artist !== '?') ? `${fullCleanTitle} — ${t.artist}` : fullCleanTitle;
+    const isProUser = !window._currentState || window._currentState.isPro;
+    const actionsHtml = isSuggestion ? (isProUser ? `
+      <div style="display:flex;gap:6px;justify-content:center;">
+        <button class="btn deck-btn" data-deck="A" title="Cargar en Plato A" style="flex:1;padding:8px 6px;font-size:12px;border-radius:8px;background:linear-gradient(135deg,rgba(70,195,123,0.2),rgba(70,195,123,0.05));border:1px solid rgba(70,195,123,0.5);color:var(--green);cursor:pointer;font-weight:900;letter-spacing:0.5px;min-width:0;">▶ PLATO A</button>
+        <button class="btn deck-btn" data-deck="B" title="Cargar en Plato B" style="flex:1;padding:8px 6px;font-size:12px;border-radius:8px;background:linear-gradient(135deg,rgba(70,195,123,0.2),rgba(70,195,123,0.05));border:1px solid rgba(70,195,123,0.5);color:var(--green);cursor:pointer;font-weight:900;letter-spacing:0.5px;min-width:0;">▶ PLATO B</button>
+        <button class="btn swap-btn" onclick="rejectSuggestion('${t.path ? esc(t.path) : esc(t.title)}')" title="Cambiar sugerencia" style="width:36px;height:36px;font-size:14px;border-radius:8px;">🔀</button>
+      </div>` : `
+      <div style="display:flex;gap:6px;justify-content:center;">
+        <button onclick="copyText('${esc(fullCleanTitle)}'); openFounderModal('limit');" title="Copiar y ver planes" style="flex:1;padding:8px 6px;font-size:12px;font-weight:900;border-radius:8px;background:rgba(255,202,40,0.15);color:#ffca28;border:1px solid rgba(255,202,40,0.4);cursor:pointer;letter-spacing:0.5px;">📋 Copiar</button>
+        <button class="btn swap-btn" onclick="rejectSuggestion('${t.path ? esc(t.path) : esc(t.title)}')" title="Cambiar sugerencia" style="width:36px;height:36px;font-size:14px;border-radius:8px;">🔀</button>
+      </div>`) : '';
+    
+    const comodinClass = isComodin ? 'track-comodin' : '';
+    const badges = [repeatBadge(t), creativeBadge(t), transitionBadge(t), bpmxBadge(t), freshBadge(t)].filter(Boolean).join('');
+    const crateHtml = crateBadge(t);
+    const artistText = t.artist ? esc(t.artist) : '';
+
+    const tagHtml = customTag ? `<div style="font-size: 9px; font-weight: 900; color: var(--accent); letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 5px; display: flex; align-items: center; justify-content: center; gap: 4px;">${customTag}</div>` : '';
+
+    return `<div class="track ${comodinClass}" ${slotId ? 'id="' + slotId + '"' : ''} data-title="${esc(t.title)}" data-path="${esc(t.path || '')}" data-copy="${esc(fullCleanTitle)}">
+      ${tagHtml}
+      <div class="t" title="${esc(fullTooltip)}">${esc(fullCleanTitle) || 'Sin título'} ${mixTag}</div>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 3px; margin-bottom: 2px;">
+        <span class="artist-name" style="font-size: 10.5px; color: var(--text-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 8px; font-weight: 600;">${artistText}</span>
+        <div style="display: flex; gap: 4px; flex-shrink: 0;">
+          ${t.camelot ? `<span style="font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 4px; background: rgba(184,119,224,0.15); border: 1px solid rgba(184,119,224,0.4); color: var(--key);">TONO ${esc(t.camelot)}</span>` : ''}
+          ${formattedBpm ? `<span style="font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 4px; background: rgba(160,176,216,0.1); border: 1px solid rgba(160,176,216,0.3); color: #a0b0d8;">${esc(formattedBpm)}</span>` : ''}
+        </div>
+      </div>
+      <div style="display: flex; gap: 3px; align-items: center; flex-wrap: wrap; margin-bottom: 4px;">
+        ${crateHtml} ${badges}
+      </div>
+      <div style="border-top: 1px solid rgba(255,255,255,0.08); margin: 2px 0 5px;"></div>
+      ${actionsHtml}
+    </div>`;
+  }
+
+  // Reject específico track
+  window.rejectSuggestion = function(pathOrTitle) {
+    if (window.api.rejectSuggestion) {
+      window.api.rejectSuggestion(pathOrTitle);
+    }
+  };
+
+  // 🔒 Bloqueo de una tarjeta (overlay) mientras carga al plato
+  function lockCard(row, text) {
+    if (!row) return null;
+    row.style.position = 'relative';
+    var ov = document.createElement('div');
+    ov.className = 'card-lock';
+    ov.innerHTML = '<div class="cl-spin"></div><div class="cl-txt"></div>';
+    ov.querySelector('.cl-txt').textContent = text;
+    row.appendChild(ov);
+    return ov;
+  }
+  function setCardLock(ov, text, kind) {
+    if (!ov) return;
+    var t = ov.querySelector('.cl-txt');
+    if (t) t.textContent = text;
+    ov.classList.remove('ok', 'err');
+    if (kind) ov.classList.add(kind);
+  }
+  function unlockCard(ov) { if (ov && ov.parentNode) ov.parentNode.removeChild(ov); }
+
+  // Delegación: botones cargar/cambiar sugerencias
+  document.addEventListener('click', function (e) {
+    const load = e.target.closest('.load-btn, .deck-btn');
+    if (load) {
+      if (window._deckLoading) return; // 🔒 ya hay una carga en curso: no manda el atajo dos veces
+      const row = load.closest('.track');
+      const title = row && row.dataset.title;
+      const path = row && row.dataset.path;
+      const deck = load.dataset.deck || 'auto';
+      if (!row || !title || !window.api.loadToSerato) return;
+
+      window._deckLoading = true;                                  // 🔒 bloqueo global
+      const ov = lockCard(row, 'Cargando en Plato ' + deck + '…'); // 🔒 bloqueo visual de ESTA tarjeta
+
+      window.api.loadToSerato({ title, path, deck }).then(function (res) {
+        if (res && res.ok) {
+          setCardLock(ov, '✅ Cargado en Plato ' + (res.deck || deck), 'ok');
+        } else {
+          setCardLock(ov, '❌ No se cargó. Intente con otra.', 'err');
+          if (res && res.permission) {
+            const tipo = res.permissionType === 'accessibility' ? 'Accesibilidad' : 'Automatización';
+            setTimeout(function () { alert('🔒 Permiso de ' + tipo + ' requerido:\n\nAjustes del Sistema → Privacidad y Seguridad → ' + tipo + ' → activa TrackAI'); }, 100);
+          }
+        }
+        var wait = (res && res.ok) ? 1300 : 2500;
+        setTimeout(function () { unlockCard(ov); window._deckLoading = false; }, wait);
+      }).catch(function () {
+        setCardLock(ov, '❌ No se cargó. Intente con otra.', 'err');
+        setTimeout(function () { unlockCard(ov); window._deckLoading = false; }, 2500);
+      });
+      return;
+    }
+  });
+
+  function copyText(text) {
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = event.target;
+      const orig = btn.textContent;
+      btn.textContent = '✓';
+      setTimeout(() => { btn.textContent = orig; }, 1000);
+    });
+  }
+
+  window.copyText = copyText;
+
+  function openFounderModal(motive) {
+    const desc = document.getElementById('founderModalDesc');
+    if (desc) {
+      if (motive === 'ultra_ia') {
+        desc.innerHTML = 'El <b>Modo Ultra IA</b> (puentes armónicos largos y saltos creativos masivos) está reservado para DJs <b>PRO o Fundador</b>.';
+      } else if (motive === 'limit') {
+        desc.innerHTML = 'Has completado tus <b>30 cargas LITE del día</b>. Con PRO cargas directo a tus decks de forma ilimitada. También puedes copiar el título y buscarlo manualmente.';
+      } else if (motive === 'live_pitch') {
+        desc.innerHTML = 'En <b>PRO o Fundador</b>, Live Pitch® y el Coach de Energía recuerdan tu estilo de mezcla y adaptan sus consejos estratégicos a tus sets.';
+      } else {
+        desc.innerHTML = 'Estás usando <b>TrackAI LITE</b> (gratis, 30 cargas/día). Pásate a <b>PRO</b> por $7.990/mes o asegura tu <b>Cupo Fundador</b> por $30.000 (6 meses).';
+      }
+    }
+    const m = document.getElementById('founderModal');
+    if (m) m.style.display = 'flex';
+  }
+  function closeFounderModal() {
+    const m = document.getElementById('founderModal');
+    if (m) m.style.display = 'none';
+  }
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeFounderModal();
+  });
+  function contactFounderWhatsApp() {
+    const email = (window._currentState && window._currentState.email) || 'un DJ';
+    const txt = encodeURIComponent(`Hola DJ Vlex, estoy usando TrackAI (${email}) y quiero adquirir mi cupo de la Oferta Fundador PRO ($30.000 x 6 meses) 🔥`);
+    window.open(`https://wa.me/56991261916?text=${txt}`, '_blank');
+  }
+  window.openFounderModal = openFounderModal;
+  window.closeFounderModal = closeFounderModal;
+  window.contactFounderWhatsApp = contactFounderWhatsApp;
+
+  function closeApp() {
+    window.api.closeWindow ? window.api.closeWindow() : alert('Cierra la ventana manualmente');
+  }
+  window.closeApp = closeApp;
+
+  function minimizeApp() { if (window.api.minimizeWindow) window.api.minimizeWindow(); }
+  window.minimizeApp = minimizeApp;
+
+  // Modo transition overlay
+  const _modeEmojiMap = {
+    auto: { emoji: '⚖️', label: 'MODO AUTO', color: '#a0b0d8' },
+    ultra_ia: { emoji: '🚀', label: 'ULTRA IA', color: '#ffca28' },
+    estricto: { emoji: '🔒', label: 'ESTRICTO', color: '#b877e0' },
+    monitor: { emoji: '🎧', label: 'MONITOR', color: '#4fc3f7' },
+    up_only: { emoji: '🔥', label: 'SIEMPRE ARRIBA', color: '#ff6b6b' }
+  };
+  let _modeOverlay = null;
+  let _modeOverlayTimeout = null;
+
+  function showModeTransition(mode) {
+    const info = _modeEmojiMap[mode] || _modeEmojiMap.auto;
+    if (!_modeOverlay) {
+      _modeOverlay = document.createElement('div');
+      _modeOverlay.className = 'mode-transition-overlay';
+      document.body.appendChild(_modeOverlay);
+    }
+    var innerHtml;
+    if (mode === 'ultra_ia') {
+      innerHtml = '<div class="mt-rocket-wrapper">'
+        + '<div class="mt-rocket">🚀</div>'
+        + '<div class="mt-smoke s1"></div><div class="mt-smoke s2"></div>'
+        + '<div class="mt-smoke s3"></div><div class="mt-smoke s4"></div>'
+        + '</div>'
+        + '<div class="mode-label" style="color:' + info.color + '">' + info.label + '</div>';
+    } else if (mode === 'auto') {
+      innerHtml = '<div class="mt-eq">'
+        + '<div class="mt-bar" style="animation-delay:0s"></div>'
+        + '<div class="mt-bar" style="animation-delay:0.05s"></div>'
+        + '<div class="mt-bar" style="animation-delay:0.1s"></div>'
+        + '<div class="mt-bar" style="animation-delay:0.15s"></div>'
+        + '<div class="mt-bar" style="animation-delay:0.2s"></div>'
+        + '<div class="mt-bar" style="animation-delay:0.25s"></div>'
+        + '<div class="mt-bar" style="animation-delay:0.3s"></div>'
+        + '<div class="mt-bar" style="animation-delay:0.35s"></div>'
+        + '</div>'
+        + '<div class="mode-label" style="color:' + info.color + '">' + info.label + '</div>';
+    } else {
+      innerHtml = '<div class="emoji-3d" style="color:' + info.color + '">' + info.emoji + '</div>'
+        + '<div class="mode-label" style="color:' + info.color + '">' + info.label + '</div>';
+    }
+    _modeOverlay.innerHTML = innerHtml;
+    clearTimeout(_modeOverlayTimeout);
+    _modeOverlay.classList.remove('show');
+    void _modeOverlay.offsetWidth;
+    _modeOverlay.classList.add('show');
+    _modeOverlayTimeout = setTimeout(function() {
+      _modeOverlay.classList.remove('show');
+    }, 2000);
+  }
+
+  function setMode(mode) {
+    showModeTransition(mode);
+    if (window.api.setMode) window.api.setMode(mode);
+  }
+  window.setMode = setMode;
+
+  let currentPitchOffset = 0;
+
+  function adjustPitch(delta) {
+    currentPitchOffset = Math.round((currentPitchOffset + delta) * 10) / 10;
+    if (window.api && window.api.setPitchOffset) {
+      window.api.setPitchOffset(currentPitchOffset);
+    }
+  }
+  window.adjustPitch = adjustPitch;
+
+  function resetPitch() {
+    currentPitchOffset = 0;
+    if (window.api && window.api.setPitchOffset) {
+      window.api.setPitchOffset(0);
+    }
+  }
+  window.resetPitch = resetPitch;
+
+  function editLiveBpmDirectly() {
+    const val = prompt('⚡ Pon el BPM actual de la fiesta (ej: 99.0):');
+    if (val != null && !isNaN(parseFloat(val)) && parseFloat(val) > 0) {
+      const num = parseFloat(val);
+      if (window.api && window.api.setLiveBpm) {
+        window.api.setLiveBpm(num);
+      }
+    }
+  }
+  window.editLiveBpmDirectly = editLiveBpmDirectly;
+
+  // 🔌 Primer contacto / conexión
+  async function reconnectNow(btn) {
+    if (btn) { btn.textContent = '🔄 Buscando…'; btn.disabled = true; }
+    try { await window.api.reconnectSerato(); } catch (_) {}
+    setTimeout(function () { if (btn) { btn.textContent = '🔄 Reintentar'; btn.disabled = false; } }, 1500);
+  }
+  window.reconnectNow = reconnectNow;
+  async function pickLibrary(btn) {
+    try {
+      const r = await window.api.selectCustomSeratoPath();
+      if (r && r.ok && btn) btn.textContent = '✅ ' + (r.count || 0) + ' temas';
+    } catch (_) {}
+  }
+  window.pickLibrary = pickLibrary;
+
+  // ---- Tema día / noche ----
+  function applyTheme(theme) {
+    const isDay = theme === 'day';
+    document.body.classList.toggle('theme-day', isDay);
+    const btn = document.getElementById('themeToggle');
+    if (btn) { btn.textContent = isDay ? '☀️' : '🌙'; btn.title = isDay ? 'Cambiar a noche' : 'Cambiar a día'; }
+    try { localStorage.setItem('trackai-theme', theme); } catch (_) {}
+  }
+  function toggleTheme() {
+    const cur = document.body.classList.contains('theme-day') ? 'day' : 'night';
+    applyTheme(cur === 'day' ? 'night' : 'day');
+  }
+  window.toggleTheme = toggleTheme;
+  // Aplicar tema guardado al iniciar (default: noche)
+  (function () {
+    let saved = 'night';
+    try { saved = localStorage.getItem('trackai-theme') || 'night'; } catch (_) {}
+    applyTheme(saved);
+  })();
+
+  // ---- Diseño de ventana: vertical / horizontal / mini ----
+  var LAYOUTS = ['vertical', 'horizontal'];
+  // Celular vertical con flechas de rotación (rotar dispositivo)
+  var ICON_VERT = '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="8.5" y="6" width="7" height="12" rx="1.6"/><line x1="10.6" y1="16" x2="13.4" y2="16"/><path d="M5 9.4 A9 9 0 0 1 9.4 5"/><path d="M9.4 5 L6.5 4.4 M9.4 5 L9.9 7.9"/><path d="M19 14.6 A9 9 0 0 1 14.6 19"/><path d="M14.6 19 L17.5 19.6 M14.6 19 L14.1 16.1"/></svg>';
+  // Dispositivo apaisado con detalle + flechas de rotación
+  var ICON_HORZ = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="8.5" width="14" height="7" rx="1.6"/><line x1="16" y1="10.6" x2="16" y2="13.4"/><path d="M9.4 5 A9 9 0 0 1 5 9.4"/><path d="M5 9.4 L4.4 6.5 M5 9.4 L7.9 9.9"/><path d="M14.6 19 A9 9 0 0 1 19 14.6"/><path d="M19 14.6 L19.6 17.5 M19 14.6 L16.1 14.1"/></svg>';
+  var LAYOUT_ICON = { vertical: ICON_VERT, horizontal: ICON_HORZ };
+  function applyLayout(l) {
+    // Modo horizontal fijado como diseño único activo por ahora
+    l = 'horizontal';
+    document.body.classList.remove('layout-vertical', 'layout-horizontal', 'layout-mini');
+    document.body.classList.add('layout-horizontal');
+    var b = document.getElementById('layoutToggle');
+    if (b) b.style.display = 'none'; // Oculto por ahora (horizontal es el diseño único)
+    if (window.api.setLayout) window.api.setLayout('horizontal');
+    try { localStorage.setItem('trackai-layout', 'horizontal'); } catch (_) {}
+  }
+  function cycleLayout() {
+    applyLayout('horizontal');
+  }
+  window.cycleLayout = cycleLayout;
+
+  // 🔥 Marcar que la mezcla actual funcionó → refuerza el cerebro
+  function markFire() {
+    if (!window.api.markFire) return;
+    var b = document.getElementById('fireBtn');
+    window.api.markFire().then(function (res) {
+      if (b) {
+        b.textContent = (res && res.ok) ? '✓' : '·';
+        setTimeout(function () { b.textContent = '🔥'; }, 1400);
+      }
+    }).catch(function () {});
+  }
+  window.markFire = markFire;
+  (function () {
+    var s = 'vertical';
+    try { s = localStorage.getItem('trackai-layout') || 'vertical'; } catch (_) {}
+    applyLayout(s);
+  })();
+
+  let lastRenderSig = null;
+
+  function getMonitorDashboardHTML(s) {
+    const series = s.bpmSeries || [];
+    var roadmapItems = '';
+    var slice = series.slice(-20);
+    for (var ri = 0; ri < slice.length; ri++) {
+      var t = slice[ri];
+      roadmapItems += '<div style="display:flex;align-items:center;gap:4px;padding:2px 0;font-size:8px;border-bottom:1px solid rgba(255,255,255,0.03);">'
+        + '<span style="color:var(--text-faint);font-weight:700;min-width:12px;">' + (ri + 1) + '</span>'
+        + '<span style="flex:1;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text-dim);">' + esc(t.title || '—') + '</span>'
+        + '<span style="color:#ffca28;font-weight:800;">' + t.bpm + '</span>'
+        + '</div>';
+    }
+    var roadmapHtml = roadmapItems
+      ? '<div style="padding:8px 12px;border-top:1px solid var(--border);max-height:200px;overflow-y:auto;">'
+        + '<div style="font-size:9px;font-weight:800;color:var(--text-faint);margin-bottom:4px;text-transform:uppercase;letter-spacing:1px;">🗺️ Roadmap de la sesión</div>'
+        + roadmapItems
+        + '</div>'
+      : '';
+    return `
+      <div class="monitor-dashboard" style="flex: 1; display: flex; flex-direction: column; background: rgba(13, 15, 20, 0.45); border-radius: 12px; margin-bottom: 15px; border: 1px solid var(--border); overflow: hidden; min-height: 200px; min-width: 0;">
+        <div style="padding: 12px 15px; border-bottom: 1px solid var(--border); font-weight: 800; color: var(--accent); display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.2);">
+          <span style="font-size: 14px; display:flex; align-items:center; gap:6px;">🔥 <span>HEATMAP DE LA SESIÓN</span></span>
+          <span style="font-size: 11px; color: var(--text-dim); font-weight: 600; text-transform: uppercase;">⏱️ ${s.setDurationMin || 0} min &nbsp;·&nbsp; 🎵 ${s.sessionTracksCount || 0} tracks &nbsp;·&nbsp; 🫀 Promedio ${s.avgPartyPulse || '--'} BPM</span>
+        </div>
+        <div style="flex: 1; padding: 20px 10px 10px; position: relative;">
+          <svg id="heatmapChart" width="100%" height="100%" preserveAspectRatio="none" style="overflow:visible;"></svg>
+        </div>
+        ${roadmapHtml}
+      </div>
+    `;
+  }
+
+  function drawSessionHeatmap(series) {
+    const svg = document.getElementById('heatmapChart');
+    if (!svg || !series || series.length < 2) return;
+    
+    // Configurar dimensiones
+    const w = svg.clientWidth;
+    const h = svg.clientHeight;
+    svg.innerHTML = '';
+    
+    // Encontrar min y max BPM
+    const bpms = series.map(d => d.bpm);
+    const minBpm = Math.min(...bpms) - 2;
+    const maxBpm = Math.max(...bpms) + 2;
+    const range = maxBpm - minBpm || 1;
+    
+    // Funciones de mapeo
+    const getX = (i) => (i / (series.length - 1)) * w;
+    const getY = (bpm) => h - ((bpm - minBpm) / range) * h;
+    
+    // Crear el gradiente
+    const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+    const grad = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+    grad.setAttribute('id', 'heatGrad');
+    grad.setAttribute('x1', '0%'); grad.setAttribute('y1', '100%');
+    grad.setAttribute('x2', '0%'); grad.setAttribute('y2', '0%');
+    grad.innerHTML = `
+      <stop offset="0%" stop-color="#2f80ed" />
+      <stop offset="50%" stop-color="#b877e0" />
+      <stop offset="100%" stop-color="#ff5a5f" />
+    `;
+    defs.appendChild(grad);
+    svg.appendChild(defs);
+    
+    // Generar path de la curva (usando líneas rectas por simplicidad matemática)
+    let d = `M 0 ${getY(series[0].bpm)} `;
+    for (let i = 1; i < series.length; i++) {
+      d += `L ${getX(i)} ${getY(series[i].bpm)} `;
+    }
+    
+    // Crear área rellena debajo de la curva
+    const area = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    const dArea = d + `L ${w} ${h} L 0 ${h} Z`;
+    area.setAttribute('d', dArea);
+    area.setAttribute('fill', 'url(#heatGrad)');
+    area.setAttribute('opacity', '0.2');
+    svg.appendChild(area);
+    
+    // Crear línea principal
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', d);
+    path.setAttribute('fill', 'none');
+    path.setAttribute('stroke', 'url(#heatGrad)');
+    path.setAttribute('stroke-width', '4');
+    path.setAttribute('stroke-linecap', 'round');
+    path.setAttribute('stroke-linejoin', 'round');
+    path.setAttribute('style', 'filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));');
+    svg.appendChild(path);
+    
+    // Puntos (Nodos)
+    series.forEach((pt, i) => {
+      const cx = getX(i);
+      const cy = getY(pt.bpm);
+      
+      const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      circle.setAttribute('cx', cx);
+      circle.setAttribute('cy', cy);
+      circle.setAttribute('r', i === series.length - 1 ? '6' : '4'); // Último punto más grande
+      circle.setAttribute('fill', 'var(--bg)');
+      circle.setAttribute('stroke', 'url(#heatGrad)');
+      circle.setAttribute('stroke-width', '2');
+      
+      // Tooltip rudimentario con el title del track
+      if (pt.title) {
+        const titleText = document.createElementNS('http://www.w3.org/2000/svg', 'title');
+        titleText.textContent = `${pt.bpm} BPM - ${pt.title}`;
+        circle.appendChild(titleText);
+      }
+      
+      svg.appendChild(circle);
+      
+      // Texto flotante de BPM para algunos puntos
+      if (i === 0 || i === series.length - 1 || i % 5 === 0) {
+        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        text.setAttribute('x', cx);
+        text.setAttribute('y', cy - 12);
+        text.setAttribute('fill', 'var(--text)');
+        text.setAttribute('font-size', '10px');
+        text.setAttribute('font-weight', '700');
+        text.setAttribute('text-anchor', 'middle');
+        text.textContent = pt.bpm;
+        svg.appendChild(text);
+      }
+    });
+  }
+
+  function updatePlanBadge(s) {
+    if (!s) return;
+    const btn = document.getElementById('planToggleBtn');
+    if (!btn) return;
+    const plan = s.isFounder ? 'founder' : s.isPro ? 'pro' : 'lite';
+    const planColor = { lite: '#00ff66', pro: '#007dff', founder: '#d4af37' }[plan];
+    const planName = { lite: 'LITE', pro: 'PRO', founder: 'FUNDADOR' }[plan];
+    
+    // Logo y acentos en header
+    const logoImg = document.getElementById('headerLogoImg');
+    const logoBox = document.querySelector('.logo-brand-icon');
+    const wordAi = document.getElementById('wordmarkAi');
+    if (logoImg) logoImg.src = plan === 'founder' ? 'assets/logo_pro_azul.jpg' : (s.isPro ? 'assets/logo_pro_azul.jpg' : 'assets/logo_trial_verde.jpg');
+    if (logoBox) logoBox.style.borderColor = planColor;
+    if (wordAi) wordAi.style.color = planColor;
+
+    // Estilo base del badge
+    btn.style.display = 'flex';
+    btn.style.alignItems = 'center';
+    btn.style.padding = '3px 8px';
+    btn.style.fontSize = '11px';
+    btn.style.borderColor = planColor;
+    btn.style.color = planColor;
+    btn.style.background = `rgba(${plan === 'lite' ? '0, 255, 102' : plan === 'pro' ? '0, 125, 255' : '212, 175, 55'}, 0.18)`;
+    btn.style.boxShadow = `0 0 12px ${planColor}33`;
+
+    if (plan === 'founder') {
+      btn.innerHTML = `<span style="font-size:11px;">👑</span> <b style="white-space:nowrap;">FUNDADOR</b>`;
+      btn.onclick = () => window.api && window.api.toggleTestPlan && window.api.toggleTestPlan();
+    } else if (plan === 'pro') {
+      btn.innerHTML = `<span style="font-size:10px;">🔥</span> <b style="white-space:nowrap;">PRO</b>`;
+      btn.onclick = () => window.api && window.api.toggleTestPlan && window.api.toggleTestPlan();
+    } else {
+      btn.innerHTML = `<span style="font-size:10px;">🌿</span> <b style="white-space:nowrap;">LITE</b> <span style="background:linear-gradient(135deg, #007dff, #00ff66); color:#04040c; padding:1px 6px; border-radius:8px; font-weight:900; font-size:9.5px; margin-left:4px;">$30k × 6M</span>`;
+      btn.onclick = () => openFounderModal('general');
+    }
+  }
+
+  // -----------------------------------------------------
+  // MACHINE INFO Y LICENCIA
+  if (window.api && window.api.getMachineInfo) {
+    window.api.getMachineInfo().then(info => {
+      const ownerBtn = document.getElementById('licenseOwnerBtn');
+      if (ownerBtn) {
+        ownerBtn.style.display = 'block';
+        ownerBtn.innerHTML = 'ℹ️';
+        ownerBtn.setAttribute('data-info', `Asignada a: ${info.email}\nDispositivo: ${info.deviceId}\nMac: ${info.hostname}`);
+      }
+      
+      const daysEl = document.getElementById('daysLeftBadge');
+      if (daysEl && info.plan === 'pro') {
+        daysEl.style.display = 'block';
+        document.getElementById('daysLeftCounter').innerText = info.daysLeft > 900 ? 'ILIMITADA' : (info.daysLeft + ' DÍAS');
+      }
+    }).catch(e => console.log('Error obteniendo info de maquina:', e));
+  }
+
+  // -----------------------------------------------------
+  window.api.onState((s) => {
+    try {
+      window._currentState = s;
+      window.lastState = s;
+      // ❤️ latido: confirma que onState SÍ se ejecuta (visible mientras siga en la pantalla #1)
+      try { var _hb = document.getElementById('hbCount'); if (_hb) _hb.textContent = 'onState x' + (window.__hb = (window.__hb || 0) + 1) + (s && s.error ? ' · error:"' + String(s.error).slice(0,40) + '"' : (s && s.suggestions ? ' · sug:' + s.suggestions.length : '')); } catch (_) {}
+      updatePlanBadge(s);
+
+      // 📡 Telemetría en Vivo en la Interfaz (UI)
+      const dot = document.getElementById('telemetryDot');
+      const pathText = document.getElementById('telemetryPathText');
+      const timeText = document.getElementById('telemetryTimeText');
+      const displayPath = s.activeDbPath || s.masterDbPath || s.sessionFile || 'Sin ruta detectada';
+      const source = s.dbSource ? ` [${s.dbSource}]` : '';
+      if (pathText) pathText.textContent = displayPath + source;
+      if (timeText) {
+        let info = s.lastCheck ? `🕒 ${s.lastCheck}` : '';
+        if (s.rawError) info += ` | ⚠️ ${s.rawError.substring(0, 60)}`;
+        timeText.textContent = info;
+      }
+      if (dot) dot.textContent = (s.error || s.isEperm) ? '🔴' : '🟢';
+      // 🔒 Mientras cargamos un tema al plato, no re-renderizamos (no borrar el overlay de la tarjeta)
+      if (window._deckLoading) return;
+      if (s.error && (!s.suggestions || s.suggestions.length === 0)) {
+        const mode = s.mode || 'auto';
+        const uiaBtnErr = !s.isPro 
+          ? `<button class="mode-btn" style="color:#ffca28;" onclick="openFounderModal('ultra_ia')" title="🔒 Función PRO">🚀 Ultra IA 🔒</button>`
+          : `<button class="mode-btn ${mode === 'ultra_ia' ? 'active' : ''}" onclick="setMode('ultra_ia')" title="Creatividad máxima">🚀 Ultra IA</button>`;
+        const modeBarHtml = `
+          <div class="mode-bar">
+            <button class="mode-btn ${mode === 'auto' ? 'active' : ''}" onclick="setMode('auto')" title="Balance / Modo Clásico">⚖️ Auto</button>
+            ${uiaBtnErr}
+            <button class="mode-btn ${mode === 'estricto' ? 'active' : ''}" onclick="setMode('estricto')" title="ESTRICTO: Sugerencias 100% de la misma carpeta actual. Ideal para Rock Latino, etc.">📁 Estricto</button>
+            <button class="mode-btn ${mode === 'monitor' ? 'active' : ''}" onclick="setMode('monitor')" title="MONITOR: Oculta sugerencias, protagonista Live Pitch y estadísticas del set.">👀 Monitor</button>
+            <button class="mode-btn ${mode === 'up_only' ? 'active' : ''}" onclick="setMode('up_only')" title="SIEMPRE ARRIBA: Solo sugiere canciones que debas acelerar (Pitch Positivo).">🔥 Arriba</button>
+          </div>`;
+        const conn = s.conn;
+        let panel;
+        if (conn && conn.checks && conn.checks.length) {
+          const rows = conn.checks.map(function (c) {
+            const ic = c.ok ? '🟢' : (c.optional ? '🟡' : '🔴');
+            return `<div style="display:flex; gap:8px; align-items:flex-start; padding:7px 2px; border-bottom:1px solid var(--border2); text-align:left;">
+              <span style="font-size:13px; line-height:1.3;">${ic}</span>
+              <div style="flex:1; min-width:0;">
+                <div style="font-size:12px; font-weight:800; color:var(--text);">${esc(c.label)}</div>
+                <div style="font-size:10.5px; color:var(--text-dim);">${esc(c.detail || '')}</div>
+                ${(!c.ok && c.fix) ? `<div style="font-size:10.5px; color:#ffd873; margin-top:2px;">→ ${esc(c.fix)}</div>` : ''}
+              </div>
+            </div>`;
+          }).join('');
+          const headline = conn.ok
+            ? '🎧 ¡Conectado! Reproduce un tema en Serato'
+            : (conn.install ? '⚙️ Casi listo — revisa lo que falta' : '🔎 No encontré tu biblioteca de Serato');
+          panel = `
+            <div style="margin:10px; padding:14px; border-radius:14px; background:rgba(47,128,237,0.06); border:1px solid rgba(47,128,237,0.2);">
+              <div style="font-size:14px; font-weight:900; color:var(--text); margin-bottom:4px;">${headline}</div>
+              <div style="font-size:11px; color:var(--text-dim); margin-bottom:10px;">${esc(conn.summary || '')}</div>
+              ${rows}
+              <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:12px; justify-content:center;">
+                <button class="pitch-btn" onclick="window.api.selectCustomSeratoPath()" style="background:#007dff; border-color:#66b5ff; color:#fff; font-weight:800;">📂 Seleccionar master.sqlite (1-Clic)</button>
+                <button class="pitch-btn" onclick="window.api.openFullDiskSettings()" style="background:rgba(255,202,40,0.15); border-color:#ffca28; color:#ffd873;">⚙️ Acceso al Disco</button>
+                <button class="pitch-btn" onclick="window.api.openMacSystemSettings('accessibility')">🔒 Accesibilidad</button>
+                <button class="pitch-btn" onclick="window.api.openHelpWhatsApp()" style="color:#25D366; border-color:rgba(37,211,102,0.5);">💬 Ayuda</button>
+              </div>
+            </div>`;
+          panel = `
+            <div class="err" style="margin: 14px 10px; text-align: center; line-height: 1.45; padding: 20px 16px; border-radius: 16px; background: rgba(0, 125, 255, 0.12); border: 1.5px solid rgba(0, 125, 255, 0.4); color: var(--text);">
+              <div style="font-size: 26px; margin-bottom: 6px;">🎧</div>
+              <div style="font-weight: 800; font-size: 14px; color: #ffffff;"><span class="dbg" style="color:#ff5678;">#3 </span>${esc(s.error || 'Conectando con Serato DJ...')}</div>
+              <div class="dbg" style="margin-top:6px;font-size:11px;color:#00ff9d;font-weight:800;letter-spacing:1px;">BUILD v4.4.1 · DEBUG ON</div>
+              <div style="font-size: 10.5px; color: #66b5ff; margin: 6px 0; word-break: break-all;">📍 DB Activa: ${esc(s.sessionFile || s.masterDbPath || 'Detectando base local...')}</div>
+              <div style="font-size: 11px; color: #a0b0d8; margin: 8px 0 14px;">Haz clic en el botón azul para vincular tu archivo <b>master.sqlite</b> local en 1 clic:</div>
+              <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
+                <button onclick="window.api.selectCustomSeratoPath()" style="background: linear-gradient(135deg, #007dff, #00ff66); border: none; color: #04040c; font-weight: 900; font-size: 12.5px; padding: 10px 18px; border-radius: 10px; cursor: pointer; text-transform: uppercase; box-shadow: 0 0 15px rgba(0,255,102,0.3);">📂 Seleccionar master.sqlite (1 Clic)</button>
+                <button onclick="window.api.resetSeratoPath()" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25); color: #fff; font-weight: 700; font-size: 11px; padding: 10px 14px; border-radius: 10px; cursor: pointer;">🔄 Usar Ruta Local Mac</button>
+                <button onclick="window.api.openFullDiskSettings()" style="background: rgba(255,202,40,0.15); border: 1px solid #ffca28; color: #ffd873; font-weight: 700; font-size: 11px; padding: 10px 14px; border-radius: 10px; cursor: pointer;">⚙️ Acceso al Disco</button>
+              </div>
+            </div>`;
+        }
+        app.innerHTML = `${modeBarHtml}${panel}`;
+        return;
+      }
+
+      const c = s.current || {};
+      const sig = [
+        c.path || '',
+        s.mode || '',
+        s.targetCrate || '',
+        s.pitchOffset || 0,
+        s.liveBpm || 0,
+        (s.suggestions || []).map((x) => x.path).join('|'),
+      ].join('##');
+
+      const hasErrorInDom = app && app.querySelector('.err');
+      if (!hasErrorInDom && sig === lastRenderSig) return;
+      lastRenderSig = sig;
+
+      console.log('📨 Renderizando:', c.title, '| Sugerencias:', s.suggestions ? s.suggestions.length : 0);
+      lastRenderedPath = c.path;
+      const bpm = c.bpmNum ? Math.round(c.bpmNum) + ' BPM' : '';
+
+      let sessionHtml = '—';
+      let trackCountHtml = '—';
+      if (c.startTime) {
+        const start = new Date(Number(c.startTime) * 1000);
+        sessionHtml = `${String(start.getHours()).padStart(2, '0')}:${String(start.getMinutes()).padStart(2, '0')}`;
+      }
+      trackCountHtml = `🎵 ${s.historyCount || 0}`;
+      if (sessionTime) sessionTime.textContent = sessionHtml;
+      if (trackCount) trackCount.textContent = trackCountHtml;
+
+      let progressWidth = 0;
+      let timingHtml = '';
+      if (c.length_ms && c.startTime && c.endTime) {
+        const elapsed = (c.endTime - c.startTime) * 1000;
+        progressWidth = Math.min(100, (elapsed / c.length_ms) * 100);
+        timingHtml = `<div class="timing">
+          <span class="timing-text">${formatTime(elapsed)}</span>
+          <span class="timing-text">${formatTime(c.length_ms)}</span>
+        </div>`;
+      }
+
+      const deckChip = c.deck ? `<span class="chip deck">${esc(c.deck)}</span>` : '';
+
+      renderSuggestions(s, c, progressWidth, deckChip, timingHtml, bpm);
+      if (foot) foot.textContent = s.librarySize ? `${s.librarySize} tracks` : '';
+    } catch (e) {
+      console.error('Error renderizando estado en UI:', e);
+      // 🛟 No dejar la pantalla pegada en silencio: mostrar el error real para poder depurarlo.
+      try {
+        const showErr = app && (!app.querySelector('.mode-bar') || app.querySelector('.err'));
+        if (showErr) {
+          const msg = (e && e.message) ? e.message : String(e);
+          app.innerHTML = '<div class="err" style="padding:16px;text-align:left;font-size:12px;line-height:1.5;color:#ffca28;">'
+            + '⚠️ <b>Error al pintar la UI</b><br>' + esc(msg)
+            + '<br><span style="color:#8891a5;font-size:11px;">(la lectura de Serato está OK; esto es del renderer — mándame captura)</span></div>';
+        }
+      } catch (_) {}
+    }
+  });
+</script>
+</body>
+</html>
+
+<style>
+.hero-wrapper {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  margin: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  min-height: 140px;
+  background: linear-gradient(135deg, rgba(13,15,20,0.6) 0%, rgba(20,22,30,0.5) 100%);
+}
+body:not(.layout-horizontal) .hero-wrapper {
+  flex-direction: column;
+}
+.hero-wrapper > canvas.bpm-ecg {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+  opacity: 0.7;
+}
+.hero-wrapper .now, .hero-wrapper .livepitch {
+  position: relative;
+  z-index: 1;
+  background: rgba(13, 15, 20, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: none;
+  border: 1px solid rgba(255,255,255,0.05);
+  margin-bottom: 0 !important;
+}
+body.layout-horizontal .hero-wrapper .now,
+body.layout-horizontal .hero-wrapper .livepitch {
+  flex: 1;
+}
+body.layout-horizontal .hero-wrapper .now {
+  border-right: 1px solid rgba(255,255,255,0.04);
+}
+.hero-wrapper .gradient-streak {
+  position: absolute; border-radius: 50%; filter: blur(50px);
+  pointer-events: none; z-index: 0; opacity: 0.1;
+}
+</style>
