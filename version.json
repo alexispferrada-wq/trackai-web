@@ -1,7 +1,7 @@
 {
-  "version": "2.2.0",
+  "version": "2.2.1",
   "url_mac": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.1.2/TrackAI-2.1.2-arm64.dmg",
-  "url_win": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.2.0/TrackAI-2.2.0-x64.exe",
-  "url": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.2.0/TrackAI-2.2.0-x64.exe",
-  "notes": "¡Ahora carga la canción correcta! El título va directo al script, sin depender del portapapeles de Electron. Prueba los platos A y B. 🎧"
+  "url_win": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.2.1/TrackAI-2.2.1-x64.exe",
+  "url": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.2.1/TrackAI-2.2.1-x64.exe",
+  "notes": "Versión de diagnóstico: necesito que pruebes los platos y me digas qué error sale (ahora se ve en detalle). 🧪"
 }
