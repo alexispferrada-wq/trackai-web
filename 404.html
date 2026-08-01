@@ -1,99 +1,19 @@
-<!doctype html>
-<html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/favicon.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TrackAI — Página no encontrada</title>
-    <meta name="description" content="TrackAI — El copiloto de mezcla con IA para Serato DJ. La página que buscas no existe." />
-    <style>
-      * { margin: 0; padding: 0; box-sizing: border-box; }
-      html, body { height: 100%; }
-      body {
-        background: radial-gradient(ellipse at 30% 0%, rgba(0,125,255,0.25), transparent 60%),
-                    radial-gradient(ellipse at 80% 100%, rgba(0,210,255,0.15), transparent 60%),
-                    radial-gradient(ellipse at 60% 40%, rgba(184,119,224,0.12), transparent 55%),
-                    #05070c;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
-        display: flex; align-items: center; justify-content: center;
-        min-height: 100vh; color: #fff; text-align: center; padding: 24px; overflow: hidden;
-      }
-      .bg-particle { position: fixed; width: 4px; height: 4px; border-radius: 50%; background: #00d2ff; opacity: 0.5; box-shadow: 0 0 8px #00d2ff; animation: float 5s ease-in-out infinite; pointer-events: none; }
-      .bg-particle:nth-child(2) { left: 85%; top: 40%; background: #b877e0; box-shadow: 0 0 8px #b877e0; animation-delay: 0.8s; }
-      .bg-particle:nth-child(3) { left: 20%; top: 70%; background: #ffd873; box-shadow: 0 0 8px #ffd873; animation-delay: 1.4s; }
-      @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
-      .card {
-        background: rgba(8,7,12,0.75); border: 1px solid rgba(47,128,237,0.3);
-        border-radius: 28px; padding: 56px 40px; max-width: 520px; width: 100%;
-        backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-        box-shadow: 0 20px 80px rgba(0,0,0,0.5), inset 0 0 40px rgba(47,128,237,0.08);
-        position: relative; overflow: hidden;
-      }
-      .card::before {
-        content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-        background: linear-gradient(90deg, transparent, #007dff, #00d2ff, #b877e0, #00d2ff, #007dff, transparent);
-        background-size: 300% 100%; animation: shimmer 5s ease infinite;
-      }
-      @keyframes shimmer { 0% { background-position: 0% 0; } 100% { background-position: 300% 0; } }
-      .brand { font-size: 30px; font-weight: 900; letter-spacing: -1px; margin-bottom: 8px; }
-      .brand span { color: #007dff; }
-      .code { font-size: 96px; font-weight: 900; line-height: 1; background: linear-gradient(135deg,#007dff,#00d2ff,#b877e0); -webkit-background-clip: text; background-clip: text; color: transparent; margin: 18px 0 6px; font-family: 'Archivo Black', system-ui, sans-serif; letter-spacing: -4px; filter: drop-shadow(0 0 30px rgba(0,125,255,0.3)); }
-      h1 { font-size: 22px; font-weight: 800; margin-bottom: 14px; }
-      p { font-size: 14.5px; color: #a0b0d8; line-height: 1.7; margin-bottom: 28px; }
-      .btn {
-        display: inline-flex; align-items: center; gap: 10px;
-        background: linear-gradient(135deg, #00d2ff, #007dff); color: #000;
-        font-weight: 900; font-size: 15px; padding: 14px 30px; border-radius: 999px;
-        text-decoration: none; letter-spacing: 0.5px; text-transform: uppercase;
-        box-shadow: 0 10px 30px rgba(0,125,255,0.4); transition: all 0.2s;
-      }
-      .btn:hover { transform: translateY(-2px); box-shadow: 0 14px 40px rgba(0,125,255,0.6); }
-      .links { margin-top: 22px; display: flex; gap: 18px; justify-content: center; font-size: 13px; }
-      .links a { color: #37d6c3; text-decoration: none; font-weight: 700; }
-      .links a:hover { text-decoration: underline; }
-      .foot { margin-top: 26px; font-size: 11.5px; color: #6c6e77; }
-      .eq { display: flex; gap: 4px; align-items: flex-end; height: 24px; justify-content: center; margin: 20px 0 4px; }
-      .eq span { width: 5px; background: linear-gradient(180deg,#00d2ff,#007dff); border-radius: 2px; animation: eq 1.2s ease-in-out infinite; }
-      .eq span:nth-child(2) { animation-delay: 0.2s; } .eq span:nth-child(3) { animation-delay: 0.4s; }
-      .eq span:nth-child(4) { animation-delay: 0.6s; } .eq span:nth-child(5) { animation-delay: 0.8s; }
-      @keyframes eq { 0%,100% { height: 6px; } 50% { height: 22px; } }
-    </style>
-  </head>
-  <body>
-    <div class="bg-particle" style="left:8%; top:30%;"></div>
-    <div class="bg-particle" style="left:85%; top:40%;"></div>
-    <div class="bg-particle" style="left:20%; top:70%;"></div>
-    <div class="bg-particle" style="left:70%; top:15%;"></div>
-
-    <div class="card">
-      <div class="brand">Track<span>AI</span></div>
-      <div class="eq"><span></span><span></span><span></span><span></span><span></span></div>
-      <div class="code">404</div>
-      <h1>Esta pista no existe 🎧</h1>
-      <p>
-        Hiciste un scratch en la dirección equivocada. La página que buscas
-        no está en el set o fue movida a otra carpeta.
-      </p>
-      <a class="btn" href="/">← Volver al Inicio</a>
-      <div class="links">
-        <a href="/download">Descargar</a>
-        <a href="/versions">Versiones</a>
-        <a href="/help">Ayuda</a>
-      </div>
-      <div class="foot">TrackAI · Smart Mixing Copilot · Hecho con 🎧</div>
-    </div>
-
-    <script>
-      // Fallback SPA para GitHub Pages: las rutas válidas de la app (que solo
-      // funcionan navegando desde dentro) redirigen al inicio. Para rutas
-      // realmente inexistentes se muestra el 404 de diseño.
-      (function () {
-        var valid = ['/download', '/versions', '/terms', '/help', '/reset', '/admin-dashboard'];
-        var path = window.location.pathname.replace(/\/+$/, '');
-        if (valid.indexOf(path) !== -1) {
-          window.location.replace('/');
-        }
-      })();
-    </script>
-  </body>
-</html>
+<!doctype html><html lang="es"><head><meta charset="UTF-8"><title>TrackAI</title><style>
+*{margin:0;padding:0;box-sizing:border-box}html,body{height:100%}
+body{background:radial-gradient(ellipse at 30% 0%,rgba(0,125,255,.25),transparent 60%),radial-gradient(ellipse at 80% 100%,rgba(0,210,255,.15),transparent 60%),#05070c;font-family:-apple-system,'Segoe UI',sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;color:#fff;text-align:center;padding:24px}
+.card{background:rgba(8,7,12,.75);border:1px solid rgba(47,128,237,.3);border-radius:28px;padding:56px 40px;max-width:520px;width:100%;backdrop-filter:blur(20px);box-shadow:0 20px 80px rgba(0,0,0,.5)}
+.code{font-size:96px;font-weight:900;background:linear-gradient(135deg,#007dff,#00d2ff,#b877e0);-webkit-background-clip:text;color:transparent;margin:18px 0 6px;font-family:'Archivo Black',system-ui,sans-serif}
+h1{font-size:22px;font-weight:800;margin-bottom:14px}
+p{font-size:14.5px;color:#a0b0d8;line-height:1.7;margin-bottom:28px}
+.btn{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,#00d2ff,#007dff);color:#000;font-weight:900;font-size:15px;padding:14px 30px;border-radius:999px;text-decoration:none;text-transform:uppercase;box-shadow:0 10px 30px rgba(0,125,255,.4);transition:.2s}
+.links{margin-top:22px;display:flex;gap:18px;justify-content:center;font-size:13px}
+.links a{color:#37d6c3;text-decoration:none;font-weight:700}
+</style></head><body>
+<div class="card"><div style="font-size:30px;font-weight:900;letter-spacing:-1px;margin-bottom:8px">Track<span style="color:#007dff">AI</span></div>
+<div class="code">404</div><h1>Esta pista no existe 🎧</h1>
+<p>La página que buscas no está en el set o fue movida a otra carpeta.</p>
+<a class="btn" href="/">← Volver al Inicio</a>
+<div class="links"><a href="/download">Descargar</a><a href="/versions">Versiones</a><a href="/help">Ayuda</a></div></div>
+<script>
+(function(){var v=['/download','/versions','/terms','/help','/reset','/privacy','/admin-dashboard'];var p=window.location.pathname.replace(/\/+$/,'');if(v.indexOf(p)!==-1)window.location.replace('/');})();
+</script></body></html>
