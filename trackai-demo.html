@@ -840,7 +840,7 @@
         <div style="display: flex; align-items: center; gap: 12px;">
           <div style="text-align: right;">
             <div style="font-size: 22px; font-weight: 900; color: #00ff66; line-height: 1;">$30.000</div>
-            <div style="font-size: 10.5px; color: #a0b0d8; font-weight: 700;">CLP × 2 AÑOS</div>
+            <div style="font-size: 10.5px; color: #a0b0d8; font-weight: 700;">CLP × 6 meses</div>
           </div>
           <button onclick="closeFounderModal()" style="background: rgba(255, 90, 95, 0.15); border: 1px solid #ff5a5f; color: #ff5a5f; border-radius: 99px; font-weight: 900; font-size: 12px; padding: 5px 12px; cursor: pointer; transition: all 0.15s; white-space: nowrap;" title="Cerrar ventana">✕ VOLVER</button>
         </div>
@@ -1988,7 +1988,7 @@
       } else if (motive === 'live_pitch') {
         desc.innerHTML = 'En <b>PRO o Fundador</b>, Live Pitch® y el Coach de Energía recuerdan tu estilo de mezcla y adaptan sus consejos estratégicos a tus sets.';
       } else {
-        desc.innerHTML = 'Estás usando <b>TrackAI LITE</b> (gratis, 30 cargas/día). Pásate a <b>PRO</b> por $7.990/mes o asegura tu <b>Cupo Fundador</b> por $30.000 (2 años).';
+        desc.innerHTML = 'Estás usando <b>TrackAI LITE</b> (gratis, 30 cargas/día). Pásate a <b>PRO</b> por $7.990/mes o asegura tu <b>Cupo Fundador</b> por $30.000 (6 meses).';
       }
     }
     const m = document.getElementById('founderModal');
@@ -2003,7 +2003,7 @@
   });
   function contactFounderWhatsApp() {
     const email = (window._currentState && window._currentState.email) || 'un DJ';
-    const txt = encodeURIComponent(`Hola, estoy usando TrackAI (${email}) y quiero adquirir mi cupo de la Oferta Fundador PRO ($30.000 x 2 años) 🔥`);
+    const txt = encodeURIComponent(`Hola DJ Vlex, estoy usando TrackAI (${email}) y quiero adquirir mi cupo de la Oferta Fundador PRO ($30.000 x 6 meses) 🔥`);
     window.open(`https://wa.me/56991261916?text=${txt}`, '_blank');
   }
   window.openFounderModal = openFounderModal;
