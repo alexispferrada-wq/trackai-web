@@ -1,7 +1,7 @@
 {
-  "version": "2.1.8",
+  "version": "2.1.9",
   "url_mac": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.1.2/TrackAI-2.1.2-arm64.dmg",
-  "url_win": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.1.8/TrackAI-2.1.8-x64.exe",
-  "url": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.1.8/TrackAI-2.1.8-x64.exe",
-  "notes": "¡Arreglamos que la app se congelara! Ahora al cargar no te pregunta más si quieres cerrar el programa. Prueba los platos A y B. 🎧"
+  "url_win": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.1.9/TrackAI-2.1.9-x64.exe",
+  "url": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.1.9/TrackAI-2.1.9-x64.exe",
+  "notes": "¡Ahora sale una ventanita Cargando canción... mientras carga! Y va el doble de rápido. Prueba los platos A y B. 🎧"
 }
