@@ -1,7 +1,7 @@
 {
-  "version": "2.3.2",
+  "version": "2.3.3",
   "url_mac": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.1.2/TrackAI-2.1.2-arm64.dmg",
-  "url_win": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.3.2/TrackAI-2.3.2-x64.exe",
-  "url": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.3.2/TrackAI-2.3.2-x64.exe",
-  "notes": "Arreglado el timing de las teclas. Ahora TrackAI espera a que Serato termine antes de volver."
+  "url_win": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.3.3/TrackAI-2.3.3-x64.exe",
+  "url": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.3.3/TrackAI-2.3.3-x64.exe",
+  "notes": "Fix: Ctrl+F busca, Tab selecciona. Secuencia de teclas corregida para Windows."
 }
