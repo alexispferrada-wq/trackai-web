@@ -2,6 +2,6 @@
   "version": "2.0.8",
   "url_mac": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.0.8/TrackAI-2.0.8-arm64.dmg",
   "url_win": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.0.8/TrackAI-2.0.8-x64.exe",
-  "url": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.0.8/TrackAI-2.0.8-arm64.dmg",
+  "url": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.0.8/TrackAI-2.0.8-x64.exe",
   "notes": "UI cross-platform, Windows .exe, Brain.js v2, seguridad, rate limiting"
 }
