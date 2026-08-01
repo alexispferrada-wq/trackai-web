@@ -1,7 +1,7 @@
 {
-  "version": "2.1.5",
+  "version": "2.1.6",
   "url_mac": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.1.2/TrackAI-2.1.2-arm64.dmg",
-  "url_win": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.1.5/TrackAI-2.1.5-x64.exe",
-  "url": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.1.5/TrackAI-2.1.5-x64.exe",
-  "notes": "¡Actualización para Windows! Prueba ahora los platos A y B con la carga automática. 🎧"
+  "url_win": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.1.6/TrackAI-2.1.6-x64.exe",
+  "url": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.1.6/TrackAI-2.1.6-x64.exe",
+  "notes": "¡La carga al plato quedó fina! Ahora TrackAI se hace a un ladito para que Serato reciba las teclas y cargue la canción. Prueba los platos A y B. 🎧"
 }
