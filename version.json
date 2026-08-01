@@ -1,7 +1,7 @@
 {
-  "version": "2.2.1",
+  "version": "2.2.2",
   "url_mac": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.1.2/TrackAI-2.1.2-arm64.dmg",
-  "url_win": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.2.1/TrackAI-2.2.1-x64.exe",
-  "url": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.2.1/TrackAI-2.2.1-x64.exe",
-  "notes": "Versión de diagnóstico: necesito que pruebes los platos y me digas qué error sale (ahora se ve en detalle). 🧪"
+  "url_win": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.2.2/TrackAI-2.2.2-x64.exe",
+  "url": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.2.2/TrackAI-2.2.2-x64.exe",
+  "notes": "Se arregló la búsqueda en Serato. Ahora el título se limpia antes de pegar. Prueba los platos A y B. 🎧"
 }
