@@ -1,7 +1,7 @@
 {
-  "version": "2.1.0",
-  "url_mac": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.1.0/TrackAI-2.1.0-arm64.dmg",
-  "url_win": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.1.0/TrackAI-2.1.0-x64.exe",
-  "url": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.1.0/TrackAI-2.1.0-x64.exe",
-  "notes": "¡Se arregló la carga al plato en Windows! Ahora la ventana se ve completa (con el ajuste de pantalla) y el botón A/B carga bien. Prueba los platos de nuevo. 🎧"
+  "version": "2.1.1",
+  "url_mac": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.1.1/TrackAI-2.1.1-arm64.dmg",
+  "url_win": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.1.1/TrackAI-2.1.1-x64.exe",
+  "url": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.1.1/TrackAI-2.1.1-x64.exe",
+  "notes": "¡Versión nueva para probar el update! Si la ves acá, el sistema de actualización funciona. Descarga e instala, que trae el fix de la carga al plato y la ventana completa en Windows. 🎧"
 }
