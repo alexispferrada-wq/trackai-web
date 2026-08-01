@@ -1,7 +1,7 @@
 {
-  "version": "2.5.0",
+  "version": "2.5.1",
   "url_mac": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.1.2/TrackAI-2.1.2-arm64.dmg",
-  "url_win": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.5.0/TrackAI-2.5.0-x64.exe",
-  "url": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.5.0/TrackAI-2.5.0-x64.exe",
-  "notes": "¡CARGA AL PLATO FUNCIONANDO! La app se pone translúcida mientras carga, con ventanita flotante. Probá los platos A y B. 🎧"
+  "url_win": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.5.1/TrackAI-2.5.1-x64.exe",
+  "url": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.5.1/TrackAI-2.5.1-x64.exe",
+  "notes": "Ahora la app se desvanece con efecto suave al cargar. Mucho más elegante. 🎧"
 }
