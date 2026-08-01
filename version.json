@@ -1,5 +1,7 @@
 {
   "version": "2.0.7",
+  "url_mac": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.0.7/TrackAI-2.0.7-arm64.dmg",
+  "url_win": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.0.7/TrackAI-2.0.7-x64.exe",
   "url": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.0.7/TrackAI-2.0.7-arm64.dmg",
   "notes": "Brain.js v2, Windows Ready, 10 bugs, seguridad"
 }
