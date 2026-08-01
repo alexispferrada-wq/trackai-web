@@ -1,7 +1,7 @@
 {
-  "version": "2.1.1",
-  "url_mac": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.1.1/TrackAI-2.1.1-arm64.dmg",
-  "url_win": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.1.1/TrackAI-2.1.1-x64.exe",
-  "url": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.1.1/TrackAI-2.1.1-x64.exe",
-  "notes": "¡Versión nueva para probar el update! Si la ves acá, el sistema de actualización funciona. Descarga e instala, que trae el fix de la carga al plato y la ventana completa en Windows. 🎧"
+  "version": "2.1.2",
+  "url_mac": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.1.2/TrackAI-2.1.2-arm64.dmg",
+  "url_win": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.1.2/TrackAI-2.1.2-x64.exe",
+  "url": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.1.2/TrackAI-2.1.2-x64.exe",
+  "notes": "¡Windows y macOS al día! Ya no es beta: ahora ambas plataformas tienen versión estable con todo el jugo. Descarga, instala y dale nomás. 🎧"
 }
