@@ -3,5 +3,5 @@
   "url_mac": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.1.0/TrackAI-2.1.0-arm64.dmg",
   "url_win": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.1.0/TrackAI-2.1.0-x64.exe",
   "url": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.1.0/TrackAI-2.1.0-x64.exe",
-  "notes": "¡Ya quedó el cable conectado poh! Se arregló el error que no dejaba arrancar en Windows. Ahora corre fino tanto en Mac como en Windows. 🎧"
+  "notes": "¡Se arregló la carga al plato en Windows! Ahora la ventana se ve completa (con el ajuste de pantalla) y el botón A/B carga bien. Prueba los platos de nuevo. 🎧"
 }
