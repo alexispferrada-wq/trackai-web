@@ -1,7 +1,7 @@
 {
-  "version": "2.1.1",
+  "version": "2.1.2",
   "url_mac": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.1.0/TrackAI-2.1.0-arm64.dmg",
-  "url_win": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.1.1/TrackAI-2.1.1-x64.exe",
-  "url": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.1.1/TrackAI-2.1.1-x64.exe",
-  "notes": "LITE: solo correo y entras. Sin llave. PRO: activa tu llave con el botón."
+  "url_win": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.1.2/TrackAI-2.1.2-x64.exe",
+  "url": "https://github.com/alexispferrada-wq/TrackAI/releases/download/v2.1.2/TrackAI-2.1.2-x64.exe",
+  "notes": "LITE solo correo. PRO: 1 licencia por equipo, te dice dónde ya está activada."
 }
