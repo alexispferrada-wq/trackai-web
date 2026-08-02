@@ -79,10 +79,11 @@ f.onsubmit = async (e) => {
       return;
     }
     // Login exitoso
-    if (d.token) localStorage.setItem('trackai_admin_token', d.token);
+    if (d.token) localStorage.setItem('trackai_admin_device_token', d.token);
+    if (d.token) localStorage.setItem('trackai_admin_pwd', pwd.value);
     msg.className = 'msg msg-ok';
     msg.textContent = '✅ Acceso concedido. Redirigiendo...';
-    setTimeout(() => { window.location.href = '/'; }, 800);
+    setTimeout(() => { window.location.href = '/?go=admin'; }, 800);
   } catch {
     msg.className = 'msg msg-err';
     msg.textContent = 'Error de conexión. Revisa tu internet.';
@@ -92,10 +93,10 @@ f.onsubmit = async (e) => {
 };
 
 // Si ya hay token guardado, ir directo
-if (localStorage.getItem('trackai_admin_token')) {
+if (localStorage.getItem('trackai_admin_device_token')) {
   msg.className = 'msg msg-ok';
   msg.textContent = 'Sesión guardada. Redirigiendo al panel...';
-  setTimeout(() => { window.location.href = '/'; }, 500);
+  setTimeout(() => { window.location.href = '/?go=admin'; }, 500);
 }
 </script>
 </body>
