@@ -15,5 +15,12 @@ p{font-size:14.5px;color:#a0b0d8;line-height:1.7;margin-bottom:28px}
 <a class="btn" href="/">← Volver al Inicio</a>
 <div class="links"><a href="/download">Descargar</a><a href="/versions">Versiones</a><a href="/help">Ayuda</a></div></div>
 <script>
-(function(){var v=['/download','/versions','/terms','/help','/reset','/privacy','/admin-dashboard'];var p=window.location.pathname.replace(/\/+$/,'');if(v.indexOf(p)!==-1)window.location.replace('/');})();
+(function(){
+var v=['/download','/versions','/terms','/help','/reset','/privacy'];
+var p=window.location.pathname.replace(/\/+$/,'');
+if(v.indexOf(p)!==-1)window.location.replace('/');
+if(p==='/admin-dashboard'){
+  try{ if(localStorage.getItem('trackai_admin_token'))window.location.replace('/?go=admin'); else window.location.replace('/dash.html'); }catch(e){window.location.replace('/dash.html');}
+}
+})();
 </script></body></html>
