@@ -834,13 +834,13 @@
       <!-- HEADER CON TITULO Y BOTÓN DE CERRAR INTEGRADO -->
       <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 10px;" class="modal-header-row">
         <div>
-          <span style="background: linear-gradient(135deg, #007dff, #00ff66); color: #04040c; font-weight: 900; font-size: 11px; padding: 3px 10px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.8px; box-shadow: 0 0 12px rgba(0, 125, 255, 0.4);">🔥 ¡SOLO 50 CUPOS FUNDADOR!</span>
-          <h2 style="color: #ffffff; font-size: 20px; font-weight: 900; margin-top: 6px; letter-spacing: -0.5px;">Desbloquea el Poder PRO — Oferta Fundador</h2>
+          <span style="background: linear-gradient(135deg, #f5a623, #00b8e8); color: #04040c; font-weight: 900; font-size: 11px; padding: 3px 10px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.8px; box-shadow: 0 0 12px rgba(245, 166, 35, 0.4);">⚡ 50% OFF EN EL PLAN ANUAL</span>
+          <h2 style="color: #ffffff; font-size: 20px; font-weight: 900; margin-top: 6px; letter-spacing: -0.5px;">Obtén el PRO para tus sets</h2>
         </div>
         <div style="display: flex; align-items: center; gap: 12px;">
           <div style="text-align: right;">
-            <div style="font-size: 22px; font-weight: 900; color: #00ff66; line-height: 1;">$30.000</div>
-            <div style="font-size: 10.5px; color: #a0b0d8; font-weight: 700;">CLP × 6 meses</div>
+            <div style="font-size: 22px; font-weight: 900; color: #3ddc84; line-height: 1;">Desde $2.990</div>
+            <div style="font-size: 10.5px; color: #a0b0d8; font-weight: 700;">CLP · elige tu plan</div>
           </div>
           <button onclick="closeFounderModal()" style="background: rgba(255, 90, 95, 0.15); border: 1px solid #ff5a5f; color: #ff5a5f; border-radius: 99px; font-weight: 900; font-size: 12px; padding: 5px 12px; cursor: pointer; transition: all 0.15s; white-space: nowrap;" title="Cerrar ventana">✕ VOLVER</button>
         </div>
@@ -857,7 +857,7 @@
 
       <div class="actions-row" style="display: flex; gap: 10px; align-items: center; justify-content: flex-end; margin-top: 2px; flex-wrap: wrap;">
         <button onclick="closeFounderModal()" class="modal-btn-action" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.2); color: #e0e5ff; font-weight: 800; font-size: 13px; padding: 10px 18px; border-radius: 10px; cursor: pointer; transition: all 0.15s;">← Volver y Seguir en LITE</button>
-        <button onclick="openPurchaseLink()" class="modal-btn-action" style="background: linear-gradient(135deg, #007dff 0%, #00ff66 100%); border: none; color: #04040c; font-weight: 900; font-size: 13.5px; padding: 10px 22px; border-radius: 10px; cursor: pointer; box-shadow: 0 6px 20px rgba(0, 255, 102, 0.35); text-transform: uppercase; letter-spacing: 0.5px; flex: 1; text-align: center; min-width: 200px;">💎 Actualizar a PRO</button>
+        <button onclick="window.top.location.href='/?#precio'" class="modal-btn-action" style="background: linear-gradient(135deg, #00b8e8 0%, #3ddc84 100%); border: none; color: #04040c; font-weight: 900; font-size: 13.5px; padding: 10px 22px; border-radius: 10px; cursor: pointer; box-shadow: 0 6px 20px rgba(0, 184, 232, 0.35); text-transform: uppercase; letter-spacing: 0.5px; flex: 1; text-align: center; min-width: 200px;">⚡ Obtén el PRO aquí</button>
       </div>
     </div>
   </div>
@@ -1986,9 +1986,9 @@
       } else if (motive === 'limit') {
         desc.innerHTML = 'Has completado tus <b>30 cargas LITE del día</b>. Con PRO cargas directo a tus decks de forma ilimitada. También puedes copiar el título y buscarlo manualmente.';
       } else if (motive === 'live_pitch') {
-        desc.innerHTML = 'En <b>PRO o Fundador</b>, Live Pitch® y el Coach de Energía recuerdan tu estilo de mezcla y adaptan sus consejos estratégicos a tus sets.';
+        desc.innerHTML = 'En <b>PRO</b>, Live Pitch® recuerda tu estilo de mezcla y el Coach de Energía adapta sus consejos a tus sets.';
       } else {
-        desc.innerHTML = 'Estás usando <b>TrackAI LITE</b> (gratis, 30 cargas/día). Pásate a <b>PRO</b> por $7.990/mes o asegura tu <b>Cupo Fundador</b> por $30.000 (6 meses).';
+        desc.innerHTML = 'Estás usando <b>TrackAI LITE</b> (gratis, 30 cargas/día). Obtén <b>PRO</b> con planes semanal, mensual o anual. El plan anual tiene 50% OFF.';
       }
     }
     const m = document.getElementById('founderModal');
@@ -2001,14 +2001,8 @@
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeFounderModal();
   });
-  function contactFounderWhatsApp() {
-    const email = (window._currentState && window._currentState.email) || 'un DJ';
-    const txt = encodeURIComponent(`Hola DJ Vlex, estoy usando TrackAI (${email}) y quiero adquirir mi cupo de la Oferta Fundador PRO ($30.000 x 6 meses) 🔥`);
-    window.open(`https://wa.me/56991261916?text=${txt}`, '_blank');
-  }
   window.openFounderModal = openFounderModal;
   window.closeFounderModal = closeFounderModal;
-  window.contactFounderWhatsApp = contactFounderWhatsApp;
 
   function closeApp() {
     window.api.closeWindow ? window.api.closeWindow() : alert('Cierra la ventana manualmente');
