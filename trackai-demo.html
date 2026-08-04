@@ -949,24 +949,78 @@
     }
 
     var idx = 0;
+    var demoMode = 'auto';
+    var demoOverride = {};
+    function demoState() {
+      var base = states[idx];
+      var state = Object.assign({}, base, {
+        current: Object.assign({}, base.current, demoOverride.current || {}),
+        suggestions: (demoOverride.suggestions || base.suggestions).slice(),
+        mode: demoMode
+      });
+      if (demoMode === 'estricto') {
+        var folder = state.current.folder;
+        var strict = state.suggestions.filter(function (track) {
+          return (track.crates || []).includes(folder) || (track.sharedCrates || []).includes(folder);
+        });
+        if (strict.length) state.suggestions = strict;
+      } else if (demoMode === 'up_only') {
+        var rising = state.suggestions.filter(function (track) { return Number(track.pitchShiftPct || 0) >= 0; });
+        if (rising.length) state.suggestions = rising;
+      }
+      return state;
+    }
+    function emitDemoState() {
+      if (api._cb) api._cb(demoState());
+    }
     var api = {
       onState: function (cb) {
         api._cb = cb;
-        cb(states[idx]);
+        cb(demoState());
         setInterval(function () {
           idx = (idx + 1) % states.length;
-          if (api._cb) api._cb(states[idx]);
+          demoOverride = {};
+          emitDemoState();
         }, 45000);
       },
       getMachineInfo: function () { return Promise.resolve({ os: 'darwin', arch: 'arm64', model: 'Mac Apple Silicon' }); },
       getSavedSets: function () { return Promise.resolve([]); },
       getVenue: function () { return Promise.resolve('Club Amanda'); },
       setVenue: function () { return Promise.resolve(); },
-      loadToSerato: function () { return Promise.resolve({ ok: true, deck: 'A' }); },
+      loadToSerato: function (payload) {
+        var selected = (states[idx].suggestions || []).find(function (track) { return track.path === payload.path || track.title === payload.title; });
+        if (!selected) return Promise.resolve({ ok: false });
+        demoOverride.current = Object.assign({}, selected, {
+          folder: (selected.crates && selected.crates[0]) || states[idx].current.folder,
+          deck: payload.deck === 'B' ? 'PLATO B' : 'PLATO A',
+          startTime: Math.floor(Date.now() / 1000),
+          endTime: Math.floor(Date.now() / 1000),
+          length_ms: 240000
+        });
+        emitDemoState();
+        return Promise.resolve({ ok: true, deck: payload.deck === 'B' ? 'B' : 'A' });
+      },
       markFire: function () { return Promise.resolve({ ok: true }); },
-      refreshSuggestions: function () { return Promise.resolve(); },
-      rejectSuggestion: function () { return Promise.resolve(); },
-      setMode: function () { return Promise.resolve(); },
+      refreshSuggestions: function () {
+        var list = (states[idx].suggestions || []).slice();
+        if (list.length > 1) list.push(list.shift());
+        demoOverride.suggestions = list;
+        emitDemoState();
+        return Promise.resolve({ ok: true });
+      },
+      rejectSuggestion: function (pathOrTitle) {
+        var list = (demoOverride.suggestions || states[idx].suggestions || []).filter(function (track) {
+          return track.path !== pathOrTitle && track.title !== pathOrTitle;
+        });
+        demoOverride.suggestions = list;
+        emitDemoState();
+        return Promise.resolve({ ok: true });
+      },
+      setMode: function (mode) {
+        demoMode = mode || 'auto';
+        emitDemoState();
+        return Promise.resolve({ ok: true, mode: demoMode });
+      },
       setPitchOffset: function () { return Promise.resolve(); },
       setLiveBpm: function () { return Promise.resolve(); },
       setLayout: function () { return Promise.resolve(); },
@@ -1182,11 +1236,11 @@
 
   function renderSuggestions(s, c, progressWidth, deckChip, timingHtml, bpm) {
     updatePlanBadge(s);
-    // FASE 1: 2 sugerencias principales (rotan: slot 1 cada 15s, slot 2 cada 12s)
+    // Dos sugerencias principales (rotan: slot 1 cada 15s, slot 2 cada 12s)
     const phase1Tracks = (s.suggestions || []).filter(t => t.phase === 1).slice(0, 2);
     const phase1Pool = (s.suggestions || []).filter(t => t.phase === 1);
     const phase1Html = phase1Tracks.map((t, idx) => {
-      const customTag = idx === 0 ? '🏆 FASE 4 · SUGERENCIA PRINCIPAL' : '🥈 FASE 5 · OPCIÓN ALTERNATIVA';
+      const customTag = idx === 0 ? '🏆 SUGERENCIA PRINCIPAL' : '🥈 OPCIÓN ALTERNATIVA';
       return trackRow(t, true, idx + 1, false, customTag, 'sugg-slot-' + (idx + 1));
     }).join('');
 
