@@ -1,7 +1,7 @@
 {
-  "version": "2.2.0",
-  "url_mac": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.2.0/TrackAI-2.2.0-arm64.dmg",
-  "url_win": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.2.0/TrackAI-2.2.0-x64.exe",
-  "url": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.2.0/TrackAI-2.2.0-x64.exe",
-  "notes": "💳 Planes PRO semanal, mensual y anual · ⚡ 50% OFF en el plan anual · 🎧 Live Pitch aprende de tus mezclas"
+  "version": "2.2.2",
+  "url_mac": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.2.2/TrackAI-2.2.2-arm64.dmg",
+  "url_win": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.2.2/TrackAI-2.2.2-x64.exe",
+  "url": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.2.2/TrackAI-2.2.2-x64.exe",
+  "notes": "⚡ v2.2.2: Versión de producción oficial con instaladores limpios para macOS (Apple Silicon) y Windows x64."
 }
