@@ -1,7 +1,7 @@
 {
-  "version": "2.2.2",
-  "url_mac": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.2.2/TrackAI-2.2.2-arm64.dmg",
-  "url_win": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.2.2/TrackAI-2.2.2-x64.exe",
-  "url": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.2.2/TrackAI-2.2.2-x64.exe",
-  "notes": "⚡ v2.2.2: Versión de producción oficial con instaladores limpios para macOS (Apple Silicon) y Windows x64."
+  "version": "2.3.1",
+  "url_mac": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.3.1/TrackAI-2.3.1-arm64.dmg",
+  "url_win": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.3.1/TrackAI-2.3.1-x64.exe",
+  "url": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.3.1/TrackAI-2.3.1-x64.exe",
+  "notes": "🚀 v2.3.1: Modal PRO ultra-compacto plano, Heatmap 2-min en vivo y motor Cloud AI + Brain.js local optimizado."
 }
