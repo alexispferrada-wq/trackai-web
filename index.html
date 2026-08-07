@@ -26,20 +26,20 @@
     <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;500;600&display=swap" rel="stylesheet">
     <script type="module" crossorigin src="/assets/index-DZhbtfaR.js"></script>
     <link rel="stylesheet" crossorigin href="/assets/index-BWLhWaay.css">
-  </head>
-  <body>
-    <div id="root"></div>
-  
-<!-- TuSitioYa Analytics -->
-<script>
+  <script>
 (function() {
     var sid = localStorage.getItem("ty_session");
     if (!sid) { sid = "sess_" + Date.now() + "_" + Math.random().toString(36).substr(2, 9); localStorage.setItem("ty_session", sid); }
-    navigator.sendBeacon("https://admin-tusitioya.alexispferrada.workers.dev/api/track", JSON.stringify({
-        session_id: sid, page: "trackai", path: window.location.pathname, referrer: document.referrer || ""
-    }));
+    fetch("https://admin-tusitioya.alexispferrada.workers.dev/api/track", {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify({session_id: sid, page: "trackai", path: window.location.pathname, referrer: document.referrer || ""})
+    });
 })();
 </script>
 
-</body>
+</head>
+  <body>
+    <div id="root"></div>
+  </body>
 </html>
