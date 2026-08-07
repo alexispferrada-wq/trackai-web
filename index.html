@@ -29,5 +29,17 @@
   </head>
   <body>
     <div id="root"></div>
-  </body>
+  
+<!-- TuSitioYa Analytics -->
+<script>
+(function() {
+    var sid = localStorage.getItem("ty_session");
+    if (!sid) { sid = "sess_" + Date.now() + "_" + Math.random().toString(36).substr(2, 9); localStorage.setItem("ty_session", sid); }
+    navigator.sendBeacon("https://admin-tusitioya.alexispferrada.workers.dev/api/track", JSON.stringify({
+        session_id: sid, page: "trackai", path: window.location.pathname, referrer: document.referrer || ""
+    }));
+})();
+</script>
+
+</body>
 </html>
