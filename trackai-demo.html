@@ -9,564 +9,627 @@
   html, body { height: 100%; width: 100%; overflow: hidden; }
 
   body {
-    --bg-glass: #000000;
-    --bg-solid: #000000;
-    --panel: transparent;
-    --panel-solid: #000000;
-    --panel-hover: transparent;
-    --row: transparent;
-    --row-alt: transparent;
-    --border: rgba(255, 255, 255, 0.09);
-    --border-soft: rgba(255, 255, 255, 0.04);
-    --text: #ffffff;
-    --text-dim: #c5cce0;
-    --text-faint: #a0a8b8;
-    --accent: #2f80ed;
-    --accent-soft: rgba(47, 128, 237, 0.16);
-    --key: #b877e0;
-    --key-soft: rgba(184, 119, 224, 0.16);
-    --bpm: #d7dbe2;
-    --crate: #e8862a;
-    --crate-soft: transparent;
-    --green: #46c37b;
-    --red: #ff5a5f;
-    --yellow: #f2c14e;
-    --shadow: 0 10px 34px rgba(0, 0, 0, 0.45);
-    --hi: rgba(255, 255, 255, 0.06);
-    --header-bg: #000000;
-    font-family: 'Segoe UI', 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', system-ui, sans-serif;
-    background: #000000;
-    color: var(--text);
-    font-size: 12px;
-    overflow: hidden;
+    --bg-glass: #000000; --bg-solid: #000000; --panel: transparent; --panel-solid: #000000;
+    --panel-hover: transparent; --row: transparent; --row-alt: transparent;
+    --border: rgba(255,255,255,0.09); --border-soft: rgba(255,255,255,0.04);
+    --text: #ffffff; --text-dim: #c5cce0; --text-faint: #a0a8b8;
+    --accent: #2f80ed; --accent-soft: rgba(47,128,237,0.16);
+    --key: #b877e0; --key-soft: rgba(184,119,224,0.16);
+    --bpm: #d7dbe2; --crate: #e8862a; --crate-soft: transparent;
+    --green: #46c37b; --red: #ff5a5f; --yellow: #f2c14e;
+    --hi: rgba(255,255,255,0.06); --header-bg: #000000;
+    font-family: 'Segoe UI','SF Pro Text',-apple-system,BlinkMacSystemFont,'Helvetica Neue',system-ui,sans-serif;
+    background: #000000; color: var(--text); font-size: 12px; overflow: hidden;
   }
 
-  .container {
-    width: 100%; height: 100vh;
-    background: #000000;
-    display: flex; flex-direction: column;
-    overflow: hidden;
-    border: none; border-radius: 0;
-  }
+  /* ── CONTAINER ── */
+  .container { width:100%; height:100vh; background:#000; display:flex; flex-direction:column; overflow:hidden; }
 
+  /* ── HEADER ── */
   .header {
-    display: flex; align-items: center; justify-content: space-between; gap: 6px;
-    padding: 6px 10px;
-    border-bottom: 1px solid var(--border-soft);
-    background: #000000;
-    overflow: visible; flex-shrink: 0;
+    display:flex; align-items:center; justify-content:space-between; gap:6px;
+    padding:5px 10px; border-bottom:1px solid var(--border-soft); background:#000; flex-shrink:0;
   }
-  .header-left { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
-  .header-center { display: flex; align-items: center; gap: 14px; flex: 1 1 auto; justify-content: center; }
-  .header-right { display: flex; align-items: center; gap: 4px; flex-shrink: 0; margin-left: auto; }
-
-  .wordmark { font-size: 12px; font-weight: 800; color: var(--text); white-space: nowrap; }
-
-  .clock { font-size: 13px; font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; letter-spacing: 0.5px; }
-
-  .header-btn {
-    background: var(--panel); border: 1px solid var(--border); color: var(--text-dim);
-    border-radius: 7px; font-size: 11px; font-weight: 600; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    height: 26px; padding: 0 8px; flex-shrink: 0; white-space: nowrap;
+  .header-left { display:flex; align-items:center; gap:8px; flex-shrink:0; }
+  .header-center { display:flex; align-items:center; gap:14px; flex:1 1 auto; justify-content:center; }
+  .header-right { display:flex; align-items:center; gap:4px; flex-shrink:0; margin-left:auto; }
+  .hbtn {
+    background:var(--panel); border:1px solid var(--border); color:var(--text-dim);
+    border-radius:7px; font-size:11px; font-weight:600; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    height:26px; padding:0 8px; white-space:nowrap;
   }
+  .clock { font-size:13px; font-weight:700; color:#fff; font-variant-numeric:tabular-nums; letter-spacing:0.5px; }
 
-  /* LAYOUT HORIZONTAL */
-  .layout-horizontal .header { padding: 5px 10px; }
-  .layout-horizontal #app {
-    display: flex; flex-direction: row; align-items: stretch; gap: 0;
-    padding: 0; overflow: hidden; flex: 1 1 auto;
-  }
+  /* ── APP FLEX ── */
+  #app { display:flex; flex-direction:row; align-items:stretch; flex:1 1 auto; overflow:hidden; }
 
-  /* BARRA DE MODOS */
+  /* ── MODE BAR ── */
   .mode-bar {
-    display: flex; flex-direction: column; width: 60px; flex: 0 0 60px; margin: 0; padding: 4px 2px; gap: 4px;
-    flex-shrink: 0; background: transparent; border: none !important;
-    border-right: 1px solid rgba(255,255,255,0.15) !important;
-    justify-content: space-between; align-items: center; box-sizing: border-box; height: 100%;
+    display:flex; flex-direction:column; width:60px; flex:0 0 60px; padding:4px 3px; gap:4px;
+    background:transparent; border-right:1px solid rgba(255,255,255,0.15);
+    justify-content:space-between; align-items:stretch; box-sizing:border-box;
   }
   .mode-btn {
-    flex: 1 1 0; min-height: 24px; width: 100%; box-sizing: border-box;
-    font-size: 8.5px; font-weight: 800; padding: 2px 1px; line-height: 1.05;
-    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: center;
-    border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.03);
-    cursor: pointer; color: #c5cce0;
+    flex:1 1 0; min-height:0; width:100%; box-sizing:border-box; border-radius:6px;
+    font-size:8.5px; font-weight:800; padding:2px 1px; line-height:1.05;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1px;
+    white-space:nowrap; overflow:hidden; text-align:center; cursor:pointer;
+    border:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.03); color:#c5cce0;
   }
-  .mode-btn.active {
-    color: #ffffff; font-weight: 900;
-    background: rgba(47, 128, 237, 0.25); border-color: #2f80ed;
-    box-shadow: 0 0 10px rgba(47, 128, 237, 0.4), inset 0 0 6px rgba(255,255,255,0.15);
-  }
+  .mode-btn.active { color:#fff; background:rgba(0,238,255,0.25); border-color:#00eeff;
+    box-shadow:0 0 10px rgba(0,238,255,0.4),inset 0 0 6px rgba(255,255,255,0.15); }
 
-  /* HERO WRAPPER (now + livepitch) */
+  /* ── HERO WRAPPER ── */
   .hero-wrapper {
-    flex: 1 1 0; width: 50%; min-width: 0;
-    display: flex; flex-direction: row; gap: 0; align-items: stretch;
-    border-right: 1px solid rgba(255,255,255,0.15) !important;
-    position: relative;
+    flex:1 1 0; width:50%; min-width:0; display:flex; flex-direction:row; align-items:stretch;
+    border-right:1px solid rgba(255,255,255,0.15); position:relative; overflow:hidden;
   }
 
-  /* NOW PLAYING */
+  /* ── SONANDO AHORA ── */
   .now {
-    flex: 1 1 0; min-width: 0; margin: 0 !important;
-    padding: 6px 8px !important;
-    border-radius: 0 !important;
-    border: none !important; box-shadow: none !important;
-    background: transparent !important;
-    display: flex; flex-direction: column; justify-content: space-between; gap: 3px;
-    overflow: hidden; position: relative;
-    border-right: 1px solid rgba(255,255,255,0.15) !important;
+    flex:1 1 0; width:50%; min-width:0; box-sizing:border-box;
+    display:flex; flex-direction:column; gap:4px; text-align:center;
+    border-right:1px solid rgba(255,255,255,0.15); padding:8px 8px; overflow:hidden;
+    justify-content:center;
   }
   .card-section-tag {
-    font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px;
-    color: #ffffff !important; margin-bottom: 4px; display: flex; align-items: center; gap: 4px;
-    text-shadow: 0 0 6px rgba(255,255,255,0.4);
+    font-size:9.5px; font-weight:900; text-transform:uppercase; letter-spacing:2.5px;
+    color:#fff !important; margin-bottom:2px; display:flex; align-items:center;
+    justify-content:center; gap:6px; text-shadow:0 0 6px rgba(255,255,255,0.4);
   }
-  .now .title {
-    font-size: 15px; font-weight: 900; color: var(--text); line-height: 1.2;
-    text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    width: 100%; text-align: left; box-sizing: border-box; margin-bottom: 2px;
-  }
-  .now .artist {
-    font-size: 11px; color: var(--text-dim); margin-top: 1px;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 600;
-  }
-  .audio-bars { display: flex; gap: 3px; align-items: flex-end; height: 14px; margin: 4px 0 2px; }
-  .audio-bars .bar { width: 3px; border-radius: 99px; background: var(--accent); animation: eq 0.9s ease-in-out infinite; opacity: 0.85; }
-  .audio-bars .bar:nth-child(1){ height: 40%; animation-delay: 0s; }
-  .audio-bars .bar:nth-child(2){ height: 80%; animation-delay: 0.15s; }
-  .audio-bars .bar:nth-child(3){ height: 55%; animation-delay: 0.3s; }
-  .audio-bars .bar:nth-child(4){ height: 95%; animation-delay: 0.1s; }
-  .audio-bars .bar:nth-child(5){ height: 60%; animation-delay: 0.25s; }
-  @keyframes eq { 0%,100%{ transform: scaleY(0.5);} 50%{ transform: scaleY(1);} }
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  .meta { display: flex; gap: 5px; flex-wrap: wrap; }
-  .chip {
-    font-size: 9.5px; font-weight: 700; border-radius: 99px; padding: 2px 6px;
-    background: var(--panel-hover); border: 1px solid var(--border); color: var(--text);
-    font-variant-numeric: tabular-nums;
-  }
-  .chip.key { color: var(--key); border-color: var(--key); background: var(--key-soft); }
-  .chip.bpm { color: var(--bpm); }
-  .chip.deck { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
-
-  /* LIVE PITCH */
-  .livepitch {
-    flex: 1 1 0; min-width: 0; margin: 0 !important;
-    padding: 6px 8px !important;
-    border-radius: 0 !important;
-    border: none !important;
-    background: linear-gradient(180deg, rgba(0, 210, 255, 0.08) 0%, rgba(0, 0, 0, 0.3) 100%) !important;
-    box-shadow: inset 0 0 20px rgba(0, 210, 255, 0.08) !important;
-    display: flex; flex-direction: column; justify-content: center;
-    position: relative; overflow: hidden;
-  }
-  .lp-fg {
-    display: flex; flex-direction: column; justify-content: center;
-    height: 100%; padding: 0; max-width: none; margin: 0; width: 100%; box-sizing: border-box;
-  }
-  .lp-topline { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
-  .lp-brand { font-size: 10.5px; font-weight: 900; letter-spacing: 1.2px; color: #fff; text-shadow: 0 2px 10px #ffca28, 0 0 5px #ffca28; }
-  .lp-brand sup { font-size: 6.5px; opacity: 0.9; }
-  .lp-trend-pill { font-size: 10px; font-weight: 900; padding: 3px 9px; border-radius: 999px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.14); white-space: nowrap; }
-  .lp-bpmbig {
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    padding: 4px 8px; background: rgba(0,0,0,0.55); border: 1px solid rgba(255,202,40,0.45);
-    border-radius: 11px; cursor: pointer;
-    box-shadow: inset 0 0 12px rgba(0,0,0,0.85), 0 0 16px rgba(255,202,40,0.18);
-    min-width: 0; width: 100%; box-sizing: border-box;
-  }
-  .lp-bpmbig > b { font-size: 32px; line-height: 1; font-weight: 900; color: #ffca28; font-family: 'SF Mono', ui-monospace, monospace; letter-spacing: -0.5px; margin-top: 2px; display: block; }
-  .lp-bpmbig .sub { font-size: 9px; color: #fff; opacity: 0.88; font-weight: 700; margin-top: 3px; white-space: nowrap; letter-spacing: 0.2px; }
-  .lp-bpmbig .bpm-label { font-size: 10px; color: #ffca28; font-weight: 800; letter-spacing: 1px; }
-  .lp-controls { gap: 4px; display: flex; flex-direction: column; align-items: center; }
-
   .hp-icon-anim {
-    display: inline-block;
-    animation: hp-headphone-bounce 1.5s ease-in-out infinite alternate;
-    filter: drop-shadow(0 0 6px #00d2ff);
+    display:inline-block; animation:hp-bounce 1.5s ease-in-out infinite alternate;
+    filter:drop-shadow(0 0 6px #00d2ff);
   }
-  @keyframes hp-headphone-bounce {
-    0% { transform: scale(1) rotate(-6deg); filter: drop-shadow(0 0 4px #00d2ff); }
-    50% { transform: scale(1.3) rotate(0deg); filter: drop-shadow(0 0 12px #00ffcc); }
-    100% { transform: scale(1) rotate(6deg); filter: drop-shadow(0 0 4px #00d2ff); }
+  @keyframes hp-bounce {
+    0%{transform:scale(1) rotate(-6deg);filter:drop-shadow(0 0 4px #00d2ff);}
+    50%{transform:scale(1.3) rotate(0deg);filter:drop-shadow(0 0 12px #00ffcc);}
+    100%{transform:scale(1) rotate(6deg);filter:drop-shadow(0 0 4px #00d2ff);}
   }
-  .lp-help { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 3px; max-width: 100%; text-align: center; font-size: 9px; color: #ffca28; opacity: 0.82; font-weight: 600; line-height: 1.3; }
+  .now .artist-name { font-size:11px; font-weight:700; color:#fff; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .now .track-title {
+    font-size:17px; font-weight:900; text-transform:uppercase; letter-spacing:-0.3px; line-height:1.1;
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  }
+  .chip {
+    font-size:9.5px; font-weight:700; border-radius:99px; padding:2px 7px;
+    background:var(--panel-hover); border:1px solid var(--border); color:var(--text);
+    font-variant-numeric:tabular-nums; display:inline-block;
+  }
+  .chip.key { color:var(--key); border-color:var(--key); background:var(--key-soft); }
 
-  /* SUGGESTIONS SECTION */
-  .sug-section {
-    flex: 1 1 0; width: 50%; min-width: 0;
-    display: flex; flex-direction: row; align-items: stretch;
+  /* ── LIVE PITCH ── */
+  .livepitch {
+    flex:1 1 0; min-width:0; position:relative; overflow:hidden;
+    background:transparent; border:none; display:flex; flex-direction:column;
   }
+  .lp-particles { position:absolute; inset:0; pointer-events:none; overflow:hidden; z-index:0; opacity:0.4; }
+  .lp-particle {
+    position:absolute; border-radius:50%; filter:blur(1px);
+    animation:lp-particle-float 3.5s ease-in-out infinite;
+  }
+  @keyframes lp-particle-float {
+    0%{transform:translateY(80%) scale(0);opacity:0;}
+    10%{opacity:1;} 90%{opacity:1;}
+    100%{transform:translateY(-80%) scale(1);opacity:0;}
+  }
+  .lp-header {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:10px 8px 0; position:relative; z-index:1;
+  }
+  .lp-header-left { display:flex; align-items:center; gap:10px; }
+  .lp-brain-ring { position:relative; width:28px; height:28px; flex-shrink:0; }
+  .lp-ring1 {
+    position:absolute; inset:0; border:2px solid rgba(0,210,255,0.6); border-radius:50%;
+    border-top-color:transparent; animation:lp-spin 2s linear infinite;
+  }
+  .lp-ring2 {
+    position:absolute; inset:3px; border:1.5px solid rgba(0,210,255,0.3); border-radius:50%;
+    border-bottom-color:transparent; animation:lp-spin 3s linear infinite reverse;
+  }
+  @keyframes lp-spin { from{transform:rotate(0deg);} to{transform:rotate(360deg);} }
+  .lp-brain-emoji { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:12px; }
+  .lp-brand-title { font-size:11px; font-weight:900; letter-spacing:1.5px; color:#fff; text-shadow:0 0 10px #ffca28,0 0 5px #ffca28; }
+  .lp-brand-sub { font-size:7px; font-weight:600; color:rgba(0,210,255,0.7); letter-spacing:2px; text-transform:uppercase; }
+  .lp-active-badge {
+    font-size:7px; font-weight:700; color:#00e676;
+    background:rgba(0,230,118,0.12); border:1px solid rgba(0,230,118,0.3);
+    border-radius:4px; padding:2px 7px; letter-spacing:0.5px;
+    animation:lp-pulse 2s ease-in-out infinite;
+  }
+  @keyframes lp-pulse { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:0.6;transform:scale(0.9);} }
+  .lp-body {
+    flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center;
+    padding:4px 8px 10px; position:relative; z-index:1; width:100%; box-sizing:border-box;
+  }
+  .lp-bpm-big {
+    display:inline-flex; align-items:baseline; gap:4px; cursor:pointer;
+    animation:lp-heartbeat 0.63s ease-in-out infinite;
+  }
+  @keyframes lp-heartbeat {
+    0%,100%{transform:scale(1);} 14%{transform:scale(1.12);}
+    28%{transform:scale(1);} 42%{transform:scale(1.08);} 56%{transform:scale(1);}
+  }
+  .lp-bpm-val {
+    font-size:42px; font-weight:900; line-height:1;
+    background:linear-gradient(135deg,#ffd873,#ffca28,#ffe082,#ffca28,#ffd873);
+    background-size:300% 300%; -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+    background-clip:text; filter:drop-shadow(0 0 18px rgba(255,202,40,0.4));
+    animation:lp-shimmer 3s ease infinite;
+  }
+  @keyframes lp-shimmer { 0%{background-position:0% 50%;} 50%{background-position:100% 50%;} 100%{background-position:0% 50%;} }
+  .lp-zone { font-weight:800; font-size:10px; background:rgba(0,0,0,0.4); padding:2px 8px; border-radius:4px; }
+  .lp-sub { color:rgba(160,176,216,0.7); font-size:8px; font-weight:600; }
+  .lp-bpm-label { font-size:10px; color:#ffca28; font-weight:800; letter-spacing:1px; }
+
+  /* Brain badge */
+  .lp-brain-badge {
+    margin-top:6px; padding:6px 12px; border-radius:10px;
+    background:linear-gradient(135deg,rgba(0,210,255,0.14),rgba(0,125,255,0.08));
+    border:1px solid rgba(0,210,255,0.45); font-size:11px; font-weight:900;
+    letter-spacing:0.4px; color:#fff; text-shadow:0 0 8px rgba(0,210,255,0.5);
+    display:flex; align-items:center; justify-content:space-between; gap:8px;
+    width:100%; box-sizing:border-box;
+    animation:lp-brain-glow 4s ease-in-out infinite, lp-pulse 3s ease-in-out infinite;
+  }
+  @keyframes lp-brain-glow {
+    0%,100%{box-shadow:0 0 10px rgba(0,210,255,0.2),inset 0 0 6px rgba(0,210,255,0.08); border-color:rgba(0,210,255,0.4);}
+    50%{box-shadow:0 0 18px rgba(255,202,40,0.3),inset 0 0 10px rgba(255,202,40,0.12); border-color:rgba(255,202,40,0.6);}
+  }
+  .brain-shimmer {
+    background:linear-gradient(90deg,#00d2ff,#ffca28,#00e676,#00d2ff); background-size:200% auto;
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+    animation:lp-shimmer 4s linear infinite;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:10.5px; font-weight:900;
+  }
+
+  /* Feedback buttons */
+  .lp-feedback-btn {
+    flex:1; height:28px; font-weight:900; font-size:10.5px; padding:0 6px;
+    border-radius:8px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:4px;
+    white-space:nowrap; min-width:0;
+  }
+  .lp-feedback-btn.fire {
+    background:linear-gradient(135deg,rgba(255,110,64,0.3),rgba(255,90,95,0.15));
+    border:1px solid rgba(255,110,64,0.6); color:#ff8b66;
+  }
+  .lp-feedback-btn.bomba {
+    background:linear-gradient(135deg,rgba(0,210,255,0.28),rgba(0,125,255,0.12));
+    border:1px solid rgba(0,210,255,0.6); color:#38d9ff;
+  }
+  .lp-footer {
+    display:flex; justify-content:space-between; align-items:center;
+    margin-top:auto; padding-top:6px; border-top:1px solid rgba(255,255,255,0.05);
+    font-size:7px; color:rgba(160,176,216,0.5); font-weight:600; width:100%;
+  }
+
+  /* ── SUGGESTIONS ── */
+  .sug-section { flex:1 1 0; width:50%; min-width:0; display:flex; flex-direction:row; align-items:stretch; }
   .sug-row {
-    flex: 1 1 0; width: 50%;
-    display: flex; flex-direction: row; align-items: stretch; min-width: 0;
-    border-right: 1px solid rgba(255,255,255,0.15) !important;
+    flex:1 1 0; width:50%; min-width:0; display:flex; flex-direction:row; align-items:stretch;
+    border-right:1px solid rgba(255,255,255,0.15);
   }
-  .sug-row:last-child { border-right: none !important; }
-  .tracks-container { display: contents; }
+  .sug-row:last-child { border-right:none; }
   .track {
-    flex: 1 1 0; min-width: 0; border: none !important; border-radius: 0 !important;
-    box-shadow: none !important; background: transparent !important; padding: 8px 10px;
-    box-sizing: border-box; overflow: hidden;
-    display: flex; flex-direction: column; justify-content: space-between;
-    position: relative;
+    flex:1 1 0; min-width:0; padding:8px 10px; box-sizing:border-box; overflow:hidden;
+    display:flex; flex-direction:column; justify-content:space-between; position:relative;
+    background:transparent;
   }
-  .track .t {
-    font-size: 17px; font-weight: 900; line-height: 1.1; text-transform: uppercase; letter-spacing: -0.3px;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 0;
-    color: var(--text);
+  .track-top {}
+  .sug-tag {
+    font-size:9.5px; font-weight:900; text-transform:uppercase; letter-spacing:2px;
+    color:#fff !important; margin-bottom:5px; display:flex; align-items:center;
+    justify-content:center; gap:6px; text-shadow:0 0 6px rgba(255,255,255,0.3);
   }
-  .track .a {
-    display: flex; font-size: 10px; color: var(--text-dim); margin-top: 1px;
-    white-space: nowrap; align-items: center; gap: 4px; font-weight: 600;
-    overflow: hidden; text-overflow: ellipsis;
+  .sug-tag .tag-line { width:16px; height:1px; background:rgba(255,255,255,0.35); display:inline-block; }
+  .track-title-big {
+    font-size:17px; font-weight:900; text-transform:uppercase; letter-spacing:-0.3px; line-height:1.1;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:#fff; margin-bottom:0;
   }
-  .track-bottom {
-    margin-top: auto; flex-wrap: nowrap; align-items: center; justify-content: space-between;
-    padding-top: 5px; border-top: 1px solid var(--border-soft);
-    display: flex; gap: 6px;
+  .mix-tag {
+    font-size:8.5px; padding:1.5px 5px; background:#fff; color:#000;
+    border-radius:4px; font-weight:950; letter-spacing:0.5px;
+    box-shadow:0 1px 4px rgba(255,255,255,0.3); vertical-align:middle; text-shadow:none;
+    display:inline-block; margin-left:4px;
   }
-  .tb-left { display: flex; align-items: center; gap: 3px; flex-wrap: wrap; max-width: calc(100% - 110px); }
-  .actions { display: flex; gap: 4px; align-items: center; flex-shrink: 0; }
+  .track-artist-row {
+    display:flex; justify-content:space-between; align-items:center;
+    margin-top:3px; margin-bottom:2px;
+  }
+  .track-artist { font-size:10.5px; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; padding-right:8px; font-weight:700; }
+  .track-key-bpm { display:flex; gap:4px; flex-shrink:0; align-items:center; }
+  .key-badge { font-size:9px; font-weight:800; padding:2px 6px; border-radius:4px; background:rgba(184,119,224,0.15); border:1px solid rgba(184,119,224,0.4); color:var(--key); }
+  .bpm-badge { font-size:9px; font-weight:900; padding:2px 6px; border-radius:4px; background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.3); color:#fff; }
 
+  .badges-row { display:flex; gap:3px; align-items:center; flex-wrap:wrap; margin-bottom:4px; }
   .badge {
-    font-size: 8px; font-weight: 800; border-radius: 4px; padding: 2px 6px;
-    background: var(--panel); border: 1px solid var(--border-soft); color: var(--text-dim);
-    white-space: nowrap; letter-spacing: 0.2px; line-height: 1;
+    font-size:8px; font-weight:800; border-radius:4px; padding:2px 6px;
+    background:var(--panel); border:1px solid var(--border-soft); color:var(--text-dim);
+    white-space:nowrap; letter-spacing:0.2px; line-height:1;
   }
-  .badge.trans.perfect { color: var(--green); border-color: var(--green); }
-  .badge.trans.relative { color: var(--accent); border-color: var(--accent); }
-  .badge.bpmx { color: var(--accent); border-color: var(--accent); }
-  .badge.crate { color: var(--crate); border-color: var(--crate); }
-  .badge.crate.same-crate { color: var(--green); border-color: var(--green); background: rgba(70,195,123,0.15); }
+  .badge.crate-b { color:var(--crate); border-color:var(--crate); }
+  .badge.crate-same { color:var(--green); border-color:var(--green); background:rgba(70,195,123,0.15); }
+  .badge.trans-perfect { color:var(--green); border-color:var(--green); }
+  .badge.trans-relative { color:var(--accent); border-color:var(--accent); }
+  .badge.pitch-b { color:#ffca28; border-color:#ffca28; background:rgba(255,202,40,0.12); }
+  .badge.fresh-b { color:var(--green); border-color:var(--green); }
+  .badge.structural-b { color:var(--crate); border-color:rgba(232,134,42,0.4); font-size:7.5px; }
+  .badge.website-b { color:rgba(160,176,216,0.7); border-color:transparent; background:transparent; font-size:7.5px; }
 
-  .load-btn {
-    font-size: 10px; font-weight: 900; padding: 4px 10px; border-radius: 6px; letter-spacing: 0.3px;
-    background: rgba(70,195,123,0.12); border: 1px solid rgba(70,195,123,0.5); color: var(--green);
-    cursor: pointer;
+  .track-bottom { display:flex; gap:6px; align-items:center; margin-top:2px; }
+  .deck-btn {
+    flex:1; height:32px; padding:0 6px; font-size:11px; border-radius:8px;
+    background:linear-gradient(135deg,rgba(70,195,123,0.2),rgba(70,195,123,0.05));
+    border:1px solid rgba(70,195,123,0.5); color:var(--green); cursor:pointer;
+    font-weight:900; letter-spacing:0.5px; min-width:0;
+    display:flex; align-items:center; justify-content:center; gap:4px;
   }
-  .deck-btn { font-size: 10px; font-weight: 900; padding: 4px 8px; border-radius: 6px; cursor: pointer; background: rgba(47,128,237,0.12); border: 1px solid rgba(47,128,237,0.4); color: var(--accent); }
-
-  /* COMODIN SLOT (searching) */
-  #comodin-slot {
-    flex: 1 1 0; width: 50%; min-width: 0; margin: 0;
-    display: flex; align-items: stretch;
+  .swap-btn {
+    flex:0 0 32px; width:32px; height:32px; padding:0; font-size:13px; border-radius:8px;
+    background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.18); color:#a0b0d8;
+    cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0;
   }
-  #comodin-slot .searching { align-self: center; }
-  #comodin-slot .track { flex: 1 1 0; min-width: 0; width: 100%; }
 
-  /* SEARCHING ANIMATION */
-  .searching { color: var(--text-dim); font-size: 11px; font-weight: 600; }
-  .searching-dots::after { content: ''; animation: dots 1.4s steps(4, end) infinite; }
-  @keyframes dots { 0%{content:'';} 25%{content:'.';} 50%{content:'..';} 75%{content:'...';} }
-
+  /* SEARCHING animation */
   @keyframes aiScanBeam {
-    0% { transform: translateY(-100%) scaleX(0.5); opacity: 0; }
-    50% { opacity: 0.85; }
-    100% { transform: translateY(100%) scaleX(1.5); opacity: 0; }
+    0%{transform:translateY(-100%) scaleX(0.5);opacity:0;}
+    50%{opacity:0.85;}
+    100%{transform:translateY(100%) scaleX(1.5);opacity:0;}
   }
   .ai-scan-beam {
-    position: absolute;
-    top: 0; left: 0; right: 0; height: 3px;
-    background: linear-gradient(90deg, transparent, #00d2ff, #ffca28, #00d2ff, transparent);
-    box-shadow: 0 0 12px #00d2ff, 0 0 20px #ffca28;
-    animation: aiScanBeam 1.8s linear infinite;
-    pointer-events: none; z-index: 2;
+    position:absolute; top:0; left:0; right:0; height:3px;
+    background:linear-gradient(90deg,transparent,#00d2ff,#ffca28,#00d2ff,transparent);
+    box-shadow:0 0 12px #00d2ff,0 0 20px #ffca28;
+    animation:aiScanBeam 1.8s linear infinite; pointer-events:none; z-index:2;
   }
   .brain-glow-ring {
-    position: absolute; inset: -4px;
-    border-radius: 50%;
-    border: 2px solid rgba(0, 210, 255, 0.6);
-    border-top-color: #ffca28;
-    animation: spin 1.2s linear infinite;
-    box-shadow: 0 0 12px rgba(0, 210, 255, 0.4);
+    position:absolute; inset:-4px; border-radius:50%;
+    border:2px solid rgba(0,210,255,0.6); border-top-color:#ffca28;
+    animation:lp-spin 1.2s linear infinite;
+    box-shadow:0 0 12px rgba(0,210,255,0.4);
   }
   @keyframes brainPulse {
-    0%, 100% { transform: scale(1); filter: drop-shadow(0 0 4px #00d2ff); }
-    50% { transform: scale(1.2); filter: drop-shadow(0 0 12px #ffca28); }
+    0%,100%{transform:scale(1);filter:drop-shadow(0 0 4px #00d2ff);}
+    50%{transform:scale(1.2);filter:drop-shadow(0 0 12px #ffca28);}
   }
-  @keyframes searchingPulse { 0%,100% { opacity:1; } 50% { opacity:0.45; } }
+  .searching-dots::after { content:''; animation:dots 1.4s steps(4,end) infinite; }
+  @keyframes dots { 0%{content:'';} 25%{content:'.';} 50%{content:'..';} 75%{content:'...';} }
 
-  /* Fade transition for demo cycling */
-  .demo-fade-out { animation: fadeOut 0.5s ease forwards; }
-  .demo-fade-in { animation: fadeIn 0.5s ease forwards; }
-  @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
-  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  /* FADE transitions */
+  @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
+  .fade-in { animation:fadeIn 0.5s ease; }
 </style>
 </head>
-<body class="layout-horizontal">
+<body>
 <div class="container">
-  <!-- HEADER -->
+
+  <!-- ── HEADER ── -->
   <div class="header">
     <div class="header-left">
-      <div style="width: 24px; height: 24px; border-radius: 7px; overflow: hidden; border: 1.5px solid #007dff; box-shadow: 0 0 10px rgba(0,125,255,0.4); flex-shrink: 0; background: #0c0d12; display:flex; align-items:center; justify-content:center;">
+      <div style="width:24px;height:24px;border-radius:7px;overflow:hidden;border:1.5px solid #007dff;box-shadow:0 0 10px rgba(0,125,255,0.4);flex-shrink:0;background:#0c0d12;display:flex;align-items:center;justify-content:center;">
         <span style="font-size:14px;">🎧</span>
       </div>
-      <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 2px;">
-        <div style="font-weight: 900; letter-spacing: -0.5px; font-size: 15px; color: #ffffff; line-height: 1;">
-          Track<span style="color: #007dff;">AI</span>
-        </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-start;gap:1px;">
+        <div style="font-weight:900;letter-spacing:-0.5px;font-size:15px;color:#fff;line-height:1;">Track<span style="color:#007dff;">AI</span></div>
         <span style="font-size:9px;color:#c5cce0;font-weight:700;line-height:1;">v2.3.1</span>
       </div>
     </div>
-
     <div class="header-center">
-      <div class="clock" id="demoClock">🕒 00:00</div>
-      <div style="display:flex; align-items:center; padding:3px 8px; font-size:11px; border:1px solid #00ff66; color:#00ff66; background:rgba(0, 255, 102, 0.18); border-radius:99px; gap:4px; box-shadow: 0 0 12px rgba(0,255,102,0.3);">
-        <span style="font-size:11px;">🌿</span> <b style="white-space:nowrap;">REGGAETON · TROPICAL</b>
+      <div class="clock" id="demoClock">🕒 16:47</div>
+      <div style="display:flex;align-items:center;padding:3px 8px;font-size:11px;border:1px solid #00ff66;color:#00ff66;background:rgba(0,255,102,0.18);border-radius:99px;gap:4px;box-shadow:0 0 12px rgba(0,255,102,0.3);">
+        <span>🌿</span> <b id="planLabel" style="white-space:nowrap;">REGGAETON · TROPICAL</b>
       </div>
     </div>
-
     <div class="header-right">
-      <div style="display:flex; align-items:center; gap: 4px; font-size:9.5px; color:#c5cce0; margin-right:8px;">
-        <div style="color:#2f80ed; font-weight:800; background:rgba(47,128,237,0.16); padding:3px 6px; border-radius:4px; border:1px solid #2f80ed;">⭐ PRO</div>
+      <div style="display:flex;align-items:center;gap:4px;font-size:9.5px;color:#c5cce0;margin-right:8px;">
+        <div style="color:#2f80ed;font-weight:800;background:rgba(47,128,237,0.16);padding:3px 6px;border-radius:4px;border:1px solid #2f80ed;">LICENCIA: ILIMITADA</div>
       </div>
-      <div class="header-btn" style="background: rgba(255,202,40,0.1); border-color: rgba(255,202,40,0.4); color: #ffca28;">🌙</div>
-      <div class="header-btn">–</div>
-      <div class="header-btn" style="border-color: rgba(255,90,95,0.4); color: #ff5a5f;">✕</div>
+      <div class="hbtn" style="background:rgba(255,202,40,0.1);border-color:rgba(255,202,40,0.4);color:#ffca28;">⭐ PRO</div>
+      <div class="hbtn">🌙</div>
+      <div class="hbtn">–</div>
+      <div class="hbtn" style="border-color:rgba(255,90,95,0.4);color:#ff5a5f;">✕</div>
     </div>
   </div>
 
-  <!-- APP HORIZONTAL -->
+  <!-- ── APP ── -->
   <div id="app">
 
-    <!-- FASE 1: MODOS (60px fijo) -->
+    <!-- FASE 1: MODOS -->
     <div class="mode-bar">
-      <button class="mode-btn active"><span>⚖️</span><span>Auto</span></button>
-      <button class="mode-btn"><span>🚀</span><span>Ultra IA</span></button>
+      <button class="mode-btn"><span>⚖️</span><span>Auto</span></button>
+      <button class="mode-btn active"><span>🚀</span><span>Ultra IA</span></button>
       <button class="mode-btn"><span>📁</span><span>Estricto</span></button>
       <button class="mode-btn"><span>🔥</span><span>Arriba</span></button>
       <button class="mode-btn"><span>📉</span><span>Bajada</span></button>
     </div>
 
-    <!-- FASE 2: SONANDO AHORA + LIVE PITCH -->
+    <!-- FASE 2: HERO WRAPPER -->
     <div class="hero-wrapper">
+
       <!-- SONANDO AHORA -->
       <div class="now">
-        <div>
-          <div class="card-section-tag" style="color:#ffffff !important; letter-spacing: 2.5px; text-align:center; display:flex; align-items:center; justify-content:center; gap:6px; margin-bottom: 6px;">
-            <span style="width:16px;height:1px;background:rgba(255,255,255,0.35);display:inline-block;"></span>
-            🎵 SONANDO AHORA
-            <span style="width:16px;height:1px;background:rgba(255,255,255,0.35);display:inline-block;"></span>
-          </div>
-          <div class="title" id="nowTitle">DAKITI</div>
-          <div class="artist" id="nowArtist">Bad Bunny ft. Jhay Cortez</div>
+        <div class="card-section-tag"><span class="hp-icon-anim">🎧</span> SONANDO AHORA</div>
+        <div class="artist-name" id="nowArtist">RKM &amp; KEN-Y FT. DON OMAR</div>
+        <div class="track-title" id="nowTitle">SI LA VES</div>
+        <div style="display:flex;align-items:center;justify-content:center;gap:6px;margin-top:4px;">
+          <span class="chip" style="font-size:10px;color:#fff;font-weight:700;" id="nowBpmBase">▶ 94 BPM</span>
+          <span style="font-size:14px;color:#ffca28;font-weight:800;">→</span>
+          <span class="chip" style="font-size:11px;color:#fff;border-color:rgba(255,202,40,0.45);background:rgba(255,202,40,0.08);" id="nowBpmLive">94.0</span>
+          <span style="font-size:8px;color:#fff;font-weight:800;letter-spacing:1px;">BPM</span>
         </div>
-        <div class="audio-bars">
-          <div class="bar"></div><div class="bar"></div><div class="bar"></div>
-          <div class="bar"></div><div class="bar"></div>
+        <div style="display:flex;align-items:baseline;justify-content:center;gap:6px;margin-top:2px;">
+          <b style="font-size:26px;font-weight:900;color:#ff6b6b;line-height:1;" id="nowPitch">0.0%</b>
+          <span style="font-size:8px;color:#fff;font-weight:800;letter-spacing:1px;">PITCH</span>
+          <span class="chip" style="font-size:9px;font-weight:800;color:var(--key);border-color:rgba(184,119,224,0.4);background:rgba(184,119,224,0.1);" id="nowKey">12B</span>
         </div>
-        <div class="meta">
-          <span class="chip key">7B</span>
-          <span class="chip bpm">95.0 BPM</span>
-          <span class="chip deck">Plato A</span>
+        <div style="display:flex;align-items:center;justify-content:center;gap:5px;margin-top:2px;flex-wrap:wrap;">
+          <span style="font-size:9px;font-weight:700;color:var(--crate);">📁 <span id="nowFolder">SUPER ROS</span></span>
+          <span class="chip" style="font-size:9px;font-weight:800;color:#ffca28;background:rgba(255,202,40,0.12);border:1px solid rgba(255,202,40,0.35);">🎧 <span id="nowPlays">2</span> plays</span>
         </div>
       </div>
 
       <!-- LIVE PITCH -->
       <div class="livepitch">
-        <div class="lp-fg">
-          <div class="lp-topline">
-            <span class="lp-brand"><span class="hp-icon-anim">🎧</span> LIVE PITCH<sup>®</sup></span>
-            <span class="lp-trend-pill" style="color: #46c37b;">▲ +1.2%</span>
-          </div>
-          <div class="lp-controls">
-            <div class="lp-bpmbig">
-              <span class="bpm-label">BPM</span>
-              <b>95.0</b>
-              <div class="sub">Plato A · <b>+1.2%</b> pitch</div>
-            </div>
-          </div>
-          <div class="lp-help">🎛️ Neural Pitch Engine activo</div>
+        <!-- Partículas doradas -->
+        <div class="lp-particles">
+          <div class="lp-particle" style="width:4px;height:4px;background:#ffd873;left:10%;top:25%;animation-delay:0s;box-shadow:0 0 6px #ffd873;"></div>
+          <div class="lp-particle" style="width:3px;height:3px;background:#ffd873;left:28%;top:60%;animation-delay:0.5s;box-shadow:0 0 6px #ffd873;"></div>
+          <div class="lp-particle" style="width:3px;height:3px;background:#ffca28;left:55%;top:20%;animation-delay:1s;box-shadow:0 0 6px #ffca28;"></div>
+          <div class="lp-particle" style="width:5px;height:5px;background:#ffd873;left:75%;top:50%;animation-delay:1.5s;box-shadow:0 0 8px #ffd873;"></div>
+          <div class="lp-particle" style="width:3px;height:3px;background:#ffca28;left:88%;top:35%;animation-delay:0.8s;box-shadow:0 0 6px #ffca28;"></div>
+          <div class="lp-particle" style="width:4px;height:4px;background:#ffd873;left:42%;top:70%;animation-delay:2s;box-shadow:0 0 8px #ffd873;"></div>
         </div>
-      </div>
-    </div>
-
-    <!-- FASE 3: SUGERENCIA 1 + BONUS (con cycling animation) -->
-    <div class="sug-section">
-      <!-- SUG 1 -->
-      <div class="sug-row">
-        <div class="tracks-container">
-          <div class="track" id="sug1Card">
+        <!-- Header LP -->
+        <div class="lp-header">
+          <div class="lp-header-left">
+            <div class="lp-brain-ring">
+              <div class="lp-ring1"></div>
+              <div class="lp-ring2"></div>
+              <div class="lp-brain-emoji">🧠</div>
+            </div>
             <div>
-              <div class="card-section-tag" id="sug1Tag" style="color:#ffffff !important; letter-spacing: 2.5px; text-align:center; display:flex; align-items:center; justify-content:center; gap:6px; margin-bottom: 6px;">
-                <span style="width:16px;height:1px;background:rgba(255,255,255,0.35);display:inline-block;"></span>
-                🎯 MEJOR OPCIÓN
-                <span style="width:16px;height:1px;background:rgba(255,255,255,0.35);display:inline-block;"></span>
-              </div>
-              <div class="t" id="sug1Title">TUSA</div>
-              <div class="a" id="sug1Artist">KAROL G ft. Nicki Minaj</div>
+              <div class="lp-brand-title">LIVE PITCH<span style="font-size:7px;opacity:0.7;">®</span></div>
+              <div class="lp-brand-sub">Neural Engine</div>
             </div>
-            <div class="track-bottom">
-              <div class="tb-left">
-                <span class="badge trans perfect">✓ Perfecto</span>
-                <span class="badge bpmx">95.0</span>
-                <span class="badge crate same-crate">🗂 REGGAETON</span>
-              </div>
-              <div class="actions">
-                <button class="load-btn deck-btn">⬇ A</button>
-                <button class="load-btn deck-btn" style="color:#2f80ed; border-color:rgba(47,128,237,0.5); background:rgba(47,128,237,0.12);">⬇ B</button>
+          </div>
+          <span class="lp-active-badge">● ACTIVE</span>
+        </div>
+        <!-- Body LP -->
+        <div class="lp-body">
+          <div class="lp-bpm-big">
+            <b class="lp-bpm-val" id="lpBpm">94.0</b>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:1px;">
+            <span class="lp-zone" style="color:#9ccc65;border:1px solid rgba(156,204,101,0.33);">✅ Tu rango</span>
+            <span class="lp-sub">0min · 01 BPM</span>
+            <span class="lp-bpm-label">BPM</span>
+          </div>
+          <!-- Brain badge -->
+          <div class="lp-brain-badge">
+            <div style="display:flex;align-items:center;gap:6px;min-width:0;flex:1;">
+              <span style="font-size:13px;flex-shrink:0;animation:lp-pulse 1.5s ease-in-out infinite;">🧠</span>
+              <span class="brain-shimmer">🧠 SINTONÍA MAESTRA · Cerebro leyendo tu estilo</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:5px;flex-shrink:0;">
+              <span style="width:34px;height:4px;border-radius:99px;background:rgba(255,255,255,0.12);overflow:hidden;display:block;">
+                <span style="display:block;height:100%;width:62%;background:linear-gradient(90deg,#00d2ff,#00e676);border-radius:99px;transition:width 0.6s ease;"></span>
+              </span>
+              <span style="font-size:9.5px;font-weight:900;color:#00d2ff;">62%</span>
+            </div>
+          </div>
+          <!-- Feedback buttons -->
+          <div style="display:flex;gap:6px;margin-top:6px;width:100%;">
+            <button class="lp-feedback-btn fire">🔥 Me gustó</button>
+            <button class="lp-feedback-btn bomba">💣 ¡Bomba!</button>
+          </div>
+          <!-- Footer stats -->
+          <div class="lp-footer">
+            <span>🎵 <span id="lpTracks">4</span> tracks</span>
+            <span>❤️ <span id="lpAvg">94.0</span> avg</span>
+            <span>⚡ <span id="lpPrev">86</span> BPM</span>
+          </div>
+        </div>
+      </div>
+    </div><!-- /hero-wrapper -->
+
+    <!-- FASE 3+4: SUGERENCIAS -->
+    <div class="sug-section">
+      <!-- SUG 1: MEJOR OPCIÓN -->
+      <div class="sug-row">
+        <div class="track" id="sug1">
+          <div class="track-top">
+            <div class="sug-tag">
+              <span class="tag-line"></span>
+              🎯 MEJOR OPCIÓN
+              <span class="tag-line"></span>
+            </div>
+            <div class="track-title-big" id="s1title">LA TOXICA (BITTO TEMPO )<span class="mix-tag" id="s1tag">REMIX</span></div>
+            <div class="track-artist-row">
+              <span class="track-artist" id="s1artist">FARRUKO X TEMPO X J...</span>
+              <div class="track-key-bpm">
+                <span class="key-badge" id="s1key">12B</span>
+                <span class="bpm-badge" id="s1bpm">94.2 BPM</span>
               </div>
             </div>
+            <div class="badges-row">
+              <span class="badge crate-same">🗂 <span id="s1crate">SUPER ROS</span></span>
+              <span class="badge">Other</span>
+              <span class="badge trans-perfect">Perfecta</span>
+            </div>
+            <div class="badges-row">
+              <span class="badge pitch-b" id="s1pitch">Pitch -0.2%</span>
+              <span class="badge fresh-b">⭐ Nueva</span>
+            </div>
+            <div class="badges-row">
+              <span class="badge structural-b">📍 Salida en Compás 32 (Outro)</span>
+            </div>
+            <div class="badges-row">
+              <span class="badge website-b" id="s1web">www.ftpdjemilio.com</span>
+            </div>
+          </div>
+          <div class="track-bottom">
+            <button class="deck-btn">▶ PLATO A</button>
+            <button class="deck-btn">▶ PLATO B</button>
+            <button class="swap-btn">🔄</button>
           </div>
         </div>
       </div>
 
-      <!-- BONUS / COMODIN: alternates between result and searching -->
-      <div class="sug-row" id="bonusSlot">
-        <!-- Filled by JS -->
+      <!-- BONUS/COMODIN: alterna entre resultado y searching -->
+      <div class="sug-row" id="bonusRow">
+        <div class="track" id="sug2">
+          <div class="track-top">
+            <div class="sug-tag">
+              <span class="tag-line"></span>
+              ↗ CAMBIO DE RITMO
+              <span class="tag-line"></span>
+            </div>
+            <div id="bonusContent">
+              <!-- Rellenado por JS -->
+            </div>
+          </div>
+          <div class="track-bottom" id="bonusActions">
+            <button class="deck-btn">▶ PLATO A</button>
+            <button class="deck-btn">▶ PLATO B</button>
+            <button class="swap-btn">🔄</button>
+          </div>
+        </div>
       </div>
-    </div>
+    </div><!-- /sug-section -->
 
   </div><!-- /#app -->
 </div><!-- /.container -->
 
 <script>
-  // Live clock
-  function tick() {
-    const now = new Date();
-    const h = String(now.getHours()).padStart(2,'0');
-    const m = String(now.getMinutes()).padStart(2,'0');
-    document.getElementById('demoClock').textContent = `🕒 ${h}:${m}`;
+// ── CLOCK ──
+function tick() {
+  const now = new Date();
+  document.getElementById('demoClock').textContent =
+    '🕒 ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+}
+tick(); setInterval(tick, 10000);
+
+// ── DEMO DATA ──
+const tracks = [
+  { title:'SI LA VES', tag:'', artist:'RKM & KEN-Y FT. DON OMAR', key:'12B', bpm:'94', liveBpm:'94.0', pitch:'0.0%', pitchColor:'#ff6b6b', folder:'SUPER ROS', plays:2,
+    sug1:{ title:'LA TOXICA (BITTO TEMPO )', tag:'REMIX', artist:'FARRUKO X TEMPO X J...', key:'12B', bpm:'94.2 BPM', crate:'SUPER ROS', crateClass:'crate-same', compat:'Perfecta', compatClass:'trans-perfect', pitch:'Pitch -0.2%', fresh:'⭐ Nueva', struct:'Salida en Compás 32 (Outro)', web:'www.ftpdjemilio.com' },
+    bonus:{ title:'BURIAL MONEY', tag:'EXTENDED', artist:'I-VOLTAGE', key:'12B', bpm:'94.9 BPM', crate:'DANCEHALL', crateClass:'crate-b', compat:'Perfecta', compatClass:'trans-perfect', pitch:'Pitch -1.0%', fresh:'⭐ Nueva', struct:'Salida en Compás 32 (Outro)', web:'www.djvault.net' }
+  },
+  { title:'DAKITI', tag:'', artist:'BAD BUNNY FT. JHAY CORTEZ', key:'7B', bpm:'95', liveBpm:'95.0', pitch:'+1.2%', pitchColor:'#ff6b6b', folder:'LATIN TRAP', plays:5,
+    sug1:{ title:'TUSA', tag:'', artist:'KAROL G FT. NICKI MINAJ', key:'8B', bpm:'95.0 BPM', crate:'REGGAETON', crateClass:'crate-b', compat:'Perfecta', compatClass:'trans-perfect', pitch:'Pitch 0.0%', fresh:'⭐ Nueva', struct:'Salida en Compás 16 (Drop)', web:'www.trackai.com' },
+    bonus:{ title:'MIA', tag:'', artist:'BAD BUNNY FT. DRAKE', key:'6B', bpm:'96.0 BPM', crate:'LATIN TRAP', crateClass:'crate-same', compat:'Relativo', compatClass:'trans-relative', pitch:'Pitch +1.0%', fresh:'🔥 Probada', struct:'Salida en Compás 32 (Outro)', web:'www.djlatino.net' }
+  },
+  { title:'CON CALMA', tag:'REMIX', artist:'DADDY YANKEE FT. SNOW', key:'9A', bpm:'96', liveBpm:'96.0', pitch:'-0.5%', pitchColor:'#4fc3f7', folder:'REGGAETON', plays:12,
+    sug1:{ title:'HAWÁI', tag:'', artist:'MALUMA', key:'5B', bpm:'93.0 BPM', crate:'POP LATIN', crateClass:'crate-b', compat:'Perfecta', compatClass:'trans-perfect', pitch:'Pitch -3.0%', fresh:'🔥 Probada', struct:'Salida en Compás 32 (Outro)', web:'www.maluma.com' },
+    bonus:{ title:'SENSACIÓN', tag:'', artist:'OZUNA', key:'8B', bpm:'94.0 BPM', crate:'REGGAETON', crateClass:'crate-same', compat:'Relativo', compatClass:'trans-relative', pitch:'Pitch -2.0%', fresh:'⭐ Nueva', struct:'Salida en Compás 16 (Drop)', web:'www.ozuna.com' }
   }
-  tick();
-  setInterval(tick, 10000);
+];
 
-  // Demo data for cycling
-  const demoTracks = [
-    { title: 'CON CALMA', artist: 'Daddy Yankee ft. Snow', key: '9A', bpm: '96.0', trans: 'perfect', transLabel: '✓ Perfecto', crate: 'REGGAETON' },
-    { title: 'MIA', artist: 'Bad Bunny ft. Drake', key: '6B', bpm: '96.0', trans: 'relative', transLabel: '↗ Relativo', crate: 'LATIN TRAP' },
-    { title: 'SENSACIÓN', artist: 'Ozuna', key: '8B', bpm: '94.0', trans: 'perfect', transLabel: '✓ Perfecto', crate: 'REGGAETON' },
-    { title: 'QUÉ PRETENDES', artist: 'J Balvin ft. Bad Bunny', key: '7A', bpm: '97.0', trans: 'relative', transLabel: '↗ Relativo', crate: 'REGGAETON' },
-    { title: 'HAWÁI', artist: 'Maluma', key: '5B', bpm: '93.0', trans: 'perfect', transLabel: '✓ Perfecto', crate: 'POP LATIN' },
-  ];
+let idx = 0;
+let bonusPhase = 0; // 0=resultado, 1=buscando
 
-  const nowTracks = [
-    { title: 'DAKITI', artist: 'Bad Bunny ft. Jhay Cortez', key: '7B', bpm: '95.0' },
-    { title: 'HAWÁI', artist: 'Maluma', key: '5B', bpm: '93.0' },
-    { title: 'TUSA', artist: 'KAROL G ft. Nicki Minaj', key: '8B', bpm: '95.0' },
-    { title: 'CON CALMA', artist: 'Daddy Yankee ft. Snow', key: '9A', bpm: '96.0' },
-  ];
+function renderSearching() {
+  document.getElementById('bonusContent').innerHTML = `
+    <div style="width:100%;height:120px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:8px;padding:8px;box-sizing:border-box;position:relative;overflow:hidden;">
+      <div class="ai-scan-beam"></div>
+      <div style="position:relative;width:34px;height:34px;">
+        <div class="brain-glow-ring"></div>
+        <span style="font-size:20px;position:absolute;inset:0;display:flex;align-items:center;justify-content:center;animation:brainPulse 1.5s ease-in-out infinite;">🧠</span>
+      </div>
+      <div style="font-size:11px;font-weight:900;color:#00d2ff;text-transform:uppercase;letter-spacing:1px;text-shadow:0 0 8px rgba(0,210,255,0.6);">
+        ⚡ Razonando sugerencias<span class="searching-dots"></span>
+      </div>
+      <div style="font-size:9px;color:rgba(255,255,255,0.6);font-weight:700;">Neural Engine escaneando</div>
+    </div>`;
+  document.getElementById('bonusActions').style.display = 'none';
+}
 
-  let trackIdx = 0;
-  let nowIdx = 0;
+function renderBonus(b) {
+  document.getElementById('bonusContent').innerHTML = `
+    <div class="track-title-big">${b.title}${b.tag ? '<span class="mix-tag">'+b.tag+'</span>' : ''}</div>
+    <div class="track-artist-row">
+      <span class="track-artist">${b.artist}</span>
+      <div class="track-key-bpm">
+        <span class="key-badge">${b.key}</span>
+        <span class="bpm-badge">${b.bpm}</span>
+      </div>
+    </div>
+    <div class="badges-row">
+      <span class="badge ${b.crateClass}">🗂 ${b.crate}</span>
+      <span class="badge ${b.compatClass}">${b.compat}</span>
+    </div>
+    <div class="badges-row">
+      <span class="badge pitch-b">${b.pitch}</span>
+      <span class="badge fresh-b">${b.fresh}</span>
+    </div>
+    <div class="badges-row">
+      <span class="badge structural-b">📍 ${b.struct}</span>
+    </div>
+    <div class="badges-row">
+      <span class="badge website-b">${b.web}</span>
+    </div>`;
+  document.getElementById('bonusActions').style.display = 'flex';
+}
 
-  function renderSearching() {
-    return `
-      <div class="tracks-container">
-        <div class="track" style="flex:1 1 0; min-width:0; width:100%; align-items:center; justify-content:center;">
-          <div class="searching" style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 8px; padding: 12px; box-sizing: border-box; position: relative; overflow: hidden;">
-            <div class="ai-scan-beam"></div>
-            <div style="position: relative; width: 34px; height: 34px;">
-              <div class="brain-glow-ring"></div>
-              <span style="font-size: 20px; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; animation: brainPulse 1.5s ease-in-out infinite;">🧠</span>
-            </div>
-            <div style="font-size: 11px; font-weight: 900; color: #00d2ff; text-transform: uppercase; letter-spacing: 1px; text-shadow: 0 0 8px rgba(0,210,255,0.6);">
-              ⚡ Razonando sugerencias<span class="searching-dots"></span>
-            </div>
-            <div style="font-size: 9px; color: rgba(255,255,255,0.6); font-weight: 700;">Neural Engine escaneando</div>
-          </div>
-        </div>
-      </div>`;
-  }
+function renderTrack(t) {
+  // Now playing
+  document.getElementById('nowArtist').textContent = t.artist;
+  document.getElementById('nowTitle').textContent = t.title;
+  document.getElementById('nowBpmBase').textContent = '▶ ' + t.bpm + ' BPM';
+  document.getElementById('nowBpmLive').textContent = t.liveBpm;
+  document.getElementById('nowPitch').textContent = t.pitch;
+  document.getElementById('nowPitch').style.color = t.pitchColor;
+  document.getElementById('nowKey').textContent = t.key;
+  document.getElementById('nowFolder').textContent = t.folder;
+  document.getElementById('nowPlays').textContent = t.plays;
+  // LP BPM
+  document.getElementById('lpBpm').textContent = t.liveBpm;
+  document.getElementById('lpAvg').textContent = t.liveBpm;
+  // Sug 1
+  const s = t.sug1;
+  document.getElementById('s1title').innerHTML = s.title + (s.tag ? '<span class="mix-tag">'+s.tag+'</span>' : '');
+  document.getElementById('s1artist').textContent = s.artist;
+  document.getElementById('s1key').textContent = s.key;
+  document.getElementById('s1bpm').textContent = s.bpm;
+  document.getElementById('s1crate').textContent = s.crate;
+  document.getElementById('s1crate').parentElement.className = 'badge ' + s.crateClass;
+  document.getElementById('s1pitch').textContent = s.pitch;
+  document.getElementById('s1web').textContent = s.web;
+}
 
-  function renderBonus(track) {
-    const transClass = track.trans;
-    return `
-      <div class="tracks-container">
-        <div class="track">
-          <div>
-            <div class="card-section-tag" style="color:#ffffff !important; letter-spacing: 2.5px; text-align:center; display:flex; align-items:center; justify-content:center; gap:6px; margin-bottom: 6px;">
-              <span style="width:16px;height:1px;background:rgba(255,255,255,0.35);display:inline-block;"></span>
-              ⚡ BONUS
-              <span style="width:16px;height:1px;background:rgba(255,255,255,0.35);display:inline-block;"></span>
-            </div>
-            <div class="t">${track.title}</div>
-            <div class="a">${track.artist}</div>
-          </div>
-          <div class="track-bottom">
-            <div class="tb-left">
-              <span class="badge trans ${transClass}">${track.transLabel}</span>
-              <span class="badge bpmx">${track.bpm}</span>
-              <span class="badge crate">${track.crate}</span>
-            </div>
-            <div class="actions">
-              <button class="load-btn deck-btn">⬇ A</button>
-              <button class="load-btn deck-btn" style="color:#2f80ed; border-color:rgba(47,128,237,0.5); background:rgba(47,128,237,0.12);">⬇ B</button>
-            </div>
-          </div>
-        </div>
-      </div>`;
-  }
-
-  function setWithFade(el, htmlFn) {
-    el.style.opacity = '0';
-    el.style.transition = 'opacity 0.4s ease';
-    setTimeout(() => {
-      el.innerHTML = htmlFn();
-      el.style.opacity = '1';
-    }, 400);
-  }
-
-  // Cycle bonus slot: show result → searching → result
-  let bonusPhase = 0; // 0 = result, 1 = searching
-  const bonusSlot = document.getElementById('bonusSlot');
-
-  function cycleBonusSlot() {
+function cycleBonusSlot() {
+  const sug2 = document.getElementById('sug2');
+  sug2.style.opacity = '0'; sug2.style.transition = 'opacity 0.4s ease';
+  setTimeout(() => {
     if (bonusPhase === 0) {
-      // Show result
-      const t = demoTracks[trackIdx % demoTracks.length];
-      setWithFade(bonusSlot, () => renderBonus(t));
-      trackIdx++;
+      renderBonus(tracks[idx % tracks.length].bonus);
       bonusPhase = 1;
     } else {
-      // Show searching
-      setWithFade(bonusSlot, () => renderSearching());
+      renderSearching();
       bonusPhase = 0;
     }
-  }
+    sug2.style.opacity = '1';
+  }, 400);
+}
 
-  // Cycle sug1 (now playing suggestion)
-  function cycleSug1() {
-    const nowTrack = nowTracks[nowIdx % nowTracks.length];
-    nowIdx++;
-    document.getElementById('nowTitle').textContent = nowTrack.title;
-    document.getElementById('nowArtist').textContent = nowTrack.artist;
-    // Update sug1 with a related track
-    const related = demoTracks[(nowIdx + 2) % demoTracks.length];
-    const sug1 = document.getElementById('sug1Card');
-    if (sug1) {
-      sug1.style.opacity = '0';
-      sug1.style.transition = 'opacity 0.5s ease';
-      setTimeout(() => {
-        document.getElementById('sug1Title').textContent = related.title;
-        document.getElementById('sug1Artist').textContent = related.artist;
-        sug1.style.opacity = '1';
-      }, 500);
-    }
-    // Update LP BPM
-    const bpmEl = document.querySelector('.lp-bpmbig > b');
-    if (bpmEl) bpmEl.textContent = nowTrack.bpm;
-    const chipBpm = document.querySelector('.chip.bpm');
-    if (chipBpm) chipBpm.textContent = nowTrack.bpm + ' BPM';
-    const chipKey = document.querySelector('.chip.key');
-    if (chipKey) chipKey.textContent = nowTrack.key;
-  }
-
-  // Initialize bonus slot
-  bonusSlot.innerHTML = renderSearching();
-  bonusPhase = 0;
-
-  // Start cycling
+function cycleNowPlaying() {
+  idx = (idx + 1) % tracks.length;
+  const app = document.getElementById('app');
+  app.style.opacity = '0.5'; app.style.transition = 'opacity 0.5s ease';
   setTimeout(() => {
-    cycleBonusSlot();
-    setInterval(cycleBonusSlot, 4000);
-  }, 2000);
+    renderTrack(tracks[idx]);
+    app.style.opacity = '1';
+  }, 500);
+}
 
-  setInterval(cycleSug1, 10000);
+// Init
+renderTrack(tracks[0]);
+renderBonus(tracks[0].bonus); bonusPhase = 1;
+
+// Start cycles
+setTimeout(() => { cycleBonusSlot(); setInterval(cycleBonusSlot, 4500); }, 3000);
+setInterval(cycleNowPlaying, 12000);
 </script>
 </body>
 </html>
