@@ -4,632 +4,1555 @@
 <meta charset="UTF-8" />
 <title>TrackAI v2.3.1 — Demo</title>
 <style>
+
   * { margin: 0; padding: 0; box-sizing: border-box; }
   :root { color-scheme: dark; }
-  html, body { height: 100%; width: 100%; overflow: hidden; }
+  html, body { height: 100%; width: 100%; }
 
+  /* ============ PALETAS SERATO (variables) ============ */
+  /* NOCHE (default) — negro mate ultra intenso, sin capas */
   body {
-    --bg-glass: #000000; --bg-solid: #000000; --panel: transparent; --panel-solid: #000000;
-    --panel-hover: transparent; --row: transparent; --row-alt: transparent;
-    --border: rgba(255,255,255,0.09); --border-soft: rgba(255,255,255,0.04);
-    --text: #ffffff; --text-dim: #c5cce0; --text-faint: #a0a8b8;
-    --accent: #2f80ed; --accent-soft: rgba(47,128,237,0.16);
-    --key: #b877e0; --key-soft: rgba(184,119,224,0.16);
-    --bpm: #d7dbe2; --crate: #e8862a; --crate-soft: transparent;
-    --green: #46c37b; --red: #ff5a5f; --yellow: #f2c14e;
-    --hi: rgba(255,255,255,0.06); --header-bg: #000000;
-    font-family: 'Segoe UI','SF Pro Text',-apple-system,BlinkMacSystemFont,'Helvetica Neue',system-ui,sans-serif;
-    background: #000000; color: var(--text); font-size: 12px; overflow: hidden;
+    --bg-glass: #000000;
+    --bg-solid: #000000;
+    --panel: transparent;
+    --panel-solid: #000000;
+    --panel-hover: transparent;
+    --row: transparent;
+    --row-alt: transparent;
+    --border: rgba(255, 255, 255, 0.09);
+    --border-soft: rgba(255, 255, 255, 0.04);
+    --text: #ffffff;
+    --text-dim: #c5cce0;
+    --text-faint: #a0a8b8;
+    --accent: #2f80ed;        /* azul selección Serato */
+    --accent-soft: rgba(47, 128, 237, 0.16);
+    --key: #b877e0;           /* morado tonalidad */
+    --key-soft: rgba(184, 119, 224, 0.16);
+    --bpm: #d7dbe2;
+    --crate: #e8862a;         /* naranja crates */
+    --crate-soft: transparent;
+    --green: #46c37b;
+    --red: #ff5a5f;
+    --yellow: #f2c14e;
+    --shadow: 0 10px 34px rgba(0, 0, 0, 0.45);
+    --hi: rgba(255, 255, 255, 0.06);
+    --header-bg: #000000;
+
+    font-family: 'Segoe UI', 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', system-ui, sans-serif;
+    background: #000000;
+    color: var(--text);
+    font-size: 12px;
+    overflow: hidden;
+    /* no dropIn for demo */
   }
 
-  /* ── CONTAINER ── */
-  .container { width:100%; height:100vh; background:#000; display:flex; flex-direction:column; overflow:hidden; }
+  @keyframes dropIn {
+    0% { opacity: 0; transform: translateY(-150px) scale(0.5); filter: blur(15px); border-radius: 50%; }
+    60% { transform: translateY(15px) scale(1.02); filter: blur(3px); border-radius: 20px; }
+    100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); border-radius: 0; }
+  }
 
-  /* ── HEADER ── */
+  /* DÍA — blanco Serato + mismos acentos */
+  body.theme-day {
+    --bg-glass: rgba(244, 245, 247, 0.94);
+    --bg-solid: #f2f3f5;
+    --panel: rgba(255, 255, 255, 0.7);
+    --panel-solid: #ffffff;
+    --panel-hover: rgba(255, 255, 255, 0.92);
+    --row: rgba(255, 255, 255, 0.6);
+    --row-alt: rgba(236, 238, 241, 0.6);
+    --border: rgba(0, 0, 0, 0.1);
+    --border-soft: rgba(0, 0, 0, 0.06);
+    --text: #1c1d21;
+    --text-dim: #63656d;
+    --text-faint: #9a9ca4;
+    --accent: #2f6fed;
+    --accent-soft: rgba(47, 111, 237, 0.12);
+    --key: #9b4fc4;
+    --key-soft: rgba(155, 79, 196, 0.12);
+    --bpm: #2b2c31;
+    --crate: #d9761a;
+    --crate-soft: rgba(217, 118, 26, 0.14);
+    --green: #1f9d57;
+    --red: #e0484d;
+    --yellow: #c98a12;
+    --shadow: 0 10px 30px rgba(20, 22, 28, 0.18);
+    --hi: rgba(255, 255, 255, 0.6);
+    --header-bg: rgba(255, 255, 255, 0.95);
+    color-scheme: light;
+  }
+
+  /* ============ CONTENEDOR (glass sobre Serato) ============ */
+  .container {
+    width: 100%; height: 100vh;
+    background: #000000;
+    display: flex; flex-direction: column;
+    overflow: hidden;
+    border: none;
+    border-radius: 0;
+    -webkit-app-region: drag;
+  }
+  body.win32 .container { border-radius: 0; border: none; }
+  body.win32 { background: #000000; }
+  body.win32 .header { padding-top: 2px; }
+  body.win32 .close-btn, body.win32 .min-btn { border-radius: 4px; padding: 2px 10px; border: 1px solid rgba(255,255,255,0.12); }
+  body.win32 .close-btn:hover { background: #e81123; border-color: #e81123; color: #fff; }
+  /* Header y pie no se comprimen; el centro (#app) hace scroll */
+  .header, .foot, .branding { flex-shrink: 0; }
+  #app { flex: 1 1 auto; min-height: 0; overflow-y: auto; }
+  /* Todo lo interactivo NO arrastra (así se puede clickear) */
+  button, a, input, select, textarea,
+  .close-btn, .theme-toggle, .mode-btn, .btn {
+    -webkit-app-region: no-drag;
+  }
+
+  /* ============ HEADER / barra superior estilo Serato ============ */
   .header {
-    display:flex; align-items:center; justify-content:space-between; gap:6px;
-    padding:5px 10px; border-bottom:1px solid var(--border-soft); background:#000; flex-shrink:0;
+    display: flex; align-items: center; justify-content: space-between; gap: 6px;
+    padding: 6px 10px;
+    border-bottom: 1px solid var(--border-soft);
+    background: #000000;
+    -webkit-app-region: drag; user-select: none; cursor: move;
+    overflow: visible;
   }
-  .header-left { display:flex; align-items:center; gap:8px; flex-shrink:0; }
-  .header-center { display:flex; align-items:center; gap:14px; flex:1 1 auto; justify-content:center; }
-  .header-right { display:flex; align-items:center; gap:4px; flex-shrink:0; margin-left:auto; }
-  .hbtn {
-    background:var(--panel); border:1px solid var(--border); color:var(--text-dim);
-    border-radius:7px; font-size:11px; font-weight:600; cursor:pointer;
-    display:flex; align-items:center; justify-content:center;
-    height:26px; padding:0 8px; white-space:nowrap;
+  .header-left { display: flex; align-items: center; gap: 6px; flex-shrink: 0; min-width: 0; }
+  .header-center { display: flex; align-items: center; gap: 6px; flex: 1 1 auto; min-width: 0; overflow: hidden; justify-content: center; }
+  .header-right { display: flex; align-items: center; gap: 4px; flex-shrink: 0; z-index: 10; margin-left: auto; }
+  .wordmark {
+    font-size: 12px; font-weight: 800; letter-spacing: 0.3px; color: var(--text);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
-  .clock { font-size:13px; font-weight:700; color:#fff; font-variant-numeric:tabular-nums; letter-spacing:0.5px; }
+  .wordmark::after { content: ''; }
+  .header button { -webkit-app-region: no-drag; cursor: pointer; }
+  .header-left, .header-center, .header-right, .clock, .session-info, .vinyl-container, .vinyl { -webkit-app-region: drag; }
 
-  /* ── APP FLEX ── */
-  #app { display:flex; flex-direction:row; align-items:stretch; flex:1 1 auto; overflow:hidden; }
+  .vinyl-container { width: 22px; height: 22px; }
+  .vinyl {
+    width: 22px; height: 22px; border-radius: 50%;
+    background:
+      radial-gradient(circle at center, var(--accent) 0 3px, transparent 3.5px),
+      repeating-radial-gradient(circle at center, #0000 0 2px, rgba(255,255,255,0.06) 2px 3px),
+      #1c1d22;
+    border: 1px solid var(--border);
+    animation: spin 3.2s linear infinite;
+    box-shadow: 0 0 0 1px var(--border-soft);
+  }
+  body.theme-day .vinyl { background:
+      radial-gradient(circle at center, var(--accent) 0 3px, transparent 3.5px),
+      repeating-radial-gradient(circle at center, #0000 0 2px, rgba(0,0,0,0.08) 2px 3px),
+      #d7d9de; }
+  @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* ── MODE BAR ── */
-  .mode-bar {
-    display:flex; flex-direction:column; width:60px; flex:0 0 60px; padding:4px 3px; gap:4px;
-    background:transparent; border-right:1px solid rgba(255,255,255,0.15);
-    justify-content:space-between; align-items:stretch; box-sizing:border-box;
+  .clock {
+    font-size: 13px; font-weight: 700; color: var(--text);
+    font-variant-numeric: tabular-nums; letter-spacing: 0.5px;
   }
-  .mode-btn {
-    flex:1 1 0; min-height:0; width:100%; box-sizing:border-box; border-radius:6px;
-    font-size:8.5px; font-weight:800; padding:2px 1px; line-height:1.05;
-    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1px;
-    white-space:nowrap; overflow:hidden; text-align:center; cursor:pointer;
-    border:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.03); color:#c5cce0;
-  }
-  .mode-btn.active { color:#fff; background:rgba(0,238,255,0.25); border-color:#00eeff;
-    box-shadow:0 0 10px rgba(0,238,255,0.4),inset 0 0 6px rgba(255,255,255,0.15); }
+  .session-info { display: flex; gap: 12px; font-size: 10px; color: var(--text-dim); font-weight: 600; }
+  .session-info > div { font-variant-numeric: tabular-nums; }
 
-  /* ── HERO WRAPPER ── */
-  .hero-wrapper {
-    flex:1 1 0; width:50%; min-width:0; display:flex; flex-direction:row; align-items:stretch;
-    border-right:1px solid rgba(255,255,255,0.15); position:relative; overflow:hidden;
+  .close-btn, .theme-toggle, .min-btn {
+    background: var(--panel); border: 1px solid var(--border); color: var(--text-dim);
+    border-radius: 7px; font-size: 13px; font-weight: 600; cursor: pointer;
+    transition: all 0.2s; display: flex; align-items: center; justify-content: center;
+    width: 26px; height: 26px; flex-shrink: 0;
   }
+  .min-btn:hover { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+  .close-btn:hover { background: rgba(255,90,95,0.16); border-color: var(--red); color: var(--red); }
+  .theme-toggle:hover { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+  .close-btn:active, .theme-toggle:active { transform: scale(0.94); }
 
-  /* ── SONANDO AHORA ── */
-  .now {
-    flex:1 1 0; width:50%; min-width:0; box-sizing:border-box;
-    display:flex; flex-direction:column; gap:4px; text-align:center;
-    border-right:1px solid rgba(255,255,255,0.15); padding:8px 8px; overflow:hidden;
-    justify-content:center;
-  }
-  .card-section-tag {
-    font-size:9.5px; font-weight:900; text-transform:uppercase; letter-spacing:2.5px;
-    color:#fff !important; margin-bottom:2px; display:flex; align-items:center;
-    justify-content:center; gap:6px; text-shadow:0 0 6px rgba(255,255,255,0.4);
-  }
-  .hp-icon-anim {
-    display:inline-block; animation:hp-bounce 1.5s ease-in-out infinite alternate;
-    filter:drop-shadow(0 0 6px #00d2ff);
-  }
-  @keyframes hp-bounce {
-    0%{transform:scale(1) rotate(-6deg);filter:drop-shadow(0 0 4px #00d2ff);}
-    50%{transform:scale(1.3) rotate(0deg);filter:drop-shadow(0 0 12px #00ffcc);}
-    100%{transform:scale(1) rotate(6deg);filter:drop-shadow(0 0 4px #00d2ff);}
-  }
-  .now .artist-name { font-size:11px; font-weight:700; color:#fff; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-  .now .track-title {
-    font-size:17px; font-weight:900; text-transform:uppercase; letter-spacing:-0.3px; line-height:1.1;
-    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
-  }
-  .chip {
-    font-size:9.5px; font-weight:700; border-radius:99px; padding:2px 7px;
-    background:var(--panel-hover); border:1px solid var(--border); color:var(--text);
-    font-variant-numeric:tabular-nums; display:inline-block;
-  }
-  .chip.key { color:var(--key); border-color:var(--key); background:var(--key-soft); }
+  /* Botón tema — contraste activo */
+  #themeToggle { position: relative; }
+  #themeToggle:active { transform: scale(0.88); background: rgba(255,202,40,0.2); border-color: #ffca28; }
 
-  /* ── LIVE PITCH ── */
-  .livepitch {
-    flex:1 1 0; min-width:0; position:relative; overflow:hidden;
-    background:transparent; border:none; display:flex; flex-direction:column;
+  /* ☀️ MODO DÍA COMPLETO — ALTA VISIBILIDAD PARA SHOWS CON LUZ SOLAR */
+  body.theme-day {
+    background: #edf1f7 !important;
+    color: #0d121c !important;
+    --text: #0d121c !important;
+    --text-dim: #4b5568 !important;
+    --text-faint: #727e96 !important;
+    --header-bg: #ffffff !important;
+    --border: rgba(0, 0, 0, 0.12) !important;
+    --border-soft: rgba(0, 0, 0, 0.07) !important;
+    --accent: #0066ff !important;
   }
-  .lp-particles { position:absolute; inset:0; pointer-events:none; overflow:hidden; z-index:0; opacity:0.4; }
-  .lp-particle {
-    position:absolute; border-radius:50%; filter:blur(1px);
-    animation:lp-particle-float 3.5s ease-in-out infinite;
+  body.theme-day header,
+  body.theme-day .header {
+    background: #ffffff !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12) !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05) !important;
   }
-  @keyframes lp-particle-float {
-    0%{transform:translateY(80%) scale(0);opacity:0;}
-    10%{opacity:1;} 90%{opacity:1;}
-    100%{transform:translateY(-80%) scale(1);opacity:0;}
+  body.theme-day #app,
+  body.theme-day .hero-wrapper,
+  body.theme-day .now,
+  body.theme-day .livepitch,
+  body.theme-day .sug-section,
+  body.theme-day .tracks-container,
+  body.theme-day .mode-bar {
+    background: #f4f6fa !important;
+    color: #0d121c !important;
   }
-  .lp-header {
-    display:flex; align-items:center; justify-content:space-between;
-    padding:10px 8px 0; position:relative; z-index:1;
+  body.theme-day .track {
+    background: #ffffff !important;
+    border: 1.5px solid rgba(0, 0, 0, 0.08) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+    color: #0d121c !important;
   }
-  .lp-header-left { display:flex; align-items:center; gap:10px; }
-  .lp-brain-ring { position:relative; width:28px; height:28px; flex-shrink:0; }
-  .lp-ring1 {
-    position:absolute; inset:0; border:2px solid rgba(0,210,255,0.6); border-radius:50%;
-    border-top-color:transparent; animation:lp-spin 2s linear infinite;
+  body.theme-day .track:hover {
+    background: #e8f0fe !important;
+    border-color: #0066ff !important;
   }
-  .lp-ring2 {
-    position:absolute; inset:3px; border:1.5px solid rgba(0,210,255,0.3); border-radius:50%;
-    border-bottom-color:transparent; animation:lp-spin 3s linear infinite reverse;
+  body.theme-day .track .title {
+    color: #0a0e17 !important;
   }
-  @keyframes lp-spin { from{transform:rotate(0deg);} to{transform:rotate(360deg);} }
-  .lp-brain-emoji { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:12px; }
-  .lp-brand-title { font-size:11px; font-weight:900; letter-spacing:1.5px; color:#fff; text-shadow:0 0 10px #ffca28,0 0 5px #ffca28; }
-  .lp-brand-sub { font-size:7px; font-weight:600; color:rgba(0,210,255,0.7); letter-spacing:2px; text-transform:uppercase; }
-  .lp-active-badge {
-    font-size:7px; font-weight:700; color:#00e676;
-    background:rgba(0,230,118,0.12); border:1px solid rgba(0,230,118,0.3);
-    border-radius:4px; padding:2px 7px; letter-spacing:0.5px;
-    animation:lp-pulse 2s ease-in-out infinite;
+  body.theme-day .track .artist {
+    color: #4a5468 !important;
   }
-  @keyframes lp-pulse { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:0.6;transform:scale(0.9);} }
-  .lp-body {
-    flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center;
-    padding:4px 8px 10px; position:relative; z-index:1; width:100%; box-sizing:border-box;
+  body.theme-day .now .title {
+    color: #000000 !important;
   }
-  .lp-bpm-big {
-    display:inline-flex; align-items:baseline; gap:4px; cursor:pointer;
-    animation:lp-heartbeat 0.63s ease-in-out infinite;
+  body.theme-day .now .artist {
+    color: #3b4252 !important;
   }
-  @keyframes lp-heartbeat {
-    0%,100%{transform:scale(1);} 14%{transform:scale(1.12);}
-    28%{transform:scale(1);} 42%{transform:scale(1.08);} 56%{transform:scale(1);}
+  body.theme-day .card-section-tag {
+    color: #0055ff !important;
   }
-  .lp-bpm-val {
-    font-size:42px; font-weight:900; line-height:1;
-    background:linear-gradient(135deg,#ffd873,#ffca28,#ffe082,#ffca28,#ffd873);
-    background-size:300% 300%; -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-    background-clip:text; filter:drop-shadow(0 0 18px rgba(255,202,40,0.4));
-    animation:lp-shimmer 3s ease infinite;
+  body.theme-day .mode-btn {
+    background: rgba(0, 0, 0, 0.05) !important;
+    border-color: rgba(0, 0, 0, 0.15) !important;
+    color: #2b303c !important;
   }
-  @keyframes lp-shimmer { 0%{background-position:0% 50%;} 50%{background-position:100% 50%;} 100%{background-position:0% 50%;} }
-  .lp-zone { font-weight:800; font-size:10px; background:rgba(0,0,0,0.4); padding:2px 8px; border-radius:4px; }
-  .lp-sub { color:rgba(160,176,216,0.7); font-size:8px; font-weight:600; }
-  .lp-bpm-label { font-size:10px; color:#ffca28; font-weight:800; letter-spacing:1px; }
-
-  /* Brain badge */
-  .lp-brain-badge {
-    margin-top:6px; padding:6px 12px; border-radius:10px;
-    background:linear-gradient(135deg,rgba(0,210,255,0.14),rgba(0,125,255,0.08));
-    border:1px solid rgba(0,210,255,0.45); font-size:11px; font-weight:900;
-    letter-spacing:0.4px; color:#fff; text-shadow:0 0 8px rgba(0,210,255,0.5);
-    display:flex; align-items:center; justify-content:space-between; gap:8px;
-    width:100%; box-sizing:border-box;
-    animation:lp-brain-glow 4s ease-in-out infinite, lp-pulse 3s ease-in-out infinite;
+  body.theme-day .mode-btn.active {
+    background: #0066ff !important;
+    color: #ffffff !important;
+    border-color: #0055ff !important;
+    box-shadow: 0 2px 10px rgba(0, 102, 255, 0.3) !important;
   }
-  @keyframes lp-brain-glow {
-    0%,100%{box-shadow:0 0 10px rgba(0,210,255,0.2),inset 0 0 6px rgba(0,210,255,0.08); border-color:rgba(0,210,255,0.4);}
-    50%{box-shadow:0 0 18px rgba(255,202,40,0.3),inset 0 0 10px rgba(255,202,40,0.12); border-color:rgba(255,202,40,0.6);}
+  body.theme-day .lp-brain-badge {
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.2), rgba(255, 111, 0, 0.1)) !important;
+    border-color: rgba(255, 160, 0, 0.5) !important;
+    color: #5c3b00 !important;
   }
-  .brain-shimmer {
-    background:linear-gradient(90deg,#00d2ff,#ffca28,#00e676,#00d2ff); background-size:200% auto;
-    -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-    animation:lp-shimmer 4s linear infinite;
-    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:10.5px; font-weight:900;
+  body.theme-day #themeToggle {
+    background: rgba(255, 193, 7, 0.2) !important;
+    border-color: rgba(255, 160, 0, 0.5) !important;
+    color: #d97706 !important;
+  }
+  body.theme-day #floatingWidget {
+    background: rgba(255, 255, 255, 0.95) !important;
+    border-color: #0066ff !important;
+    box-shadow: 0 4px 18px rgba(0, 102, 255, 0.25) !important;
+    color: #0f141e !important;
   }
 
-  /* Feedback buttons */
+  /* Botón PRO */
+  #proBtn { font-size: 10px !important; width: auto !important; padding: 3px 10px !important; border-radius: 99px !important; letter-spacing: 0.5px; }
+  #proBtn.pro-active { background: linear-gradient(135deg, rgba(255,202,40,0.2), rgba(255,170,0,0.1)); border-color: rgba(255,202,40,0.5); color: #ffca28; box-shadow: 0 0 12px rgba(255,202,40,0.15); }
+  #proBtn.pro-inactive { background: rgba(127,137,152,0.1); border-color: rgba(127,137,152,0.35); color: #7f8998; }
+
+  /* Botones de Feedback Live Pitch */
   .lp-feedback-btn {
-    flex:1; height:28px; font-weight:900; font-size:10.5px; padding:0 6px;
-    border-radius:8px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:4px;
-    white-space:nowrap; min-width:0;
+    flex: 1; height: 28px; font-weight: 900; font-size: 10.5px; padding: 0 6px;
+    border-radius: 8px; cursor: pointer; transition: all 0.22s ease;
+    display: flex; align-items: center; justify-content: center; gap: 4px;
+    -webkit-app-region: no-drag; white-space: nowrap; min-width: 0;
   }
   .lp-feedback-btn.fire {
-    background:linear-gradient(135deg,rgba(255,110,64,0.3),rgba(255,90,95,0.15));
-    border:1px solid rgba(255,110,64,0.6); color:#ff8b66;
+    background: linear-gradient(135deg, rgba(255,110,64,0.3), rgba(255,90,95,0.15)) !important;
+    border: 1px solid rgba(255,110,64,0.6) !important; color: #ff8b66 !important;
+  }
+  .lp-feedback-btn.fire:hover {
+    background: linear-gradient(135deg, rgba(255,110,64,0.55), rgba(255,90,95,0.35)) !important;
+    border-color: #ff6e40 !important; color: #ffffff !important;
+    box-shadow: 0 4px 16px rgba(255,110,64,0.4) !important; transform: translateY(-1px);
   }
   .lp-feedback-btn.bomba {
-    background:linear-gradient(135deg,rgba(0,210,255,0.28),rgba(0,125,255,0.12));
-    border:1px solid rgba(0,210,255,0.6); color:#38d9ff;
+    background: linear-gradient(135deg, rgba(0,210,255,0.28), rgba(0,125,255,0.12)) !important;
+    border: 1px solid rgba(0,210,255,0.6) !important; color: #38d9ff !important;
   }
-  .lp-footer {
-    display:flex; justify-content:space-between; align-items:center;
-    margin-top:auto; padding-top:6px; border-top:1px solid rgba(255,255,255,0.05);
-    font-size:7px; color:rgba(160,176,216,0.5); font-weight:600; width:100%;
+  .lp-feedback-btn.bomba:hover {
+    background: linear-gradient(135deg, rgba(0,210,255,0.55), rgba(0,125,255,0.35)) !important;
+    border-color: #00d2ff !important; color: #ffffff !important;
+    box-shadow: 0 4px 16px rgba(0,210,255,0.4) !important; transform: translateY(-1px);
   }
 
-  /* ── SUGGESTIONS ── */
-  .sug-section { flex:1 1 0; width:50%; min-width:0; display:flex; flex-direction:row; align-items:stretch; }
-  .sug-row {
-    flex:1 1 0; width:50%; min-width:0; display:flex; flex-direction:row; align-items:stretch;
-    border-right:1px solid rgba(255,255,255,0.15);
+
+  /* ============ BARRA DE MODOS — BOTONES SERATO SIMÉTRICOS Y TÁCTILES ============ */
+  .mode-bar {
+    display: flex; gap: 4px; margin: 4px 0 0; padding: 3px 6px;
+    background: transparent; border: none;
+    flex-shrink: 0; align-items: center; width: 100%; box-sizing: border-box;
   }
-  .sug-row:last-child { border-right:none; }
+  .mode-btn {
+    flex: 1 1 0; min-width: 0; height: 26px; box-sizing: border-box;
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14); color: #c5cce0;
+    border-radius: 7px; padding: 0 4px; font-size: 9px; font-weight: 800; line-height: 1;
+    cursor: pointer; transition: all 0.15s ease-in-out; -webkit-app-region: no-drag; letter-spacing: 0.2px;
+    display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 3px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: center;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  }
+  .mode-btn:hover {
+    color: #ffffff; background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.28);
+    transform: translateY(-1px); box-shadow: 0 3px 8px rgba(0,0,0,0.4);
+  }
+  .mode-btn:active { transform: translateY(0) scale(0.96); }
+
+  /* Colores neón táctiles cuando cada botón está ACTIVO */
+  .mode-btn.active, .mode-btn.btn-auto.active {
+    color: #ffffff; font-weight: 900;
+    background: rgba(47, 128, 237, 0.25); border-color: #2f80ed;
+    box-shadow: 0 0 10px rgba(47, 128, 237, 0.4), inset 0 0 6px rgba(255,255,255,0.15);
+  }
+  .mode-btn.btn-uia.active {
+    background: rgba(0, 238, 255, 0.25); border-color: #00eeff; color: #ffffff; font-weight: 900;
+    box-shadow: 0 0 10px rgba(0, 238, 255, 0.4), inset 0 0 6px rgba(255,255,255,0.15);
+  }
+  .mode-btn.btn-estricto.active {
+    background: rgba(255, 136, 0, 0.25); border-color: #ff8800; color: #ffffff; font-weight: 900;
+    box-shadow: 0 0 10px rgba(255, 136, 0, 0.4), inset 0 0 6px rgba(255,255,255,0.15);
+  }
+  .mode-btn.btn-up.active {
+    background: rgba(255, 51, 0, 0.25); border-color: #ff3300; color: #ffffff; font-weight: 900;
+    box-shadow: 0 0 10px rgba(255, 51, 0, 0.4), inset 0 0 6px rgba(255,255,255,0.15);
+  }
+  .mode-btn.btn-bajada.active {
+    background: rgba(0, 230, 118, 0.25); border-color: #00e676; color: #ffffff; font-weight: 900;
+    box-shadow: 0 0 10px rgba(0, 230, 118, 0.4), inset 0 0 6px rgba(255,255,255,0.15);
+  }
+  .mode-btn.btn-toggle-view {
+    background: rgba(255, 202, 40, 0.08); border-color: rgba(255, 202, 40, 0.25); color: #ffca28;
+  }
+  .mode-btn.btn-toggle-view:hover {
+    background: rgba(255, 202, 40, 0.18); border-color: rgba(255, 202, 40, 0.4); color: #ffffff;
+  }
+  .mode-btn.btn-toggle-view.active {
+    background: rgba(255, 202, 40, 0.28); border-color: #ffca28; color: #ffffff; font-weight: 900;
+    box-shadow: 0 0 10px rgba(255, 202, 40, 0.4), inset 0 0 6px rgba(255,255,255,0.15);
+  }
+  @keyframes modeGlow {
+    from { box-shadow: 0 2px 8px var(--accent-soft); }
+    to { box-shadow: 0 2px 16px rgba(47,128,237,0.35), inset 0 0 8px rgba(255,255,255,0.08); }
+  }
+
+  /* ============ BARRA DE PITCH EN VIVO ============ */
+  .pitch-bar { display: flex; gap: 4px; align-items: center; justify-content: center; margin-top: 6px; flex-wrap: wrap; -webkit-app-region: no-drag; }
+  .pitch-btn {
+    font-size: 9px; font-weight: 800; border-radius: 6px; padding: 3px 7px;
+    background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.1); color: var(--text);
+    cursor: pointer; transition: all 0.15s; -webkit-app-region: no-drag;
+  }
+  .pitch-btn:hover { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
+  .pitch-btn.reset { color: #ff5a5f; border-color: rgba(255, 90, 95, 0.4); }
+  .pitch-chip {
+    font-size: 10px; font-weight: 800; border-radius: 99px; padding: 3px 10px;
+    background: rgba(0, 255, 200, 0.1); border: 1px solid var(--accent); color: var(--accent);
+    cursor: pointer; font-variant-numeric: tabular-nums; transition: all 0.2s; -webkit-app-region: no-drag;
+  }
+  .pitch-chip.active {
+    background: rgba(255, 202, 40, 0.18); border-color: #ffca28; color: #ffca28;
+    box-shadow: 0 0 8px rgba(255, 202, 40, 0.3);
+  }
+
+  .badge.pitch-exact { color: var(--green); border-color: var(--green); background: rgba(0, 255, 128, 0.12); }
+  .badge.pitch-shift { color: #ffca28; border-color: #ffca28; background: rgba(255, 202, 40, 0.12); }
+
+  /* ============ TRACK ACTUAL (now playing) ============ */
+  /* ============ TRACK ACTUAL (now playing) ============ */
+  .now {
+    margin: 8px 10px 0; padding: 10px 12px;
+    background: var(--panel); border: 1px solid var(--border); border-radius: 14px;
+    box-shadow: inset 0 1px 0 var(--hi), 0 4px 14px rgba(0,0,0,0.2);
+    position: relative; overflow: hidden; min-height: 56px;
+  }
+  .now .title {
+    font-size: 14px; font-weight: 800; color: var(--text); line-height: 1.15;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .now .artist { font-size: 10.5px; color: var(--text-dim); margin-top: 1px; font-weight: 600; }
+
+  .audio-bars { display: flex; gap: 3px; align-items: flex-end; height: 16px; margin: 9px 0 4px; }
+  .audio-bars .bar {
+    width: 3px; border-radius: 99px; background: var(--accent);
+    animation: eq 0.9s ease-in-out infinite; opacity: 0.85;
+  }
+  .audio-bars .bar:nth-child(1){ height: 40%; animation-delay: 0s; }
+  .audio-bars .bar:nth-child(2){ height: 80%; animation-delay: 0.15s; }
+  .audio-bars .bar:nth-child(3){ height: 55%; animation-delay: 0.3s; }
+  .audio-bars .bar:nth-child(4){ height: 95%; animation-delay: 0.1s; }
+  .audio-bars .bar:nth-child(5){ height: 60%; animation-delay: 0.25s; }
+  @keyframes eq { 0%,100%{ transform: scaleY(0.5);} 50%{ transform: scaleY(1);} }
+
+  .timing { display: flex; justify-content: space-between; font-size: 10px; color: var(--text-dim); font-variant-numeric: tabular-nums; margin-bottom: 5px; }
+  .progress-bar { height: 5px; background: var(--border); border-radius: 99px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--key)); border-radius: 99px; transition: width 0.6s ease; }
+
+  .meta { display: flex; gap: 5px; margin-top: 7px; flex-wrap: wrap; }
+  .chip {
+    font-size: 9.5px; font-weight: 700; border-radius: 99px; padding: 3px 9px;
+    background: var(--panel-hover); border: 1px solid var(--border); color: var(--text);
+    font-variant-numeric: tabular-nums;
+  }
+  .chip.key { color: var(--key); border-color: var(--key); background: var(--key-soft); }
+  .chip.bpm { color: var(--bpm); }
+  .chip.deck { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+  .chip.crate-chip { color: var(--crate); border-color: var(--crate); background: var(--crate-soft); }
+  .chip.trend.up { color: var(--green); border-color: var(--green); }
+  .chip.trend.down { color: #6db6ff; border-color: #6db6ff; }
+  .chip.trend.flat { color: var(--text-dim); }
+
+  .cue-hint { margin-top: 9px; font-size: 9.5px; color: var(--crate); border-top: 1px dashed var(--border); padding-top: 7px; font-weight: 600; }
+
+  /* ============ BARRA DE SET ============ */
+  .set-bar { display: flex; gap: 5px; justify-content: center; margin: 6px 10px 0; flex-wrap: wrap; }
+  .set-chip {
+    font-size: 9.5px; font-weight: 600; color: var(--text-dim);
+    background: var(--panel); border: 1px solid var(--border-soft); border-radius: 99px; padding: 3px 9px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ============ GRÁFICO DE BPM COMO FONDO DEL TRACK ============ */
+  .now-chart { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+  .now > *:not(.now-chart) { position: relative; z-index: 1; }
+
+  /* ============ SECCIÓN "SIGUIENTES" ============ */
+  h2 {
+    margin: 9px 12px 5px; font-size: 9px; text-transform: uppercase; letter-spacing: 1.2px;
+    color: var(--text-faint); font-weight: 800;
+  }
+  .group-label {
+    margin: 10px 10px 5px; font-size: 10px; font-weight: 800; letter-spacing: 0.3px;
+    display: flex; align-items: center; justify-content: center; gap: 6px; text-align: center;
+  }
+  .group-label span { font-size: 9px; font-weight: 600; color: var(--text-faint); text-transform: none; letter-spacing: 0; }
+  .group-label.match { color: var(--green); }
+  .group-label.change { color: var(--crate); }
+  .tracks-container { padding: 0 10px 6px; display: flex; flex-direction: column; gap: 5px; }
+  .tracks-container:last-of-type { padding-bottom: 12px; }
+
+  /* ============ FILAS DE SUGERENCIAS (estilo Serato, fondo negro puro) ============ */
   .track {
-    flex:1 1 0; min-width:0; padding:8px 10px; box-sizing:border-box; overflow:hidden;
-    display:flex; flex-direction:column; justify-content:space-between; position:relative;
-    background:transparent;
+    display: flex; flex-direction: column; align-items: stretch; gap: 2px;
+    padding: 7px 10px; border-radius: 0;
+    background: transparent; border: none; border-bottom: 1px solid var(--border-soft);
+    transition: all 0.25s cubic-bezier(0.25, 0.1, 0.25, 1); position: relative;
+    width: 100%; max-width: 100%; overflow: hidden;
   }
-  .track-top {}
-  .sug-tag {
-    font-size:9.5px; font-weight:900; text-transform:uppercase; letter-spacing:2px;
-    color:#fff !important; margin-bottom:5px; display:flex; align-items:center;
-    justify-content:center; gap:6px; text-shadow:0 0 6px rgba(255,255,255,0.3);
+  .track:hover { background: rgba(255,255,255,0.04); transform: translateY(-1px); }
+  #app > * { transition: opacity 0.3s ease, transform 0.3s ease; }
+  .livepitch { transition: border-color 0.4s ease; }
+  .track-comodin {
+    background: transparent; border-color: var(--border-soft);
+    box-shadow: none;
   }
-  .sug-tag .tag-line { width:16px; height:1px; background:rgba(255,255,255,0.35); display:inline-block; }
-  .track-title-big {
-    font-size:17px; font-weight:900; text-transform:uppercase; letter-spacing:-0.3px; line-height:1.1;
-    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:#fff; margin-bottom:0;
+  .track-comodin .tag-fase6 { display: none; }
+  .track .t {
+    font-size: 12.5px; font-weight: 700; color: var(--text); line-height: 1.2;
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden; text-overflow: ellipsis; margin-bottom: 2px;
   }
-  .mix-tag {
-    font-size:8.5px; padding:1.5px 5px; background:#fff; color:#000;
-    border-radius:4px; font-weight:950; letter-spacing:0.5px;
-    box-shadow:0 1px 4px rgba(255,255,255,0.3); vertical-align:middle; text-shadow:none;
-    display:inline-block; margin-left:4px;
+  .track .a { font-size: 10px; color: var(--text-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .track-bottom { display: flex; align-items: center; gap: 6px; margin-top: 3px; }
+  .tb-left { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; flex: 1; min-width: 0; }
+  .track .info {
+    font-size: 10px; color: var(--key); font-weight: 800; white-space: nowrap;
+    font-variant-numeric: tabular-nums;
   }
-  .track-artist-row {
-    display:flex; justify-content:space-between; align-items:center;
-    margin-top:3px; margin-bottom:2px;
+  .track-index {
+    font-size: 9px; font-weight: 800; color: var(--text-faint);
+    background: var(--panel); border: 1px solid var(--border); border-radius: 5px;
+    padding: 2px 5px; flex-shrink: 0;
   }
-  .track-artist { font-size:10.5px; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; padding-right:8px; font-weight:700; }
-  .track-key-bpm { display:flex; gap:4px; flex-shrink:0; align-items:center; }
-  .key-badge { font-size:9px; font-weight:800; padding:2px 6px; border-radius:4px; background:rgba(184,119,224,0.15); border:1px solid rgba(184,119,224,0.4); color:var(--key); }
-  .bpm-badge { font-size:9px; font-weight:900; padding:2px 6px; border-radius:4px; background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.3); color:#fff; }
+  .btn {
+    background: var(--panel); border: 1px solid var(--border); color: var(--text-dim);
+    border-radius: 6px; width: 26px; height: 26px; font-size: 12px; cursor: pointer;
+    transition: all 0.18s; flex-shrink: 0;
+  }
+  .btn:hover { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+  .actions { display: flex; gap: 4px; align-items: center; flex-shrink: 0; }
+  .load-btn { color: var(--green); border-color: rgba(70,195,123,0.4); width: auto; min-width: 80px; padding: 6px 12px; font-size: 12px; font-weight: 900; letter-spacing: 0.5px; }
+  .deck-btn { transition: all 0.2s cubic-bezier(0.175,0.885,0.32,1.275) !important; }
+  .deck-btn:hover { transform: scale(1.03); filter: brightness(1.2); }
+  body.layout-horizontal .deck-btn { padding: 5px 4px !important; font-size: 10px !important; }
+  /* 🔒 Carga al plato: mini-overlay sutil, no tapa el diseño */
+  .card-lock { 
+    position: absolute; inset: 0; z-index: 30; display: flex; flex-direction: column; 
+    align-items: center; justify-content: center; text-align: center; gap: 4px;
+    border-radius: 0; background: rgba(0,0,0,0.4); border: 0;
+    animation: cardLockIn 0.12s ease;
+  }
+  .card-lock .cl-spin { width: 16px; height: 16px; border: 2px solid rgba(70,195,123,0.2); border-top-color: var(--green); border-radius: 50%; animation: spin 0.6s linear infinite; }
+  .card-lock .cl-txt { font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.9); letter-spacing: 0.3px; line-height: 1.2; }
+  .card-lock.ok .cl-spin, .card-lock.err .cl-spin { display: none; }
+  .card-lock.ok { border: 1.5px solid var(--green); box-shadow: inset 0 0 14px rgba(70,195,123,0.2); background: rgba(70,195,123,0.08); }
+  .card-lock.err { border: 1.5px solid var(--red); box-shadow: inset 0 0 14px rgba(255,90,95,0.2); background: rgba(255,90,95,0.08); }
+  @keyframes cardLockIn { from { opacity: 0; } to { opacity: 1; } }
+  .load-btn:hover { background: rgba(70,195,123,0.15); border-color: var(--green); color: var(--green); }
 
-  .badges-row { display:flex; gap:3px; align-items:center; flex-wrap:wrap; margin-bottom:4px; }
+  /* Botones CARGAR estilo captura: texto + flecha */
+  body.layout-horizontal .load-btn {
+    font-size: 10px; font-weight: 900; padding: 4px 10px; border-radius: 6px; letter-spacing: 0.3px;
+    background: rgba(70,195,123,0.12); border: 1px solid rgba(70,195,123,0.5); color: var(--green);
+  }
+  body.layout-horizontal .load-btn:hover { background: rgba(70,195,123,0.25); border-color: var(--green); }
+  body.layout-horizontal .swap-btn {
+    font-size: 10px; font-weight: 900; padding: 4px 8px; border-radius: 6px;
+  }
+
+  /* ============ 2 DISEÑOS DE VENTANA ============ */
+  /* HORIZONTAL: barra ancha para pegar ABAJO de Serato (~178px de alto).
+     Truco clave: display:contents aplana los contenedores para que TODAS las
+     tarjetas (modos, actual, sugerencias) queden en una sola fila. */
+  body.layout-horizontal .container { border-radius: 10px; }
+  body.layout-horizontal .header { padding: 5px 10px; }
+  body.layout-horizontal #app {
+    display: flex; flex-direction: row; align-items: stretch; gap: 0;
+    padding: 0; overflow-x: hidden; overflow-y: hidden;
+  }
+  /* Separación por fase: línea clara entre cada bloque */
+  body.layout-horizontal #app > .mode-bar { border-right: 1px solid rgba(255,255,255,0.12); }
+  body.layout-horizontal .hero-wrapper > .now { border-right: 1px solid rgba(255,255,255,0.12); }
+  body.layout-horizontal #app > #comodin-slot { border-left: 1px solid rgba(255,255,255,0.12); }
+
+  /* Ocultar lo que no aporta en la barra */
+  body.layout-horizontal .set-bar, body.layout-horizontal h2, body.layout-horizontal .group-label,
+  body.layout-horizontal .learning, body.layout-horizontal .foot, body.layout-horizontal .branding { display: none; }
+  /* Distribución simétrica 4 columnas de 25% con 4 líneas verticales puras */
+  body.layout-horizontal .sug-section { flex: 1 1 0; width: 50%; min-width: 0; display: flex; flex-direction: row; align-items: stretch; }
+  body.layout-horizontal .sug-row { flex: 1 1 0; width: 50%; display: flex; flex-direction: row; align-items: stretch; min-width: 0; border-right: 1px solid rgba(255,255,255,0.15) !important; }
+  body.layout-horizontal .tracks-container { display: contents; }
+  body.layout-horizontal .sug-row > .track { flex: 1 1 0; min-width: 0; border: none !important; border-radius: 0 !important; box-shadow: none !important; background: transparent !important; padding: 8px 10px; box-sizing: border-box; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; }
+  body.layout-horizontal #comodin-slot { flex: 1 1 0; width: 50%; min-width: 0; margin: 0; display: flex; align-items: stretch; }
+  body.layout-horizontal #comodin-slot .track { flex: 1 1 0; min-width: 0; width: 100%; border: none !important; border-radius: 0 !important; box-shadow: none !important; background: transparent !important; padding: 8px 10px; box-sizing: border-box; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; }
+  body.layout-horizontal #comodin-slot .searching { align-self: center; }
+  body.layout-horizontal #comodin-slot .track::before { display: none; }
+
+  /* Modos: columna de 60px a la izquierda con línea divisora */
+  body.layout-horizontal .mode-bar {
+    display: flex; flex-direction: column; width: 60px; flex: 0 0 60px; margin: 0; padding: 4px 2px; gap: 4px;
+    flex-shrink: 0; background: transparent; border: none !important; border-right: 1px solid rgba(255,255,255,0.15) !important;
+    justify-content: space-between; align-items: center; box-sizing: border-box; position: relative; height: 100%;
+  }
+
+  body.layout-horizontal .mode-btn {
+    flex: 1 1 0; min-height: 24px; width: 100%; box-sizing: border-box;
+    font-size: 8.5px; font-weight: 800; padding: 2px 1px; line-height: 1.05;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: center;
+    border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.03);
+  }
+  /* Secciones con etiquetas de título superiores */
+  .card-section-tag {
+    font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px;
+    color: #ffffff !important; margin-bottom: 4px; display: flex; align-items: center; gap: 4px;
+    text-shadow: 0 0 6px rgba(255,255,255,0.4);
+  }
+
+  /* Remoción de márgenes/cajas en Sonando Ahora + Destacado sutil en Live Pitch Neural AI */
+  body.layout-horizontal .now {
+    margin: 0 !important;
+    padding: 6px 8px !important;
+    border-radius: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+  }
+  body.layout-horizontal .livepitch {
+    margin: 0 !important;
+    padding: 6px 8px !important;
+    border-radius: 0 !important;
+    border: none !important;
+    background: linear-gradient(180deg, rgba(0, 210, 255, 0.08) 0%, rgba(0, 0, 0, 0.3) 100%) !important;
+    box-shadow: inset 0 0 20px rgba(0, 210, 255, 0.08) !important;
+  }
+
+  .hp-icon-anim {
+    display: inline-block;
+    animation: hp-headphone-bounce 1.5s ease-in-out infinite alternate;
+    filter: drop-shadow(0 0 6px #00d2ff);
+  }
+  @keyframes hp-headphone-bounce {
+    0% { transform: scale(1) rotate(-6deg); filter: drop-shadow(0 0 4px #00d2ff); }
+    50% { transform: scale(1.3) rotate(0deg); filter: drop-shadow(0 0 12px #00ffcc); }
+    100% { transform: scale(1) rotate(6deg); filter: drop-shadow(0 0 4px #00d2ff); }
+  }
+
+  /* ⚡ LIVE PITCH Y SECCIONES TOTALMENTE PLANAS (SIN PULSOS EN LA ORILLA) */
+  .livepitch {
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    background: rgba(0, 0, 0, 0.25) !important;
+    box-shadow: none !important;
+    animation: none !important;
+  }
+
+  /* 🍎 TRANSICIÓN DE MODO AL ESTILO APPLE (FROSTED GLASSMORPHISM) */
+  #apple-mode-overlay {
+    position: fixed; inset: 0; z-index: 999999;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(4, 6, 12, 0.72);
+    backdrop-filter: blur(28px) saturate(210%);
+    -webkit-backdrop-filter: blur(28px) saturate(210%);
+    opacity: 0; pointer-events: none; transform: scale(1.03);
+    transition: opacity 160ms cubic-bezier(0.16, 1, 0.3, 1), transform 160ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  #apple-mode-overlay.apple-overlay-active {
+    opacity: 1; pointer-events: auto; transform: scale(1);
+  }
+  .apple-overlay-card {
+    display: flex; flex-direction: column; align-items: center; gap: 12px;
+    padding: 28px 46px; border-radius: 24px;
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.03));
+    border: 1.5px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.85), inset 0 1px 1px rgba(255, 255, 255, 0.4);
+    transform: scale(0.86);
+    transition: transform 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  #apple-mode-overlay.apple-overlay-active .apple-overlay-card {
+    transform: scale(1);
+  }
+  .apple-overlay-icon {
+    font-size: 40px;
+    filter: drop-shadow(0 0 16px rgba(0, 210, 255, 0.9));
+    animation: apple-pulse 1.2s ease-in-out infinite alternate;
+  }
+  .apple-overlay-title {
+    font-size: 18px; font-weight: 900; color: #ffffff; letter-spacing: 0.5px;
+  }
+  .apple-overlay-sub {
+    font-size: 11px; font-weight: 800; color: rgba(0, 210, 255, 0.95);
+    letter-spacing: 1.8px; text-transform: uppercase;
+  }
+  @keyframes apple-pulse {
+    from { transform: scale(0.94); filter: drop-shadow(0 0 8px rgba(0, 210, 255, 0.5)); }
+    to { transform: scale(1.08); filter: drop-shadow(0 0 22px rgba(0, 210, 255, 1)); }
+  }
+
+  /* ============ MODO VERTICAL Y VERTICAL COMPACTO (A LA MITAD) ============ */
+  body.layout-vertical #app {
+    display: flex; flex-direction: column; align-items: stretch; gap: 8px;
+    padding: 10px; overflow-y: auto;
+  }
+  body.layout-vertical-compact #app {
+    padding: 6px; gap: 6px;
+  }
+  body.layout-vertical-compact .set-bar,
+  body.layout-vertical-compact .learning,
+  body.layout-vertical-compact .foot,
+  body.layout-vertical-compact .branding,
+  body.layout-vertical-compact .pitch-help {
+    display: none !important;
+  }
+  body.layout-vertical-compact .sug-row > .track:nth-child(n+3) {
+    display: none !important;
+  }
+  body.layout-vertical-compact .hero-wrapper {
+    margin-bottom: 2px;
+  }
+
+  /* ============ MODO BURBUJA FLOTANTE (LOGO PIP) ============ */
+  #floatingWidget { display: none; }
+  body.layout-floating #app,
+  body.layout-floating .header,
+  body.layout-floating .learning,
+  body.layout-floating .foot,
+  body.layout-floating .branding { display: none !important; }
+  body.layout-floating #floatingWidget {
+    display: flex !important;
+    align-items: center; justify-content: space-between;
+    position: fixed; inset: 0; width: 100%; height: 100%;
+    padding: 6px 12px; background: rgba(8, 10, 16, 0.92);
+    backdrop-filter: blur(20px); border: 1.5px solid #00d2ff;
+    border-radius: 999px; box-shadow: 0 0 25px rgba(0, 210, 255, 0.4);
+    cursor: pointer; -webkit-app-region: drag;
+    animation: lp-brain-pulse 2s ease-in-out infinite;
+  }
+
+  body.layout-horizontal .pitch-bar {
+    width: 220px; flex: 0 0 220px; margin: 0; padding: 10px 14px;
+    background: linear-gradient(145deg, rgba(255,202,40,0.06), rgba(255,202,40,0.02));
+    border: 1px solid rgba(255, 202, 40, 0.2); border-radius: 12px;
+    display: flex; flex-direction: column; justify-content: flex-start; align-items: center; gap: 8px;
+    box-shadow: 0 4px 14px rgba(255, 202, 40, 0.05);
+  }
+  body.layout-horizontal .pitch-grid {
+    display: grid;
+    grid-template-areas: 
+      "m5 bpm p5"
+      "m1 rst p1";
+    gap: 6px 4px;
+    align-items: center;
+    justify-items: center;
+    width: 100%;
+  }
+  body.layout-horizontal .pitch-help {
+    display: block; font-size: 8.5px; color: rgba(255,255,255,0.6); text-align: center; line-height: 1.35; margin-top: auto;
+  }
+  body:not(.layout-horizontal) .pitch-help { display: none; }
+
+  /* ============ LIVE PITCH® — el cerebro de TrackAI (rediseño) ============ */
+  .livepitch { position: relative; overflow: hidden; border-radius: 16px; margin-top: 6px; -webkit-app-region: no-drag; }
+  .livepitch > #pulseChart { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; opacity: 0.62; pointer-events: none; }
+  .lp-veil { position: absolute; inset: 0; z-index: 0; pointer-events: none; background: radial-gradient(130% 100% at 50% 0%, rgba(13,15,20,0.22), rgba(13,15,20,0.62)); }
+  .lp-fg { position: relative; z-index: 1; padding: 9px 12px 9px; }
+  .lp-topline { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+  .lp-brand { font-size: 10.5px; font-weight: 900; letter-spacing: 1.2px; color: #fff; text-shadow: 0 2px 10px #ffca28, 0 0 5px #ffca28; }
+  .lp-brand sup { font-size: 6.5px; opacity: 0.9; }
+  .lp-trend-pill { font-size: 10px; font-weight: 900; padding: 3px 9px; border-radius: 999px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.14); white-space: nowrap; }
+  .lp-controls { display: flex; flex-direction: column; align-items: center; gap: 7px; }
+  .lp-bpmbig { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 5px 18px; background: rgba(0,0,0,0.55); border: 1px solid rgba(255,202,40,0.45); border-radius: 11px; cursor: pointer; box-shadow: inset 0 0 12px rgba(0,0,0,0.85), 0 0 16px rgba(255,202,40,0.18); transition: transform 0.15s; }
+  .lp-bpmbig:hover { transform: translateY(-1px); }
+  .lp-bpmbig.active { border-color: #ffca28; box-shadow: inset 0 0 12px rgba(0,0,0,0.85), 0 0 22px rgba(255,202,40,0.4); }
+  .lp-bpmbig > b { font-size: 26px; font-weight: 900; color: #ffca28; font-family: 'SF Mono', ui-monospace, monospace; letter-spacing: -0.5px; line-height: 1; }
+  .lp-bpmbig .sub { font-size: 9px; color: #fff; opacity: 0.88; font-weight: 700; margin-top: 3px; white-space: nowrap; letter-spacing: 0.2px; }
+  .lp-bpmbig .sub b { font-size: 9px; font-weight: 800; }
+  .lp-bpmbig .bpm-label { font-size: 10px; color: #ffca28; font-weight: 800; letter-spacing: 1px; }
+  /* 🔴 Alarma de pitch forzado (>8%): el cerebro llama la atención */
+  @keyframes lpAlarm {
+    0%,100% { box-shadow: inset 0 2px 4px rgba(255,255,255,0.1), 0 8px 16px rgba(0,0,0,0.6), 0 0 14px rgba(255,90,95,0.4); border-color: rgba(255,90,95,0.55); }
+    50% { box-shadow: inset 0 2px 4px rgba(255,255,255,0.1), 0 8px 16px rgba(0,0,0,0.6), 0 0 34px rgba(255,90,95,0.95); border-color: #ff5a5f; }
+  }
+  @keyframes lp-heartbeat {
+    0%,100% { transform:scale(1); }
+    14% { transform:scale(1.12); }
+    28% { transform:scale(1); }
+    42% { transform:scale(1.08); }
+    56% { transform:scale(1); }
+  }
+  @keyframes lp-neural-spin { from { transform:rotate(0deg); } to { transform:rotate(360deg); } }
+  @keyframes lp-pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.6; transform:scale(0.9); } }
+  @keyframes searchingPulse { 0%,100% { opacity:1; } 50% { opacity:0.45; } }
+  @keyframes lp-bpm-shimmer { 0% { background-position:0% 50%; } 50% { background-position:100% 50%; } 100% { background-position:0% 50%; } }
+  @keyframes lp-float { 0%,100% { transform:translateY(0) translateZ(0); } 50% { transform:translateY(0) translateZ(8px); } }
+  @keyframes lp-particle-float { 0% { transform:translateY(80%) scale(0); opacity:0; } 10% { opacity:1; } 90% { opacity:1; } 100% { transform:translateY(-80%) scale(1); opacity:0; } }
+  .live-pitch-ai { animation:lp-float 6s ease-in-out infinite; }
+  .livepitch.lp-alarm { animation: lpAlarm 0.7s ease-in-out infinite; }
+  @keyframes lp-brain-glow {
+    0%, 100% { box-shadow: 0 0 10px rgba(0,210,255,0.2), inset 0 0 6px rgba(0,210,255,0.08); border-color: rgba(0,210,255,0.4); }
+    50% { box-shadow: 0 0 18px rgba(255,202,40,0.3), inset 0 0 10px rgba(255,202,40,0.12); border-color: rgba(255,202,40,0.6); }
+  }
+  @keyframes lp-brain-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.015); }
+  }
+  @keyframes lpBlink { 50% { opacity: 0.45; } }
+  .lp-btn-solid { width:44px;height:44px;min-width:44px;border-radius:12px;font-size:13px;font-weight:800;font-family:'SF Mono',monospace;cursor:pointer;transition:all 0.25s cubic-bezier(0.175,0.885,0.32,1.275);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;border:none;}
+  body.layout-horizontal .lp-btn-solid { width:auto; min-width:0; flex:1 1 0; height:40px; }
+  .lp-btn-solid::before { content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent 40%,rgba(255,255,255,0.1) 50%,transparent 60%);transform:translateX(-100%);transition:transform 0.4s ease; }
+  .lp-btn-solid:hover { transform:translateY(-3px) scale(1.05); }
+  .lp-btn-solid:hover::before { transform:translateX(100%); }
+  .lp-btn-solid:active { transform:translateY(-1px) scale(0.98); transition:all 0.1s; }
+  .lp-alarmbar { background: rgba(255,90,95,0.18); border: 1px solid rgba(255,90,95,0.65); color: #ff9a9e; font-weight: 900; font-size: 9.5px; text-align: center; padding: 5px 6px; border-radius: 8px; margin-bottom: 8px; letter-spacing: 0.3px; animation: lpBlink 0.7s steps(1) infinite; }
+  .lp-zonebar { display: flex; align-items: center; gap: 6px; justify-content: center; }
+  .lp-zbar { position: relative; height: 6px; width: 120px; border-radius: 99px; overflow: hidden; background: linear-gradient(90deg,#46c37b 0 33.3%,#f2c14e 33.3% 66.6%,#ff5a5f 66.6% 100%); box-shadow: inset 0 0 4px rgba(0,0,0,0.6); }
+  .lp-zmark { position: absolute; top: -2px; transform: translateX(-50%); width: 3px; height: 10px; background: #fff; border-radius: 2px; box-shadow: 0 0 5px #fff; transition: left 0.25s ease; }
+  /* 🎛️ Fader de pitch vertical estilo Serato / CDJ */
+  .lp-controls-row { display: flex; align-items: center; justify-content: center; gap: 14px; }
+  .lp-fader { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+  .lp-fader-cap { font-size: 7px; color: #8a8f98; font-weight: 800; letter-spacing: 1px; }
+  .lp-fader-track { position: relative; width: 13px; height: 92px; border-radius: 7px; overflow: hidden; border: 1px solid rgba(255,255,255,0.16); box-shadow: inset 0 0 6px rgba(0,0,0,0.75); background: linear-gradient(180deg,#ff5a5f 0 16.6%,#f2c14e 16.6% 33.3%,#46c37b 33.3% 66.6%,#f2c14e 66.6% 83.3%,#ff5a5f 83.3% 100%); }
+  .lp-fader-center { position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: rgba(255,255,255,0.55); }
+  .lp-fader-handle { position: absolute; left: -3px; right: -3px; height: 7px; background: #fff; border-radius: 3px; box-shadow: 0 0 8px rgba(255,255,255,0.9), 0 1px 3px rgba(0,0,0,0.8); transform: translateY(-50%); transition: top 0.25s ease; }
+  .lp-fader-val { font-size: 9px; font-weight: 900; font-family: 'SF Mono', ui-monospace, monospace; white-space: nowrap; }
+  .lp-btnrow { display: flex; gap: 5px; align-items: center; justify-content: center; flex-wrap: wrap; }
+  .lp-btnrow .pitch-btn { padding: 6px 9px; font-size: 11px; -webkit-app-region: no-drag; }
+  .lp-help { text-align: center; margin-top: 9px; font-size: 9px; color: #ffca28; opacity: 0.82; font-weight: 600; line-height: 1.3; }
+  /* Horizontal: cerebro compacto con flex simétrico 1/4 */
+  body.layout-horizontal .livepitch { flex: 1 1 0; min-width: 0; margin: 0; align-self: stretch; position: relative; }
+  body.layout-horizontal .livepitch::before {
+    display: none;
+  }
+  body.layout-horizontal .livepitch > * { position: relative; z-index: 1; }
+  body.layout-horizontal .hero-wrapper { flex: 1 1 0; width: 50%; min-width: 0; display: flex; flex-direction: row; gap: 0; align-items: stretch; border-right: 1px solid rgba(255,255,255,0.15) !important; }
+  body.layout-horizontal .hero-wrapper > canvas.bpm-ecg { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; opacity: 0.7; pointer-events: none; }
+  body.layout-horizontal .hero-wrapper .now, body.layout-horizontal .hero-wrapper .livepitch { position: relative; z-index: 1; margin-bottom: 0 !important; }
+  body.layout-horizontal .hero-wrapper .gradient-streak { position: absolute; border-radius: 50%; filter: blur(50px); pointer-events: none; z-index: 0; opacity: 0.1; }
+  body.layout-horizontal .lp-fg { display: flex; flex-direction: column; justify-content: center; height: 100%; padding: 8px 6px; max-width: none; margin: 0; width: 100%; box-sizing: border-box; }
+  body.layout-horizontal .lp-help { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 3px; max-width: 100%; }
+  body.layout-horizontal .lp-controls-row { gap: 8px; }
+  body.layout-horizontal .lp-bpmbig > b { font-size: 32px; line-height: 1; margin-top: 2px; display: block; }
+  body.layout-horizontal .lp-bpmbig { min-width: 0; width: 100%; padding: 4px 8px; box-sizing: border-box; }
+  body.layout-horizontal .lp-fader-track { height: 50px; width: 10px; }
+  body.layout-horizontal .lp-topline { margin-bottom: 4px; }
+  body.layout-horizontal .lp-controls { gap: 4px; }
+
+  /* Track actual: tarjeta (1/4 del espacio disponible), contenido al 100% */
+  body.layout-horizontal .now {
+    flex: 1 1 0; min-width: 0; margin: 0; padding: 8px 8px;
+    display: flex; flex-direction: column; justify-content: space-between; gap: 3px;
+    background: transparent; overflow: hidden; position: relative;
+    border-radius: 0; border: none; border-right: 1px solid var(--border-soft);
+  }
+  body.layout-horizontal .now::before {
+    display: none;
+  }
+  body.layout-horizontal .now > * { position: relative; z-index: 1; }
+  body.layout-horizontal .now .cue-hint, body.layout-horizontal .now .timing, body.layout-horizontal .now .progress-bar { display: none; }
+  body.layout-horizontal .now .title,
+  body.layout-horizontal .track .t {
+    font-size: 15px !important; font-weight: 900 !important; line-height: 1.2; text-transform: uppercase;
+    white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important;
+    width: 100% !important; text-align: left !important; box-sizing: border-box !important; margin-bottom: 2px;
+  }
+  body.layout-horizontal .now .title .marquee-text,
+  body.layout-horizontal .track .t .marquee-text {
+    display: inline; white-space: nowrap; animation: none !important; transform: none !important;
+  }
+  body.layout-horizontal .now .artist {
+    font-size: 11px; color: var(--text-dim); margin-top: 1px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 600;
+  }
+  body.layout-horizontal .now .meta .chip {
+    padding: 2px 6px; font-size: 9px; font-weight: 800;
+  }
+
+  /* Sugerencias: tarjetas con líneas degradadas difuminadas, sin bordes duros */
+  body.layout-horizontal .track {
+    flex: 1 1 240px; min-width: 220px; max-width: none; margin: 0;
+    padding: 8px 10px 6px; gap: 2px; justify-content: space-between;
+    border-radius: 0; display: flex; flex-direction: column; overflow: hidden;
+    position: relative; border: none; border-right: 1px solid var(--border-soft);
+    background: transparent;
+  }
+  body.layout-horizontal .track::before {
+    display: none;
+  }
+  body.layout-horizontal .track > * { position: relative; z-index: 1; }
+  body.layout-horizontal .track .t {
+    font-size: 17px; font-weight: 900; line-height: 1.1; text-transform: uppercase; letter-spacing: -0.3px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 0;
+  }
+  body.layout-horizontal .track .a {
+    display: flex; font-size: 10px; color: var(--text-dim); margin-top: 1px;
+    white-space: nowrap; align-items: center; gap: 4px; font-weight: 600;
+  }
+  body.layout-horizontal .track .a .artist-name {
+    overflow: hidden; text-overflow: ellipsis; flex-shrink: 1;
+  }
+  body.layout-horizontal .track .a .crate {
+    flex-shrink: 0; margin: 0;
+  }
+  body.layout-horizontal .track-bottom { margin-top: auto; flex-wrap: nowrap; align-items: center; justify-content: space-between; padding-top: 5px; border-top: 1px solid var(--border-soft); }
+  body.layout-horizontal .tb-left { flex-wrap: wrap; gap: 3px; max-width: calc(100% - 110px); }
+
+  /* ============ BADGES (Sin recortes) ============ */
+  .badges { display: flex; gap: 3px 4px; margin-top: 3px; flex-wrap: wrap; align-items: center; max-height: 36px; overflow: hidden; }
   .badge {
-    font-size:8px; font-weight:800; border-radius:4px; padding:2px 6px;
-    background:var(--panel); border:1px solid var(--border-soft); color:var(--text-dim);
-    white-space:nowrap; letter-spacing:0.2px; line-height:1;
+    font-size: 8px; font-weight: 800; border-radius: 4px; padding: 2px 6px;
+    background: var(--panel); border: 1px solid var(--border-soft); color: var(--text-dim);
+    white-space: nowrap; letter-spacing: 0.2px; line-height: 1;
   }
-  .badge.crate-b { color:var(--crate); border-color:var(--crate); }
-  .badge.crate-same { color:var(--green); border-color:var(--green); background:rgba(70,195,123,0.15); }
-  .badge.trans-perfect { color:var(--green); border-color:var(--green); }
-  .badge.trans-relative { color:var(--accent); border-color:var(--accent); }
-  .badge.pitch-b { color:#ffca28; border-color:#ffca28; background:rgba(255,202,40,0.12); }
-  .badge.fresh-b { color:var(--green); border-color:var(--green); }
-  .badge.structural-b { color:var(--crate); border-color:rgba(232,134,42,0.4); font-size:7.5px; }
-  .badge.website-b { color:rgba(160,176,216,0.7); border-color:transparent; background:transparent; font-size:7.5px; }
+  .badge.trans.perfect     { color: var(--green);  border-color: var(--green); }
+  .badge.trans.relative    { color: var(--accent); border-color: var(--accent); }
+  .badge.trans.energy_up   { color: var(--yellow); border-color: var(--yellow); }
+  .badge.trans.energy_down { color: #6db6ff; border-color: #6db6ff; }
+  .badge.trans.boost       { color: #ff7ac0; border-color: #ff7ac0; }
+  .badge.trans.dominant    { color: var(--crate); border-color: var(--crate); }
+  .badge.trans.mood        { color: var(--key); border-color: var(--key); }
+  .badge.creative { color: #00ffc8; border-color: rgba(0, 255, 200, 0.5); background: rgba(0, 255, 200, 0.15); font-weight: 800; }
+  .badge.bpmx  { color: var(--accent); border-color: var(--accent); }
+  .badge.fresh.new         { color: var(--green); border-color: var(--green); }
+  .badge.fresh.fresh       { color: var(--green); }
+  .badge.fresh.proven      { color: var(--yellow); border-color: var(--yellow); }
+  .badge.fresh.overplayed  { color: var(--red); }
+  .badge.crate { color: var(--crate); border-color: var(--crate); }
+  .badge.crate.same-crate { color: var(--green); border-color: var(--green); background: rgba(70,195,123,0.15); font-weight: 800; }
+  .badge.warn { color: var(--red); border-color: var(--red); background: rgba(255,90,95,0.1); }
 
-  .track-bottom { display:flex; gap:6px; align-items:center; margin-top:2px; }
-  .deck-btn {
-    flex:1; height:32px; padding:0 6px; font-size:11px; border-radius:8px;
-    background:linear-gradient(135deg,rgba(70,195,123,0.2),rgba(70,195,123,0.05));
-    border:1px solid rgba(70,195,123,0.5); color:var(--green); cursor:pointer;
-    font-weight:900; letter-spacing:0.5px; min-width:0;
-    display:flex; align-items:center; justify-content:center; gap:4px;
-  }
-  .swap-btn {
-    flex:0 0 32px; width:32px; height:32px; padding:0; font-size:13px; border-radius:8px;
-    background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.18); color:#a0b0d8;
-    cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0;
-  }
-
-  /* SEARCHING animation */
-  @keyframes aiScanBeam {
-    0%{transform:translateY(-100%) scaleX(0.5);opacity:0;}
-    50%{opacity:0.85;}
-    100%{transform:translateY(100%) scaleX(1.5);opacity:0;}
-  }
-  .ai-scan-beam {
-    position:absolute; top:0; left:0; right:0; height:3px;
-    background:linear-gradient(90deg,transparent,#00d2ff,#ffca28,#00d2ff,transparent);
-    box-shadow:0 0 12px #00d2ff,0 0 20px #ffca28;
-    animation:aiScanBeam 1.8s linear infinite; pointer-events:none; z-index:2;
-  }
-  .brain-glow-ring {
-    position:absolute; inset:-4px; border-radius:50%;
-    border:2px solid rgba(0,210,255,0.6); border-top-color:#ffca28;
-    animation:lp-spin 1.2s linear infinite;
-    box-shadow:0 0 12px rgba(0,210,255,0.4);
-  }
-  @keyframes brainPulse {
-    0%,100%{transform:scale(1);filter:drop-shadow(0 0 4px #00d2ff);}
-    50%{transform:scale(1.2);filter:drop-shadow(0 0 12px #ffca28);}
-  }
-  .searching-dots::after { content:''; animation:dots 1.4s steps(4,end) infinite; }
+  /* ============ BUSCANDO / ANIMACIÓN RAYO Y CEREBRO AI ============ */
+  .searching { color: var(--text-dim); font-size: 11px; font-weight: 600; }
+  .searching-dots::after { content: ''; animation: dots 1.4s steps(4, end) infinite; }
   @keyframes dots { 0%{content:'';} 25%{content:'.';} 50%{content:'..';} 75%{content:'...';} }
 
-  /* FADE transitions */
-  @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
-  .fade-in { animation:fadeIn 0.5s ease; }
+  @keyframes aiScanBeam {
+    0% { transform: translateY(-100%) scaleX(0.5); opacity: 0; }
+    50% { opacity: 0.85; }
+    100% { transform: translateY(100%) scaleX(1.5); opacity: 0; }
+  }
+  .ai-scan-beam {
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, transparent, #00d2ff, #ffca28, #00d2ff, transparent);
+    box-shadow: 0 0 12px #00d2ff, 0 0 20px #ffca28;
+    animation: aiScanBeam 1.8s linear infinite;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .brain-glow-ring {
+    position: absolute; inset: -4px;
+    border-radius: 50%;
+    border: 2px solid rgba(0, 210, 255, 0.6);
+    border-top-color: #ffca28;
+    animation: spin 1.2s linear infinite;
+    box-shadow: 0 0 12px rgba(0, 210, 255, 0.4);
+  }
+  @keyframes brainPulse {
+    0%, 100% { transform: scale(1); filter: drop-shadow(0 0 4px #00d2ff); }
+    50% { transform: scale(1.2); filter: drop-shadow(0 0 12px #ffca28); }
+  }
+  .err { color: var(--text-dim); font-size: 12px; text-align: center; padding: 30px 16px; }
+
+  /* ============ FOOTER ============ */
+  .learning {
+    flex-shrink: 0; text-align: center; font-size: 9.5px; font-weight: 600;
+    color: var(--accent); background: var(--accent-soft);
+    border-top: 1px solid var(--border-soft); padding: 5px 8px;
+  }
+  body.layout-horizontal .learning { display: none; }
+  .foot { font-size: 9px; color: var(--text-faint); text-align: center; padding: 6px; }
+  .branding { font-size: 9px; color: var(--text-faint); text-align: center; padding: 4px 6px 10px; opacity: 0.75; }
+
+  /* ============ COMPACT MODE ============ */
+  body.compact-mode .now, body.compact-mode h2, body.compact-mode .branding { display: none; }
+  body.compact-mode .container { min-height: auto; }
+  body.compact-mode .tracks-container { padding: 8px 12px; }
+
+  /* Scroll sutil — oculto: las fases son fijas, no debe aparecer barra que tape el diseño */
+  #app::-webkit-scrollbar { width: 0; height: 0; display: none; }
+  #app { scrollbar-width: none; -ms-overflow-style: none; }
+
+  /* ============ MODO TRANSITION OVERLAY ============ */
+  .mode-transition-overlay {
+    position: fixed; inset: 0; z-index: 9999;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(0,0,0,0.88), rgba(0,0,0,0.97));
+    pointer-events: none; opacity: 0;
+    transition: opacity 0.35s cubic-bezier(0.16,1,0.3,1);
+  }
+  .mode-transition-overlay.show { opacity: 1; }
+  .mode-transition-overlay .emoji-3d {
+    font-size: 96px; line-height: 1;
+    animation: emojiPulse 1.6s cubic-bezier(0.16,1,0.3,1) both;
+    filter: drop-shadow(0 0 40px currentColor);
+  }
+  .mode-transition-overlay .mode-label {
+    font-size: 18px; font-weight: 900; letter-spacing: 2px;
+    text-transform: uppercase; margin-top: 16px;
+    opacity: 0; animation: labelSlide 0.6s 0.2s cubic-bezier(0.16,1,0.3,1) forwards;
+  }
+  /* 🚀 Cohete despegando con humo */
+  .mt-rocket-wrapper { position:relative; width:120px; height:140px; display:flex; align-items:center; justify-content:center; }
+  .mt-rocket { font-size:72px; position:absolute; bottom:10px; left:50%; transform:translateX(-50%); animation:mtRocketLaunch 1.8s cubic-bezier(0.16,1,0.3,1) both; filter:drop-shadow(0 0 40px rgba(255,202,40,0.6)); }
+  .mt-smoke { position:absolute; left:50%; transform:translateX(-50%); width:14px; height:14px; background:radial-gradient(circle,rgba(255,255,255,0.5),transparent); border-radius:50%; bottom:25px; }
+  .mt-smoke.s1 { animation:mtSmoke 1.8s ease-out both; }
+  .mt-smoke.s2 { animation:mtSmoke 1.8s ease-out 0.15s both; }
+  .mt-smoke.s3 { animation:mtSmoke 1.8s ease-out 0.3s both; }
+  .mt-smoke.s4 { animation:mtSmoke 1.8s ease-out 0.45s both; }
+  @keyframes mtRocketLaunch {
+    0% { transform:translateX(-50%) translateY(0) scale(1); opacity:1; }
+    60% { transform:translateX(-50%) translateY(-50px) scale(0.6); opacity:1; }
+    100% { transform:translateX(-50%) translateY(-90px) scale(0.2); opacity:0; }
+  }
+  @keyframes mtSmoke {
+    0% { transform:translateX(-50%) translateY(0) scale(0); opacity:0.5; }
+    40% { transform:translateX(-50%) translateY(5px) scale(1.5); opacity:0.25; }
+    100% { transform:translateX(-50%) translateY(15px) scale(3); opacity:0; }
+  }
+  /* ⚖️ Equalizador flat (Auto) */
+  .mt-eq { display:flex; gap:5px; align-items:center; height:80px; padding:10px 0; }
+  .mt-bar { width:10px; border-radius:3px 3px 0 0; background:linear-gradient(180deg,#2f80ed,#4fc3f7); animation:mtEqFlat 1.4s ease-in-out infinite; }
+  @keyframes mtEqFlat { 0%,100% { height:28px; } 50% { height:32px; } }
+  @keyframes emojiPulse {
+    0% { transform: scale(0.3) rotate(-15deg); opacity: 0; }
+    30% { transform: scale(1.2) rotate(5deg); opacity: 1; }
+    50% { transform: scale(1) rotate(0deg); opacity: 1; }
+    100% { transform: scale(1.8) rotate(0deg); opacity: 0; }
+  }
+  @keyframes labelSlide {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  /* Líneas degradadas difuminadas para fondos de secciones */
+  .gradient-streak {
+    position: absolute; border-radius: 50%; filter: blur(60px); opacity: 0.12;
+    pointer-events: none; z-index: 0;
+  }
+  .gradient-streak.green { background: linear-gradient(135deg, #46c37b, #00ffc8); }
+  .gradient-streak.amber { background: linear-gradient(135deg, #ffca28, #ff9100); }
+  .gradient-streak.purple { background: linear-gradient(135deg, #b877e0, #7c4dff); }
+  .gradient-streak.blue { background: linear-gradient(135deg, #2f80ed, #00b0ff); }
+
+  /* ============ RESPONSIVE: ventana angosta ============ */
+  @media (max-width: 360px) {
+    .now { margin: 8px; padding: 11px; }
+    .now .title { font-size: 14px; }
+    .mode-bar, .set-bar { margin-left: 8px; margin-right: 8px; }
+    .mode-btn { font-size: 9px; padding: 5px 2px; }
+    .tracks-container { padding: 0 8px 14px; }
+    .track { padding: 8px; gap: 7px; }
+    h2 { margin: 10px 10px 5px; }
+  }
+  /* Ventana muy baja: compacta aún más el track actual */
+  @media (max-height: 460px) {
+    .audio-bars { display: none; }
+    .now { padding: 10px 12px; }
+    .branding { display: none; }
+  }
+  /* Marquee animation for titles */
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    12% { transform: translateX(0); }
+    88% { transform: translateX(calc(-100% + 120px)); }
+    100% { transform: translateX(calc(-100% + 120px)); }
+  }
+  .marquee-text {
+    display: inline-block;
+    white-space: nowrap;
+    animation: marquee 14s ease-in-out infinite;
+    will-change: transform;
+  }
+  .marquee-text:hover {
+    animation-play-state: paused;
+  }
+  
+  /* Modo Monitor (Pantalla Completa) */
+  body.mode-monitor .tracks-container, body.mode-monitor .group-label {
+    display: none !important;
+  }
+
+  /* Estilos Responsivos y Paleta Serato Pro para #founderModal */
+  #founderModal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+    background: rgba(5, 7, 15, 0.94);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    overflow-y: auto;
+    padding: 14px;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: center;
+  }
+  #libraryCleanModal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 100001;
+    background: rgba(4, 7, 12, 0.94);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    overflow-y: auto;
+    padding: 16px;
+    align-items: center;
+    justify-content: center;
+  }
+  #libraryCleanCard {
+    width: 100%;
+    max-width: 850px;
+    max-height: 92vh;
+    overflow-y: auto;
+    padding: 26px;
+    border: 1px solid rgba(61, 220, 132, 0.5);
+    border-radius: 24px;
+    background: linear-gradient(145deg, rgba(18, 30, 28, 0.98), rgba(9, 14, 18, 0.98));
+    box-shadow: 0 24px 90px rgba(0, 0, 0, 0.85), 0 0 50px rgba(61, 220, 132, 0.16);
+  }
+  .library-clean-summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 20px 0; }
+  .library-clean-stat { padding: 14px 12px; border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; background: rgba(255,255,255,0.04); text-align: center; }
+  .library-clean-stat strong { display: block; color: #fff; font-size: 24px; line-height: 1; }
+  .library-clean-stat span { display: block; color: #a0b0d8; font-size: 10px; margin-top: 6px; text-transform: uppercase; letter-spacing: 0.8px; }
+  .library-clean-list { display: grid; gap: 8px; max-height: 330px; overflow-y: auto; margin: 14px 0 20px; }
+  .library-clean-row { display: grid; grid-template-columns: 24px 1fr 24px 1fr; gap: 10px; align-items: center; padding: 11px 12px; border-radius: 11px; background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.07); font-size: 11px; }
+  .library-clean-row .old { color: #ffb7b9; overflow-wrap: anywhere; }
+  .library-clean-row .new { color: #baffd2; overflow-wrap: anywhere; }
+  .library-clean-row .arrow { color: #f5a623; text-align: center; font-weight: 900; }
+  @media (max-width: 600px) {
+    #libraryCleanCard { padding: 18px; border-radius: 18px; }
+    .library-clean-summary { grid-template-columns: repeat(2, 1fr); }
+    .library-clean-row { grid-template-columns: 24px 1fr; gap: 3px 8px; }
+    .library-clean-row .arrow { text-align: left; transform: rotate(90deg); }
+  }
+  #founderModalCard {
+    background: rgba(14, 17, 28, 0.98);
+    border: 1.5px solid #007dff;
+    border-radius: 20px;
+    max-width: 640px;
+    width: 100%;
+    max-height: 90vh; /* Para que no se pase de la pantalla */
+    overflow-y: auto; /* Scroll interno si es necesario */
+    padding: 22px 26px;
+    margin: auto;
+    box-shadow: 0 20px 80px rgba(0, 0, 0, 0.95), 0 0 30px rgba(0, 125, 255, 0.25);
+    position: relative;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    box-sizing: border-box;
+  }
+  @media (max-height: 480px) {
+    #founderModal { padding: 6px !important; }
+    #founderModalCard {
+      padding: 10px 14px !important;
+      gap: 6px !important;
+      max-width: 98% !important;
+      border-radius: 14px !important;
+    }
+    #founderModalCard h2 { font-size: 15px !important; margin-top: 2px !important; }
+    #founderModalDesc { font-size: 11px !important; padding-bottom: 3px !important; }
+    #founderModalCard .grid-benefits {
+      grid-template-columns: 1fr 1fr !important;
+      gap: 4px 10px !important;
+      padding: 6px 10px !important;
+      border-radius: 10px !important;
+    }
+    #founderModalCard .grid-benefits div { font-size: 10.5px !important; }
+    #founderModalCard .modal-btn-action { padding: 8px 14px !important; font-size: 11.5px !important; }
+  }
+
+  .custom-tooltip-btn {
+    position: relative;
+  }
+  .custom-tooltip-btn:hover::after {
+    content: attr(data-info);
+    position: absolute;
+    right: 0;
+    top: 120%;
+    background: rgba(10, 14, 24, 0.95);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1.5px solid #007dff;
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: #ffffff;
+    font-size: 10px;
+    white-space: pre-wrap;
+    z-index: 100000;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.8);
+    pointer-events: none;
+    text-align: left;
+    line-height: 1.4;
+    font-weight: 600;
+    width: max-content;
+  }
+  /* ============ 3 NIVELES DE VENTANA (gotas de mercurio) ============ */
+  /* SEMI: sin header ni mode-bar. Normal → semi = solo se retrae la UI. */
+  body.layout-semi .header, body.layout-semi .mode-bar { display: none; }
+  body.layout-semi #app { padding-top: 10px; }
+  body.layout-semi .compact-exit { display: flex; }
+  /* COMPACT: solo Live Pitch + 2 sugerencias compactas en una línea. */
+  body.layout-compact .header, body.layout-compact .mode-bar { display: none; }
+  body.layout-compact .now { display: none; }
+  body.layout-compact #comodin-slot { display: none; }
+  body.layout-compact .tracks-container { display: contents; }
+  body.layout-compact #app { padding: 6px 8px; }
+  body.layout-compact .hero-wrapper { gap: 6px; }
+  body.layout-compact .livepitch { border-right: 1px solid rgba(255,255,255,0.04); }
+  /* Mini-botón flotante para salir del compacto */
+  .compact-exit {
+    display: none; position: fixed; top: 6px; right: 8px; z-index: 99990;
+    background: rgba(10,14,24,0.85); border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 8px; color: #fff; font-size: 11px; font-weight: 800;
+    padding: 4px 9px; cursor: pointer; gap: 4px; align-items: center;
+    -webkit-app-region: no-drag; backdrop-filter: blur(8px); transition: all 0.2s;
+  }
+  .compact-exit:hover { border-color: var(--accent); color: var(--accent); }
+  body.layout-compact .compact-exit { display: flex; }
+
+  /* Sugerencias en 1 línea (compacto): título arriba, acciones al costado */
+  body.layout-compact .track { padding: 5px 8px; }
+  body.layout-compact .track .t { font-size: 11px; }
+  body.layout-compact .deck-btn { padding: 4px 6px !important; font-size: 10px !important; }
+  body.layout-compact .swap-btn { width: 28px; height: 28px !important; font-size: 11px; }
+  body.layout-compact .set-chip, body.layout-compact .group-label,
+  body.layout-compact .learning, body.layout-compact .foot, body.layout-compact .branding { display: none; }
+
+  /* Fade suave al cambiar de nivel (gotas de mercurio) */
+  #app, .header { transition: opacity 0.18s ease, transform 0.18s ease; }
+  body.layout-transitioning #app, body.layout-transitioning .header { opacity: 0.35; transform: scale(0.985); }
+
+html, body { height: 100%; width: 100%; overflow: hidden; }
 </style>
 </head>
-<body>
+<body class="layout-horizontal mode-auto">
 <div class="container">
-
-  <!-- ── HEADER ── -->
   <div class="header">
-    <div class="header-left">
-      <div style="width:24px;height:24px;border-radius:7px;overflow:hidden;border:1.5px solid #007dff;box-shadow:0 0 10px rgba(0,125,255,0.4);flex-shrink:0;background:#0c0d12;display:flex;align-items:center;justify-content:center;">
-        <span style="font-size:14px;">🎧</span>
+    <div class="header-left" style="display: flex; align-items: center; gap: 8px;">
+      <div class="logo-brand-icon" style="width: 24px; height: 24px; border-radius: 7px; overflow: hidden; border: 1.5px solid #007dff; box-shadow: 0 0 10px rgba(0,125,255,0.4); flex-shrink: 0; background: #0c0d12; display: flex; align-items: center; justify-content: center;">
+        <span style="font-size: 14px;">🎧</span>
       </div>
-      <div style="display:flex;flex-direction:column;align-items:flex-start;gap:1px;">
-        <div style="font-weight:900;letter-spacing:-0.5px;font-size:15px;color:#fff;line-height:1;">Track<span style="color:#007dff;">AI</span></div>
-        <span style="font-size:9px;color:#c5cce0;font-weight:700;line-height:1;">v2.3.1</span>
-      </div>
-    </div>
-    <div class="header-center">
-      <div class="clock" id="demoClock">🕒 16:47</div>
-      <div style="display:flex;align-items:center;padding:3px 8px;font-size:11px;border:1px solid #00ff66;color:#00ff66;background:rgba(0,255,102,0.18);border-radius:99px;gap:4px;box-shadow:0 0 12px rgba(0,255,102,0.3);">
-        <span>🌿</span> <b id="planLabel" style="white-space:nowrap;">REGGAETON · TROPICAL</b>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <div class="wordmark" title="TrackAI Versión 2.3.1" style="display: flex; flex-direction: column; align-items: flex-start; gap: 2px; cursor: help;">
+          <div style="font-weight: 900; letter-spacing: -0.5px; font-size: 15px; color: #ffffff; line-height: 1;">
+            Track<span style="color: #007dff;" id="wordmarkAi">AI</span>
+          </div>
+          <span class="app-version" style="font-size:9px;color:var(--text-dim);font-weight:700;line-height:1;">v2.3.1</span>
+        </div>
       </div>
     </div>
+
+    <div class="header-center" style="display: flex; align-items: center; gap: 14px;">
+      <div class="clock" id="demoClock" style="font-weight: 800; color: var(--text);">🕒 16:47</div>
+      <div style="display:flex; align-items:center; padding:3px 8px; font-size:11px; border:1px solid #00ff66; color:#00ff66; background:rgba(0, 255, 102, 0.18); border-radius:99px; gap:4px; box-shadow: 0 0 12px rgba(0,255,102,0.3);">
+        <span style="font-size:11px;">🌿</span> <b style="white-space:nowrap;" id="genreBanner">REGGAETON · TROPICAL</b>
+      </div>
+    </div>
+
     <div class="header-right">
-      <div style="display:flex;align-items:center;gap:4px;font-size:9.5px;color:#c5cce0;margin-right:8px;">
-        <div style="color:#2f80ed;font-weight:800;background:rgba(47,128,237,0.16);padding:3px 6px;border-radius:4px;border:1px solid #2f80ed;">LICENCIA: ILIMITADA</div>
+      <div style="display:flex; align-items:center; gap: 4px; font-size:9.5px; color:var(--text-dim); margin-right:8px;">
+        <div style="color:var(--accent); font-weight:800; background:var(--accent-soft); padding:3px 6px; border-radius:4px; border:1px solid var(--accent);">LICENCIA: ILIMITADA</div>
       </div>
-      <div class="hbtn" style="background:rgba(255,202,40,0.1);border-color:rgba(255,202,40,0.4);color:#ffca28;">⭐ PRO</div>
-      <div class="hbtn">🌙</div>
-      <div class="hbtn">–</div>
-      <div class="hbtn" style="border-color:rgba(255,90,95,0.4);color:#ff5a5f;">✕</div>
+      <button class="theme-toggle" style="font-weight:900;font-size:10px;padding:3px 10px;border-radius:99px;letter-spacing:0.5px;background:rgba(255,202,40,0.1);border:1px solid rgba(255,202,40,0.4);color:#ffca28;">⭐ PRO</button>
+      <button class="theme-toggle">📂</button>
+      <button class="theme-toggle">🌙</button>
+      <button class="min-btn">–</button>
+      <button class="close-btn" style="border-color: rgba(255,90,95,0.4); color: #ff5a5f;">✕</button>
     </div>
   </div>
-
-  <!-- ── APP ── -->
-  <div id="app">
-
-    <!-- FASE 1: MODOS -->
-    <div class="mode-bar">
-      <button class="mode-btn"><span>⚖️</span><span>Auto</span></button>
-      <button class="mode-btn active"><span>🚀</span><span>Ultra IA</span></button>
-      <button class="mode-btn"><span>📁</span><span>Estricto</span></button>
-      <button class="mode-btn"><span>🔥</span><span>Arriba</span></button>
-      <button class="mode-btn"><span>📉</span><span>Bajada</span></button>
-    </div>
-
-    <!-- FASE 2: HERO WRAPPER -->
-    <div class="hero-wrapper">
-
-      <!-- SONANDO AHORA -->
-      <div class="now">
-        <div class="card-section-tag"><span class="hp-icon-anim">🎧</span> SONANDO AHORA</div>
-        <div class="artist-name" id="nowArtist">RKM &amp; KEN-Y FT. DON OMAR</div>
-        <div class="track-title" id="nowTitle">SI LA VES</div>
-        <div style="display:flex;align-items:center;justify-content:center;gap:6px;margin-top:4px;">
-          <span class="chip" style="font-size:10px;color:#fff;font-weight:700;" id="nowBpmBase">▶ 94 BPM</span>
-          <span style="font-size:14px;color:#ffca28;font-weight:800;">→</span>
-          <span class="chip" style="font-size:11px;color:#fff;border-color:rgba(255,202,40,0.45);background:rgba(255,202,40,0.08);" id="nowBpmLive">94.0</span>
-          <span style="font-size:8px;color:#fff;font-weight:800;letter-spacing:1px;">BPM</span>
-        </div>
-        <div style="display:flex;align-items:baseline;justify-content:center;gap:6px;margin-top:2px;">
-          <b style="font-size:26px;font-weight:900;color:#ff6b6b;line-height:1;" id="nowPitch">0.0%</b>
-          <span style="font-size:8px;color:#fff;font-weight:800;letter-spacing:1px;">PITCH</span>
-          <span class="chip" style="font-size:9px;font-weight:800;color:var(--key);border-color:rgba(184,119,224,0.4);background:rgba(184,119,224,0.1);" id="nowKey">12B</span>
-        </div>
-        <div style="display:flex;align-items:center;justify-content:center;gap:5px;margin-top:2px;flex-wrap:wrap;">
-          <span style="font-size:9px;font-weight:700;color:var(--crate);">📁 <span id="nowFolder">SUPER ROS</span></span>
-          <span class="chip" style="font-size:9px;font-weight:800;color:#ffca28;background:rgba(255,202,40,0.12);border:1px solid rgba(255,202,40,0.35);">🎧 <span id="nowPlays">2</span> plays</span>
-        </div>
-      </div>
-
-      <!-- LIVE PITCH -->
-      <div class="livepitch">
-        <!-- Partículas doradas -->
-        <div class="lp-particles">
-          <div class="lp-particle" style="width:4px;height:4px;background:#ffd873;left:10%;top:25%;animation-delay:0s;box-shadow:0 0 6px #ffd873;"></div>
-          <div class="lp-particle" style="width:3px;height:3px;background:#ffd873;left:28%;top:60%;animation-delay:0.5s;box-shadow:0 0 6px #ffd873;"></div>
-          <div class="lp-particle" style="width:3px;height:3px;background:#ffca28;left:55%;top:20%;animation-delay:1s;box-shadow:0 0 6px #ffca28;"></div>
-          <div class="lp-particle" style="width:5px;height:5px;background:#ffd873;left:75%;top:50%;animation-delay:1.5s;box-shadow:0 0 8px #ffd873;"></div>
-          <div class="lp-particle" style="width:3px;height:3px;background:#ffca28;left:88%;top:35%;animation-delay:0.8s;box-shadow:0 0 6px #ffca28;"></div>
-          <div class="lp-particle" style="width:4px;height:4px;background:#ffd873;left:42%;top:70%;animation-delay:2s;box-shadow:0 0 8px #ffd873;"></div>
-        </div>
-        <!-- Header LP -->
-        <div class="lp-header">
-          <div class="lp-header-left">
-            <div class="lp-brain-ring">
-              <div class="lp-ring1"></div>
-              <div class="lp-ring2"></div>
-              <div class="lp-brain-emoji">🧠</div>
-            </div>
-            <div>
-              <div class="lp-brand-title">LIVE PITCH<span style="font-size:7px;opacity:0.7;">®</span></div>
-              <div class="lp-brand-sub">Neural Engine</div>
-            </div>
-          </div>
-          <span class="lp-active-badge">● ACTIVE</span>
-        </div>
-        <!-- Body LP -->
-        <div class="lp-body">
-          <div class="lp-bpm-big">
-            <b class="lp-bpm-val" id="lpBpm">94.0</b>
-          </div>
-          <div style="display:flex;align-items:center;gap:8px;margin-top:1px;">
-            <span class="lp-zone" style="color:#9ccc65;border:1px solid rgba(156,204,101,0.33);">✅ Tu rango</span>
-            <span class="lp-sub">0min · 01 BPM</span>
-            <span class="lp-bpm-label">BPM</span>
-          </div>
-          <!-- Brain badge -->
-          <div class="lp-brain-badge">
-            <div style="display:flex;align-items:center;gap:6px;min-width:0;flex:1;">
-              <span style="font-size:13px;flex-shrink:0;animation:lp-pulse 1.5s ease-in-out infinite;">🧠</span>
-              <span class="brain-shimmer">🧠 SINTONÍA MAESTRA · Cerebro leyendo tu estilo</span>
-            </div>
-            <div style="display:flex;align-items:center;gap:5px;flex-shrink:0;">
-              <span style="width:34px;height:4px;border-radius:99px;background:rgba(255,255,255,0.12);overflow:hidden;display:block;">
-                <span style="display:block;height:100%;width:62%;background:linear-gradient(90deg,#00d2ff,#00e676);border-radius:99px;transition:width 0.6s ease;"></span>
-              </span>
-              <span style="font-size:9.5px;font-weight:900;color:#00d2ff;">62%</span>
-            </div>
-          </div>
-          <!-- Feedback buttons -->
-          <div style="display:flex;gap:6px;margin-top:6px;width:100%;">
-            <button class="lp-feedback-btn fire">🔥 Me gustó</button>
-            <button class="lp-feedback-btn bomba">💣 ¡Bomba!</button>
-          </div>
-          <!-- Footer stats -->
-          <div class="lp-footer">
-            <span>🎵 <span id="lpTracks">4</span> tracks</span>
-            <span>❤️ <span id="lpAvg">94.0</span> avg</span>
-            <span>⚡ <span id="lpPrev">86</span> BPM</span>
-          </div>
-        </div>
-      </div>
-    </div><!-- /hero-wrapper -->
-
-    <!-- FASE 3+4: SUGERENCIAS -->
-    <div class="sug-section">
-      <!-- SUG 1: MEJOR OPCIÓN -->
-      <div class="sug-row">
-        <div class="track" id="sug1">
-          <div class="track-top">
-            <div class="sug-tag">
-              <span class="tag-line"></span>
-              🎯 MEJOR OPCIÓN
-              <span class="tag-line"></span>
-            </div>
-            <div class="track-title-big" id="s1title">LA TOXICA (BITTO TEMPO )<span class="mix-tag" id="s1tag">REMIX</span></div>
-            <div class="track-artist-row">
-              <span class="track-artist" id="s1artist">FARRUKO X TEMPO X J...</span>
-              <div class="track-key-bpm">
-                <span class="key-badge" id="s1key">12B</span>
-                <span class="bpm-badge" id="s1bpm">94.2 BPM</span>
-              </div>
-            </div>
-            <div class="badges-row">
-              <span class="badge crate-same">🗂 <span id="s1crate">SUPER ROS</span></span>
-              <span class="badge">Other</span>
-              <span class="badge trans-perfect">Perfecta</span>
-            </div>
-            <div class="badges-row">
-              <span class="badge pitch-b" id="s1pitch">Pitch -0.2%</span>
-              <span class="badge fresh-b">⭐ Nueva</span>
-            </div>
-            <div class="badges-row">
-              <span class="badge structural-b">📍 Salida en Compás 32 (Outro)</span>
-            </div>
-            <div class="badges-row">
-              <span class="badge website-b" id="s1web">www.ftpdjemilio.com</span>
-            </div>
-          </div>
-          <div class="track-bottom">
-            <button class="deck-btn">▶ PLATO A</button>
-            <button class="deck-btn">▶ PLATO B</button>
-            <button class="swap-btn">🔄</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- BONUS/COMODIN: alterna entre resultado y searching -->
-      <div class="sug-row" id="bonusRow">
-        <div class="track" id="sug2">
-          <div class="track-top">
-            <div class="sug-tag">
-              <span class="tag-line"></span>
-              ↗ CAMBIO DE RITMO
-              <span class="tag-line"></span>
-            </div>
-            <div id="bonusContent">
-              <!-- Rellenado por JS -->
-            </div>
-          </div>
-          <div class="track-bottom" id="bonusActions">
-            <button class="deck-btn">▶ PLATO A</button>
-            <button class="deck-btn">▶ PLATO B</button>
-            <button class="swap-btn">🔄</button>
-          </div>
-        </div>
-      </div>
-    </div><!-- /sug-section -->
-
-  </div><!-- /#app -->
-</div><!-- /.container -->
+  <!-- APP (LAYOUT HORIZONTAL EXACTO DE INDEX.HTML) -->
+  <div id="app"></div>
+</div>
 
 <script>
-// ── CLOCK ──
-function tick() {
-  const now = new Date();
-  document.getElementById('demoClock').textContent =
-    '🕒 ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
-}
-tick(); setInterval(tick, 10000);
 
-// ── DEMO DATA ──
-const tracks = [
-  { title:'SI LA VES', tag:'', artist:'RKM & KEN-Y FT. DON OMAR', key:'12B', bpm:'94', liveBpm:'94.0', pitch:'0.0%', pitchColor:'#ff6b6b', folder:'SUPER ROS', plays:2,
-    sug1:{ title:'LA TOXICA (BITTO TEMPO )', tag:'REMIX', artist:'FARRUKO X TEMPO X J...', key:'12B', bpm:'94.2 BPM', crate:'SUPER ROS', crateClass:'crate-same', compat:'Perfecta', compatClass:'trans-perfect', pitch:'Pitch -0.2%', fresh:'⭐ Nueva', struct:'Salida en Compás 32 (Outro)', web:'www.ftpdjemilio.com' },
-    bonus:{ title:'BURIAL MONEY', tag:'EXTENDED', artist:'I-VOLTAGE', key:'12B', bpm:'94.9 BPM', crate:'DANCEHALL', crateClass:'crate-b', compat:'Perfecta', compatClass:'trans-perfect', pitch:'Pitch -1.0%', fresh:'⭐ Nueva', struct:'Salida en Compás 32 (Outro)', web:'www.djvault.net' }
+const DEMO_SETS = [
+  {
+    mode: 'auto',
+    now: {
+      title: 'SI LA VES',
+      artist: 'RKM & KEN-Y FT. DON OMAR',
+      bpm: '94',
+      liveBpm: '94.0',
+      pitch: '0.0%',
+      pitchColor: '#ff6b6b',
+      key: '12B',
+      folder: 'SUPER ROS',
+      plays: 2
+    },
+    sug1: {
+      title: 'LA TOXICA',
+      tag: 'REMIX',
+      artist: 'FARRUKO X TEMPO X MYKE TOWERS',
+      key: '12B',
+      bpm: '94.2 BPM',
+      crate: 'SUPER ROS',
+      sameCrate: true,
+      compat: 'Perfecta',
+      pitch: 'Pitch -0.2%',
+      fresh: '⭐ Nueva',
+      struct: 'Salida en Compás 32 (Outro)',
+      web: 'www.ftpdjemilio.com'
+    },
+    comodin: {
+      title: 'BURIAL MONEY',
+      tag: 'EXTENDED',
+      artist: 'I-VOLTAGE',
+      key: '12B',
+      bpm: '94.9 BPM',
+      crate: 'DANCEHALL',
+      sameCrate: false,
+      compat: 'Perfecta',
+      pitch: 'Pitch -1.0%',
+      fresh: '⭐ Nueva',
+      struct: 'Salida en Compás 32 (Outro)',
+      web: 'www.djvault.net'
+    }
   },
-  { title:'DAKITI', tag:'', artist:'BAD BUNNY FT. JHAY CORTEZ', key:'7B', bpm:'95', liveBpm:'95.0', pitch:'+1.2%', pitchColor:'#ff6b6b', folder:'LATIN TRAP', plays:5,
-    sug1:{ title:'TUSA', tag:'', artist:'KAROL G FT. NICKI MINAJ', key:'8B', bpm:'95.0 BPM', crate:'REGGAETON', crateClass:'crate-b', compat:'Perfecta', compatClass:'trans-perfect', pitch:'Pitch 0.0%', fresh:'⭐ Nueva', struct:'Salida en Compás 16 (Drop)', web:'www.trackai.com' },
-    bonus:{ title:'MIA', tag:'', artist:'BAD BUNNY FT. DRAKE', key:'6B', bpm:'96.0 BPM', crate:'LATIN TRAP', crateClass:'crate-same', compat:'Relativo', compatClass:'trans-relative', pitch:'Pitch +1.0%', fresh:'🔥 Probada', struct:'Salida en Compás 32 (Outro)', web:'www.djlatino.net' }
+  {
+    mode: 'ultra_ia',
+    now: {
+      title: 'DAKITI',
+      artist: 'BAD BUNNY FT. JHAY CORTEZ',
+      bpm: '95',
+      liveBpm: '95.0',
+      pitch: '+1.2%',
+      pitchColor: '#ff6b6b',
+      key: '7B',
+      folder: 'LATIN TRAP',
+      plays: 5
+    },
+    sug1: {
+      title: 'TUSA',
+      tag: '',
+      artist: 'KAROL G FT. NICKI MINAJ',
+      key: '8B',
+      bpm: '95.0 BPM',
+      crate: 'REGGAETON',
+      sameCrate: false,
+      compat: 'Perfecta',
+      pitch: 'Pitch 0.0%',
+      fresh: '⭐ Nueva',
+      struct: 'Salida en Compás 16 (Drop)',
+      web: 'www.trackai.com'
+    },
+    comodin: {
+      title: 'MIA',
+      tag: '',
+      artist: 'BAD BUNNY FT. DRAKE',
+      key: '6B',
+      bpm: '96.0 BPM',
+      crate: 'LATIN TRAP',
+      sameCrate: true,
+      compat: 'Relativo',
+      pitch: 'Pitch +1.0%',
+      fresh: '🔥 Probada',
+      struct: 'Salida en Compás 32 (Outro)',
+      web: 'www.djlatino.net'
+    }
   },
-  { title:'CON CALMA', tag:'REMIX', artist:'DADDY YANKEE FT. SNOW', key:'9A', bpm:'96', liveBpm:'96.0', pitch:'-0.5%', pitchColor:'#4fc3f7', folder:'REGGAETON', plays:12,
-    sug1:{ title:'HAWÁI', tag:'', artist:'MALUMA', key:'5B', bpm:'93.0 BPM', crate:'POP LATIN', crateClass:'crate-b', compat:'Perfecta', compatClass:'trans-perfect', pitch:'Pitch -3.0%', fresh:'🔥 Probada', struct:'Salida en Compás 32 (Outro)', web:'www.maluma.com' },
-    bonus:{ title:'SENSACIÓN', tag:'', artist:'OZUNA', key:'8B', bpm:'94.0 BPM', crate:'REGGAETON', crateClass:'crate-same', compat:'Relativo', compatClass:'trans-relative', pitch:'Pitch -2.0%', fresh:'⭐ Nueva', struct:'Salida en Compás 16 (Drop)', web:'www.ozuna.com' }
+  {
+    mode: 'estricto',
+    now: {
+      title: 'CON CALMA',
+      tag: 'REMIX',
+      artist: 'DADDY YANKEE FT. SNOW',
+      bpm: '96',
+      liveBpm: '96.0',
+      pitch: '-0.5%',
+      pitchColor: '#4fc3f7',
+      folder: 'REGGAETON',
+      plays: 12
+    },
+    sug1: {
+      title: 'HAWÁI',
+      tag: '',
+      artist: 'MALUMA',
+      key: '5B',
+      bpm: '93.0 BPM',
+      crate: 'POP LATIN',
+      sameCrate: false,
+      compat: 'Perfecta',
+      pitch: 'Pitch -3.0%',
+      fresh: '🔥 Probada',
+      struct: 'Salida en Compás 32 (Outro)',
+      web: 'www.maluma.com'
+    },
+    comodin: {
+      title: 'SENSACIÓN',
+      tag: '',
+      artist: 'OZUNA',
+      key: '8B',
+      bpm: '94.0 BPM',
+      crate: 'REGGAETON',
+      sameCrate: true,
+      compat: 'Relativo',
+      pitch: 'Pitch -2.0%',
+      fresh: '⭐ Nueva',
+      struct: 'Salida en Compás 16 (Drop)',
+      web: 'www.ozuna.com'
+    }
   }
 ];
 
-let idx = 0;
-let bonusPhase = 0; // 0=resultado, 1=buscando
+let currentIdx = 0;
+let currentMode = 'auto';
+let isSearchingState = false;
 
-function renderSearching() {
-  document.getElementById('bonusContent').innerHTML = `
-    <div style="width:100%;height:120px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:8px;padding:8px;box-sizing:border-box;position:relative;overflow:hidden;">
-      <div class="ai-scan-beam"></div>
-      <div style="position:relative;width:34px;height:34px;">
-        <div class="brain-glow-ring"></div>
-        <span style="font-size:20px;position:absolute;inset:0;display:flex;align-items:center;justify-content:center;animation:brainPulse 1.5s ease-in-out infinite;">🧠</span>
+function updateClock() {
+  const now = new Date();
+  document.getElementById('demoClock').textContent = '🕒 ' + String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+}
+setInterval(updateClock, 10000);
+updateClock();
+
+function selectMode(m) {
+  currentMode = m;
+  document.body.className = 'layout-horizontal mode-' + m;
+  renderApp();
+}
+
+function trackCard(t, customTag) {
+  if (!t) return '';
+  const mixTag = t.tag ? '<span style="font-size: 8.5px; padding: 1.5px 5px; background: #ffffff; color: #000000; border-radius: 4px; font-weight: 950; letter-spacing: 0.5px; box-shadow: 0 1px 4px rgba(255,255,255,0.3); vertical-align: middle; text-shadow: none;">' + t.tag + '</span>' : '';
+  const crateBadge = '<span style="font-size: 8.5px; font-weight: 800; padding: 2px 6px; border-radius: 4px; background: ' + (t.sameCrate ? 'rgba(70,195,123,0.15)' : 'rgba(232,134,42,0.15)') + '; border: 1px solid ' + (t.sameCrate ? '#46c37b' : '#e8862a') + '; color: ' + (t.sameCrate ? '#46c37b' : '#e8862a') + ';">🗂️ ' + t.crate + '</span>';
+  const compatBadge = '<span style="font-size: 8.5px; font-weight: 800; padding: 2px 6px; border-radius: 4px; background: rgba(70,195,123,0.15); border: 1px solid #46c37b; color: #46c37b;">✔ ' + t.compat + '</span>';
+  const pitchBadge = '<span style="font-size: 8.5px; font-weight: 800; padding: 2px 6px; border-radius: 4px; background: rgba(255,202,40,0.12); border: 1px solid rgba(255,202,40,0.35); color: #ffca28;">' + t.pitch + '</span>';
+  const freshBadge = '<span style="font-size: 8.5px; font-weight: 800; padding: 2px 6px; border-radius: 4px; background: rgba(70,195,123,0.15); border: 1px solid #46c37b; color: #46c37b;">' + t.fresh + '</span>';
+  const structBadge = '<span style="font-size: 7.5px; font-weight: 800; padding: 2px 6px; border-radius: 4px; background: rgba(232,134,42,0.15); border: 1px solid rgba(232,134,42,0.4); color: #e8862a;">📍 ' + t.struct + '</span>';
+  const webBadge = '<span style="font-size: 7.5px; color: rgba(160,176,216,0.7); font-weight: 600;">' + t.web + '</span>';
+
+  return `
+    <div class="track" style="display:flex;flex-direction:column;justify-content:space-between;height:100%;box-sizing:border-box;">
+      <div class="card-section-tag" style="color: #ffffff !important; letter-spacing: 2.5px; text-align:center; display:flex; align-items:center; justify-content:center; gap:6px; margin-bottom: 6px;">` + customTag + `</div>
+      <div class="t" title="` + t.title + ` — ` + t.artist + `"><div>` + t.title + `</div> ` + mixTag + `</div>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 3px; margin-bottom: 2px;">
+        <span class="artist-name" style="font-size: 10.5px; color: #ffffff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 8px; font-weight: 700;">` + t.artist + `</span>
+        <div style="display: flex; gap: 4px; flex-shrink: 0; align-items: center;">
+          <span style="font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 4px; background: rgba(184,119,224,0.15); border: 1px solid rgba(184,119,224,0.4); color: var(--key);">` + t.key + `</span>
+          <span style="font-size: 9px; font-weight: 900; padding: 2px 6px; border-radius: 4px; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.3); color: #ffffff;">` + t.bpm + `</span>
+        </div>
       </div>
-      <div style="font-size:11px;font-weight:900;color:#00d2ff;text-transform:uppercase;letter-spacing:1px;text-shadow:0 0 8px rgba(0,210,255,0.6);">
+      <div style="display: flex; gap: 3px; align-items: center; flex-wrap: wrap; margin-bottom: 4px;">
+        ` + crateBadge + ` ` + compatBadge + ` ` + pitchBadge + ` ` + freshBadge + `
+      </div>
+      <div style="display: flex; gap: 3px; align-items: center; flex-wrap: wrap; margin-bottom: 4px;">
+        ` + structBadge + `
+      </div>
+      <div style="display: flex; gap: 3px; align-items: center; flex-wrap: wrap; margin-bottom: 4px;">
+        ` + webBadge + `
+      </div>
+      <div style="display:flex;gap:6px;align-items:center;margin-top:auto;">
+        <button class="btn deck-btn" onclick="loadNextTrack('A')" style="flex:1;height:32px;padding:0 6px;font-size:11px;border-radius:8px;background:linear-gradient(135deg,rgba(70,195,123,0.2),rgba(70,195,123,0.05));border:1px solid rgba(70,195,123,0.5);color:var(--green);cursor:pointer;font-weight:900;letter-spacing:0.5px;min-width:0;display:flex;align-items:center;justify-content:center;gap:4px;">▶ PLATO A</button>
+        <button class="btn deck-btn" onclick="loadNextTrack('B')" style="flex:1;height:32px;padding:0 6px;font-size:11px;border-radius:8px;background:linear-gradient(135deg,rgba(70,195,123,0.2),rgba(70,195,123,0.05));border:1px solid rgba(70,195,123,0.5);color:var(--green);cursor:pointer;font-weight:900;letter-spacing:0.5px;min-width:0;display:flex;align-items:center;justify-content:center;gap:4px;">▶ PLATO B</button>
+        <button class="btn swap-btn" onclick="rotateDemo()" style="flex:0 0 32px;width:32px;height:32px;padding:0;font-size:13px;border-radius:8px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);color:#a0b0d8;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">🔄</button>
+      </div>
+    </div>
+  `;
+}
+
+function searchingHTML() {
+  return `
+    <div class="searching searching-ai-beam" style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 8px; padding: 12px; box-sizing: border-box; position: relative; overflow: hidden;">
+      <div class="ai-scan-beam"></div>
+      <div style="position: relative; width: 34px; height: 34px;">
+        <div class="brain-glow-ring"></div>
+        <span style="font-size: 20px; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; animation: brainPulse 1.5s ease-in-out infinite;">🧠</span>
+      </div>
+      <div style="font-size: 11px; font-weight: 900; color: #00d2ff; text-transform: uppercase; letter-spacing: 1px; text-shadow: 0 0 8px rgba(0,210,255,0.6);">
         ⚡ Razonando sugerencias<span class="searching-dots"></span>
       </div>
-      <div style="font-size:9px;color:rgba(255,255,255,0.6);font-weight:700;">Neural Engine escaneando</div>
-    </div>`;
-  document.getElementById('bonusActions').style.display = 'none';
+      <div style="font-size: 9px; color: rgba(255,255,255,0.6); font-weight: 700;">Neural Engine escaneando</div>
+    </div>
+  `;
 }
 
-function renderBonus(b) {
-  document.getElementById('bonusContent').innerHTML = `
-    <div class="track-title-big">${b.title}${b.tag ? '<span class="mix-tag">'+b.tag+'</span>' : ''}</div>
-    <div class="track-artist-row">
-      <span class="track-artist">${b.artist}</span>
-      <div class="track-key-bpm">
-        <span class="key-badge">${b.key}</span>
-        <span class="bpm-badge">${b.bpm}</span>
+function renderApp() {
+  const data = DEMO_SETS[currentIdx];
+  const c = data.now;
+
+  const modeBar = `
+    <div class="mode-bar">
+      <button class="mode-btn btn-auto ` + (currentMode === 'auto' ? 'active' : '') + `" onclick="selectMode('auto')" title="Balance / Modo Clásico"><span>⚖️</span><span>Auto</span></button>
+      <button class="mode-btn btn-uia ` + (currentMode === 'ultra_ia' ? 'active' : '') + `" onclick="selectMode('ultra_ia')" title="Ultra IA Cloud"><span>🚀</span><span>Ultra IA</span></button>
+      <button class="mode-btn btn-estricto ` + (currentMode === 'estricto' ? 'active' : '') + `" onclick="selectMode('estricto')" title="Estricto"><span>📁</span><span>Estricto</span></button>
+      <button class="mode-btn btn-up ` + (currentMode === 'up_only' ? 'active' : '') + `" onclick="selectMode('up_only')" title="Arriba"><span>🔥</span><span>Arriba</span></button>
+      <button class="mode-btn btn-bajada ` + (currentMode === 'bajada' ? 'active' : '') + `" onclick="selectMode('bajada')" title="Bajada"><span>📉</span><span>Bajada</span></button>
+    </div>
+  `;
+
+  const heroWrapperHTML = `
+    <div class="hero-wrapper" style="position: relative; overflow: hidden; display: flex; flex-direction: row; flex: 1 1 0; width: 50%; min-width: 0; align-items: stretch; border-right: 1px solid rgba(255,255,255,0.15);">
+      <div class="now" style="position: relative; z-index: 1; flex: 1 1 0; width: 50%; min-width: 0; box-sizing: border-box; display: flex; flex-direction: column; gap: 4px; text-align: center; border-right: 1px solid rgba(255,255,255,0.15); padding: 8px 8px; justify-content: center;">
+        <div class="card-section-tag" style="color: #ffffff !important; letter-spacing: 2.5px; text-align:center; display:flex; align-items:center; justify-content:center; gap:6px;"><span class="hp-icon-anim">🎧</span> SONANDO AHORA</div>
+        <div class="artist" style="font-size: 11px; font-weight: 700; color: #ffffff; width: 100%; text-align:center; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">` + c.artist + `</div>
+        <div class="title" style="overflow: hidden; font-size: 17px; font-weight: 900; text-transform: uppercase; letter-spacing: -0.3px; line-height: 1.1; width: 100%; text-align:center;"><div>` + c.title + `</div></div>
+        <div style="display:flex;align-items:center;justify-content:center;gap:6px;margin-top:4px;">
+          <span class="chip" style="font-size:10px;color:#ffffff;font-weight:700;">▶ ` + c.bpm + ` BPM</span>
+          <span style="font-size:14px;color:#ffca28;font-weight:800;">→</span>
+          <span class="chip" style="font-size:11px;color:#fff;border-color:rgba(255,202,40,0.45);background:rgba(255,202,40,0.08);">` + c.liveBpm + `</span>
+          <span style="font-size:8px;color:#ffffff;font-weight:800;letter-spacing:1px;">BPM</span>
+        </div>
+        <div style="display:flex;align-items:baseline;justify-content:center;gap:6px;margin-top:2px;">
+          <b style="font-size:26px;font-weight:900;color:` + c.pitchColor + `;line-height:1;">` + c.pitch + `</b>
+          <span style="font-size:8px;color:#ffffff;font-weight:800;letter-spacing:1px;">PITCH</span>
+          <span class="chip" style="font-size:9px;font-weight:800;color:var(--key);border-color:rgba(184,119,224,0.4);background:rgba(184,119,224,0.1);">` + c.key + `</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:center;gap:5px;margin-top:2px;flex-wrap:wrap;">
+          <span style="font-size:9px;font-weight:700;color:var(--crate);">📁 ` + c.folder + `</span>
+          <span class="chip" style="font-size:9px;font-weight:800;color:#ffca28;background:rgba(255,202,40,0.12);border:1px solid rgba(255,202,40,0.35);">🎧 ` + c.plays + ` plays</span>
+        </div>
+      </div>
+
+      <div class="livepitch live-pitch-ai" style="position:relative; flex: 1 1 0; min-width: 0; border-radius:0; overflow:hidden; background:transparent; border:none; padding:0; display:flex; flex-direction:column;">
+        <div style="position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0;opacity:0.4;">
+          <div style="position:absolute;width:4px;height:4px;background:#ffd873;border-radius:50%;left:10%;top:25%;animation:lp-particle-float 3s ease-in-out infinite;filter:blur(1px);box-shadow:0 0 6px #ffd873;"></div>
+          <div style="position:absolute;width:3px;height:3px;background:#ffd873;border-radius:50%;left:28%;top:60%;animation:lp-particle-float 3.7s ease-in-out infinite;animation-delay:0.5s;filter:blur(1px);box-shadow:0 0 6px #ffd873;"></div>
+          <div style="position:absolute;width:3px;height:3px;background:#ffca28;border-radius:50%;left:55%;top:20%;animation:lp-particle-float 4.2s ease-in-out infinite;animation-delay:1s;filter:blur(1px);box-shadow:0 0 6px #ffca28;"></div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 8px 0;position:relative;z-index:1;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="position:relative;width:28px;height:28px;flex-shrink:0;">
+              <div style="position:absolute;inset:0;border:2px solid rgba(0,210,255,0.6);border-radius:50%;border-top-color:transparent;animation:lp-neural-spin 2s linear infinite;"></div>
+              <div style="position:absolute;inset:3px;border:1.5px solid rgba(0,210,255,0.3);border-radius:50%;border-bottom-color:transparent;animation:lp-neural-spin 3s linear infinite reverse;"></div>
+              <span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12px;">🧠</span>
+            </div>
+            <div>
+              <div style="font-size:11px;font-weight:900;letter-spacing:1.5px;color:#fff;text-shadow:0 0 10px #ffca28,0 0 5px #ffca28;">LIVE PITCH<span style="font-size:7px;opacity:0.7;">®</span></div>
+              <div style="font-size:7px;font-weight:600;color:rgba(0,210,255,0.7);letter-spacing:2px;text-transform:uppercase;">Neural Engine</div>
+            </div>
+          </div>
+          <span style="font-size:7px;font-weight:700;color:#00e676;background:rgba(0,230,118,0.12);border:1px solid rgba(0,230,118,0.3);border-radius:4px;padding:2px 7px;letter-spacing:0.5px;">● ACTIVE</span>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:4px 8px 10px;position:relative;z-index:1;width:100%;box-sizing:border-box;">
+          <span style="display:inline-flex;align-items:baseline;gap:4px;cursor:pointer;">
+            <b style="font-size:42px;font-weight:900;line-height:1;background:linear-gradient(135deg,#ffd873,#ffca28,#ffe082,#ffca28,#ffd873);background-size:300% 300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 18px rgba(255,202,40,0.4));">` + c.liveBpm + `</b>
+          </span>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:1px;">
+            <span style="color:#9ccc65;font-weight:800;font-size:10px;background:rgba(0,0,0,0.4);padding:2px 8px;border-radius:4px;border:1px solid rgba(156,204,101,0.33);">✅ Tu rango</span>
+            <span style="color:rgba(160,176,216,0.7);font-size:8px;font-weight:600;">0min · 01 BPM</span>
+            <span style="font-size:10px;color:#ffca28;font-weight:800;letter-spacing:1px;">BPM</span>
+          </div>
+          <div class="lp-brain-badge" style="margin-top:6px;padding:6px 12px;border-radius:10px;background:linear-gradient(135deg,rgba(0,210,255,0.14),rgba(0,125,255,0.08));border:1px solid rgba(0,210,255,0.45);font-size:11px;font-weight:900;letter-spacing:0.4px;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;box-sizing:border-box;">
+            <div style="display:flex;align-items:center;gap:6px;min-width:0;flex:1;">
+              <span style="font-size:13px;flex-shrink:0;">🧠</span>
+              <span style="background:linear-gradient(90deg,#00d2ff,#ffca28,#00e676,#00d2ff);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:10.5px;font-weight:900;">🧠 SINTONÍA MAESTRA</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:5px;flex-shrink:0;">
+              <span style="width:34px;height:4px;border-radius:99px;background:rgba(255,255,255,0.12);overflow:hidden;display:block;">
+                <span style="display:block;height:100%;width:85%;background:linear-gradient(90deg,#00d2ff,#00e676);border-radius:99px;"></span>
+              </span>
+              <span style="font-size:9.5px;font-weight:900;color:#00d2ff;">85%</span>
+            </div>
+          </div>
+          <div style="display:flex;gap:6px;margin-top:6px;width:100%;">
+            <button class="lp-feedback-btn fire" onclick="rotateDemo()" style="flex:1;height:28px;font-weight:900;font-size:10.5px;padding:0 6px;border-radius:8px;cursor:pointer;background:linear-gradient(135deg,rgba(255,110,64,0.3),rgba(255,90,95,0.15));border:1px solid rgba(255,110,64,0.6);color:#ff8b66;">🔥 Me gustó</button>
+            <button class="lp-feedback-btn bomba" onclick="rotateDemo()" style="flex:1;height:28px;font-weight:900;font-size:10.5px;padding:0 6px;border-radius:8px;cursor:pointer;background:linear-gradient(135deg,rgba(0,210,255,0.28),rgba(0,125,255,0.12));border:1px solid rgba(0,210,255,0.6);color:#38d9ff;">💣 ¡Bomba!</button>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:6px;border-top:1px solid rgba(255,255,255,0.05);font-size:7px;color:rgba(160,176,216,0.5);font-weight:600;width:100%;">
+            <span>🎵 4 tracks</span>
+            <span>❤️ ` + c.liveBpm + ` avg</span>
+            <span>⚡ ` + c.bpm + ` BPM</span>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="badges-row">
-      <span class="badge ${b.crateClass}">🗂 ${b.crate}</span>
-      <span class="badge ${b.compatClass}">${b.compat}</span>
+  `;
+
+  const phase1Html = trackCard(data.sug1, '🎯 MEJOR OPCIÓN');
+  const comodinHtml = isSearchingState ? searchingHTML() : trackCard(data.comodin, '↗ CAMBIO DE RITMO');
+
+  const sugSectionHTML = `
+    <div class="sug-section" style="flex: 1 1 0; width: 50%; min-width: 0; display: flex; flex-direction: row; align-items: stretch;">
+      <div class="sug-row" style="flex: 1 1 0; width: 50%; min-width: 0; display: flex; flex-direction: row; align-items: stretch; border-right: 1px solid rgba(255,255,255,0.15);">
+        ` + phase1Html + `
+      </div>
+      <div id="comodin-slot" style="flex: 1 1 0; width: 50%; min-width: 0; display: flex; align-items: stretch;">
+        ` + comodinHtml + `
+      </div>
     </div>
-    <div class="badges-row">
-      <span class="badge pitch-b">${b.pitch}</span>
-      <span class="badge fresh-b">${b.fresh}</span>
-    </div>
-    <div class="badges-row">
-      <span class="badge structural-b">📍 ${b.struct}</span>
-    </div>
-    <div class="badges-row">
-      <span class="badge website-b">${b.web}</span>
-    </div>`;
-  document.getElementById('bonusActions').style.display = 'flex';
+  `;
+
+  document.getElementById('app').innerHTML = modeBar + heroWrapperHTML + sugSectionHTML;
 }
 
-function renderTrack(t) {
-  // Now playing
-  document.getElementById('nowArtist').textContent = t.artist;
-  document.getElementById('nowTitle').textContent = t.title;
-  document.getElementById('nowBpmBase').textContent = '▶ ' + t.bpm + ' BPM';
-  document.getElementById('nowBpmLive').textContent = t.liveBpm;
-  document.getElementById('nowPitch').textContent = t.pitch;
-  document.getElementById('nowPitch').style.color = t.pitchColor;
-  document.getElementById('nowKey').textContent = t.key;
-  document.getElementById('nowFolder').textContent = t.folder;
-  document.getElementById('nowPlays').textContent = t.plays;
-  // LP BPM
-  document.getElementById('lpBpm').textContent = t.liveBpm;
-  document.getElementById('lpAvg').textContent = t.liveBpm;
-  // Sug 1
-  const s = t.sug1;
-  document.getElementById('s1title').innerHTML = s.title + (s.tag ? '<span class="mix-tag">'+s.tag+'</span>' : '');
-  document.getElementById('s1artist').textContent = s.artist;
-  document.getElementById('s1key').textContent = s.key;
-  document.getElementById('s1bpm').textContent = s.bpm;
-  document.getElementById('s1crate').textContent = s.crate;
-  document.getElementById('s1crate').parentElement.className = 'badge ' + s.crateClass;
-  document.getElementById('s1pitch').textContent = s.pitch;
-  document.getElementById('s1web').textContent = s.web;
-}
-
-function cycleBonusSlot() {
-  const sug2 = document.getElementById('sug2');
-  sug2.style.opacity = '0'; sug2.style.transition = 'opacity 0.4s ease';
+function loadNextTrack(deck) {
+  isSearchingState = true;
+  renderApp();
   setTimeout(() => {
-    if (bonusPhase === 0) {
-      renderBonus(tracks[idx % tracks.length].bonus);
-      bonusPhase = 1;
-    } else {
-      renderSearching();
-      bonusPhase = 0;
-    }
-    sug2.style.opacity = '1';
-  }, 400);
+    currentIdx = (currentIdx + 1) % DEMO_SETS.length;
+    isSearchingState = false;
+    renderApp();
+  }, 1200);
 }
 
-function cycleNowPlaying() {
-  idx = (idx + 1) % tracks.length;
-  const app = document.getElementById('app');
-  app.style.opacity = '0.5'; app.style.transition = 'opacity 0.5s ease';
-  setTimeout(() => {
-    renderTrack(tracks[idx]);
-    app.style.opacity = '1';
-  }, 500);
+function rotateDemo() {
+  loadNextTrack('A');
 }
 
-// Init
-renderTrack(tracks[0]);
-renderBonus(tracks[0].bonus); bonusPhase = 1;
+// Initial render
+renderApp();
 
-// Start cycles
-setTimeout(() => { cycleBonusSlot(); setInterval(cycleBonusSlot, 4500); }, 3000);
-setInterval(cycleNowPlaying, 12000);
+// Automatic periodic rotation
+setInterval(() => {
+  if (!isSearchingState) {
+    isSearchingState = true;
+    renderApp();
+    setTimeout(() => {
+      currentIdx = (currentIdx + 1) % DEMO_SETS.length;
+      isSearchingState = false;
+      renderApp();
+    }, 1500);
+  }
+}, 9000);
+
 </script>
 </body>
 </html>
