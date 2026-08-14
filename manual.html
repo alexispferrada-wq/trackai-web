@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manual de Operación — TrackAI v2.3.2 (Copiloto Serato DJ & Editor)</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@500;700&display=swap');
+
+  :root {
+    --primary: #0088c4;
+    --primary-dark: #005f8a;
+    --accent: #3ddc84;
+    --gold: #f5a623;
+    --text: #1a202c;
+    --text-muted: #4a5568;
+    --bg: #ffffff;
+    --bg-alt: #f7fafc;
+    --border: #e2e8f0;
+    --border-dark: #cbd5e0;
+    --code-bg: #edf2f7;
+    --tag-bg: #ebf8ff;
+    --tag-text: #2b6cb0;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: var(--text);
+    background: #e2e8f0;
+    line-height: 1.6;
+    font-size: 13.5px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* BARRA FLOTANTE DE ACCIONES (NO SE IMPRIME) */
+  .action-bar {
+    position: sticky;
+    top: 0;
+    background: #0f172a;
+    color: #fff;
+    padding: 12px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+    z-index: 1000;
+  }
+
+  .action-bar .brand {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .action-bar .brand span {
+    color: var(--primary);
+  }
+
+  .print-btn {
+    background: linear-gradient(135deg, #3ddc84, #00b8e8);
+    color: #03101b;
+    border: none;
+    padding: 10px 22px;
+    border-radius: 999px;
+    font-weight: 800;
+    font-size: 13px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 12px rgba(61,220,132,0.3);
+    transition: all 0.2s ease;
+  }
+
+  .print-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(61,220,132,0.45);
+  }
+
+  /* HOJA DE DOCUMENTO */
+  .document {
+    max-width: 900px;
+    margin: 30px auto;
+    background: #fff;
+    padding: 60px 70px;
+    border-radius: 8px;
+    box-shadow: 0 10px 35px rgba(0,0,0,0.08);
+  }
+
+  /* PORTADA */
+  .cover {
+    border-bottom: 3px solid var(--primary);
+    padding-bottom: 40px;
+    margin-bottom: 40px;
+  }
+
+  .cover-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #ebf8ff;
+    border: 1px solid #bee3f8;
+    color: #2b6cb0;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+  }
+
+  .cover h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 34px;
+    line-height: 1.15;
+    color: #0f172a;
+    margin-bottom: 12px;
+    letter-spacing: -1px;
+  }
+
+  .cover h1 span {
+    color: var(--primary);
+  }
+
+  .cover-subtitle {
+    font-size: 16px;
+    color: var(--text-muted);
+    margin-bottom: 24px;
+    line-height: 1.5;
+  }
+
+  .meta-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    padding: 16px;
+    border-radius: 8px;
+    font-size: 12px;
+  }
+
+  .meta-item strong {
+    display: block;
+    color: #0f172a;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  /* TIPOGRAFÍA & SECCIONES */
+  h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 20px;
+    color: #0f172a;
+    margin: 36px 0 14px;
+    padding-bottom: 8px;
+    border-bottom: 1.5px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 22px 0 8px;
+  }
+
+  h4 {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #334155;
+    margin: 14px 0 6px;
+  }
+
+  p {
+    margin-bottom: 12px;
+    color: #334155;
+  }
+
+  ul, ol {
+    margin-left: 20px;
+    margin-bottom: 14px;
+    color: #334155;
+  }
+
+  li {
+    margin-bottom: 6px;
+  }
+
+  strong {
+    color: #0f172a;
+  }
+
+  /* CAJAS DESTACADAS */
+  .callout {
+    background: #f0fdf4;
+    border-left: 4px solid var(--accent);
+    padding: 14px 18px;
+    border-radius: 0 8px 8px 0;
+    margin: 18px 0;
+    font-size: 13px;
+  }
+
+  .callout.warning {
+    background: #fffbeb;
+    border-left-color: var(--gold);
+  }
+
+  .callout.info {
+    background: #eff6ff;
+    border-left-color: var(--primary);
+  }
+
+  .callout strong {
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  /* TABLAS */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 18px 0;
+    font-size: 12.5px;
+  }
+
+  th, td {
+    padding: 10px 12px;
+    text-align: left;
+    border: 1px solid var(--border);
+  }
+
+  th {
+    background: #f1f5f9;
+    color: #0f172a;
+    font-weight: 700;
+    font-size: 11.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  tr:nth-child(even) {
+    background: #f8fafc;
+  }
+
+  /* MODOS DE MEZCLA CARDS */
+  .mode-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    margin: 18px 0;
+  }
+
+  .mode-card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px;
+    background: #ffffff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+  }
+
+  .mode-card .mode-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+
+  .mode-badge {
+    font-size: 10.5px;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 6px;
+    text-transform: uppercase;
+  }
+
+  .badge-auto { background: #e0f2fe; color: #0284c7; }
+  .badge-strict { background: #fef3c7; color: #d97706; }
+  .badge-monitor { background: #f1f5f9; color: #475569; }
+  .badge-up { background: #fee2e2; color: #dc2626; }
+  .badge-pro { background: #f3e8ff; color: #7e22ce; }
+
+  /* DIAGRAMA DE FLUJO VISUAL */
+  .diagram {
+    background: #0f172a;
+    color: #e2e8f0;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 18px 0;
+    font-family: 'Fira Code', monospace;
+    font-size: 11.5px;
+    line-height: 1.5;
+    overflow-x: auto;
+  }
+
+  .diagram .highlight {
+    color: #38bdf8;
+    font-weight: bold;
+  }
+
+  .diagram .success {
+    color: #4ade80;
+  }
+
+  .diagram .warn {
+    color: #fbbf24;
+  }
+
+  /* REGLAS PARA IMPRESIÓN Y EXPORTACIÓN EN PDF */
+  @media print {
+    body {
+      background: #ffffff !important;
+      color: #000000 !important;
+      font-size: 11pt !important;
+    }
+
+    .action-bar {
+      display: none !important;
+    }
+
+    .document {
+      max-width: 100% !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      box-shadow: none !important;
+    }
+
+    .page-break {
+      page-break-before: always;
+      break-before: page;
+    }
+
+    .no-break {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    a {
+      text-decoration: none !important;
+      color: #000000 !important;
+    }
+
+    .diagram {
+      background: #f8fafc !important;
+      color: #0f172a !important;
+      border: 1px solid #cbd5e0 !important;
+    }
+
+    .diagram .highlight { color: #0284c7 !important; }
+    .diagram .success { color: #16a34a !important; }
+    .diagram .warn { color: #d97706 !important; }
+  }
+
+  @page {
+    size: letter portrait;
+    margin: 1.6cm 1.4cm 1.6cm 1.4cm;
+  }
+</style>
+</head>
+<body>
+
+<!-- BARRA SUPERIOR PARA IMPRIMIR -->
+<div class="action-bar">
+  <div class="brand">
+    🎧 <span>TrackAI</span> · Manual de Operación y Editor
+  </div>
+  <button class="print-btn" onclick="window.print()">
+    🖨️ Imprimir / Guardar en PDF
+  </button>
+</div>
+
+<div class="document">
+
+  <!-- PORTADA -->
+  <header class="cover">
+    <div class="cover-badge">Manual Oficial de Usuario y Arquitectura</div>
+    <h1>TrackAI <span>v2.3.2</span><br>Copiloto de Mezcla & Editor Serato DJ</h1>
+    <p class="cover-subtitle">
+      Guía exhaustiva para DJs sobre el funcionamiento en tiempo real, el motor de recomendación armónica Camelot, el simulador interactivo de sets y el algoritmo Live Pitch®.
+    </p>
+
+    <div class="meta-grid">
+      <div class="meta-item">
+        <strong>Versión Canónica</strong>
+        <span>v2.3.2 (Estable)</span>
+      </div>
+      <div class="meta-item">
+        <strong>Compatibilidad</strong>
+        <span>Serato DJ Pro 4.0+</span>
+      </div>
+      <div class="meta-item">
+        <strong>Sistemas</strong>
+        <span>macOS (Apple Silicon) / Win 10-11</span>
+      </div>
+      <div class="meta-item">
+        <strong>Desarrollado Por</strong>
+        <span>TuSitioYa & DJ Vlex</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- SECCIÓN 1: INTRODUCCIÓN Y ARQUITECTURA -->
+  <section class="no-break">
+    <h2>1. ¿Qué es TrackAI y Cómo Funciona?</h2>
+    <p>
+      <strong>TrackAI</strong> es un asistente inteligente y copiloto de mezcla en tiempo real que se ejecuta como un <em>overlay</em> transparente y ligero sobre <strong>Serato DJ Pro</strong>. Su objetivo principal es eliminar la fatiga mental y el bloqueo de pista durante presentaciones en vivo, sugiriendo la canción matemáticamente y estilísticamente óptima para sonar a continuación.
+    </p>
+
+    <div class="diagram">
++------------------------------------------------------------------------+
+|                     ARQUITECTURA DE DATOS EN VIVO                     |
++------------------------------------------------------------------------+
+   [ Serato DJ Pro ] ──(Escribe en vivo)──> [ master.sqlite (Readonly) ]
+                                                        │
+                                                        ▼
+   [ TrackAI Engine ] <──(Polling 600ms)──────── [ Lector SQLite ]
+         │
+         ├──> Filtro Camelot (±1A/1B, Saltos de Energía)
+         ├──> Filtro BPM Rango ±4% (con pitch dinámico)
+         ├──> Filtro Crates / Subcarpetas Serato
+         └──> Cerebro Live Pitch® (IA de transiciones previas)
+                                │
+                                ▼
+   [ Interfaz Overlay ] ──(AppleScript / PowerShell)──> [ Carga al Plato ]
+    </div>
+
+    <h3>Pilares de Rendimiento:</h3>
+    <ul>
+      <li><strong>Lectura Readonly Cero-Latencia:</strong> Accede a la base de datos de Serato (<code>master.sqlite</code>) sin bloquear archivos ni generar caídas de audio.</li>
+      <li><strong>Operación 100% Offline:</strong> No requiere internet durante el show en vivo. Las licencias y la memoria del DJ se ejecutan localmente en memoria.</li>
+      <li><strong>Carga Instantánea al Plato:</strong> A través de automatización nativa de teclado (AppleScript en macOS / Win32 API en Windows), envía la canción seleccionada directamente al plato en reproducción.</li>
+    </ul>
+  </section>
+
+  <!-- SALTO DE PÁGINA -->
+  <div class="page-break"></div>
+
+  <!-- SECCIÓN 2: EL EDITOR / SIMULADOR DE MEZCLA -->
+  <section class="no-break">
+    <h2>2. El Editor y Simulador de Sets (Live Simulator)</h2>
+    <p>
+      El <strong>Editor / Simulador</strong> de TrackAI permite previsualizar, testear y configurar la respuesta del copiloto ante diferentes situaciones de mezcla. Está compuesto por 4 áreas operativas esenciales:
+    </p>
+
+    <table class="no-break">
+      <thead>
+        <tr>
+          <th>Componente</th>
+          <th>Función Operativa</th>
+          <th>Comportamiento en Vivo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Live BPM Indicator</strong></td>
+          <td>Muestra el BPM real ajustado por el pitch físico actual del fader.</td>
+          <td>Pulsa rítmicamente al tempo del deck activo.</td>
+        </tr>
+        <tr>
+          <td><strong>Track Activo (Now Playing)</strong></td>
+          <td>Muestra el título, artista, BPM base, tonalidad Camelot y género.</td>
+          <td>Se actualiza automáticamente al soltar el fader en Serato.</td>
+        </tr>
+        <tr>
+          <td><strong>Lista de Recomendaciones</strong></td>
+          <td>Muestra las 3 a 5 mejores opciones ordenadas por Score de IA.</td>
+          <td>Muestra el pitch exacto requerido (+1.2%, -0.8%, etc.).</td>
+        </tr>
+        <tr>
+          <td><strong>Selector de Modos</strong></td>
+          <td>Cambia la agresividad y el criterio armónico del algoritmo.</td>
+          <td>Auto, Estricto, Monitor, Arriba y Ultra IA.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Los 4 Modos de Mezcla Explicados:</h3>
+    <div class="mode-grid no-break">
+      <div class="mode-card">
+        <div class="mode-header">
+          <strong>Modo Auto</strong>
+          <span class="mode-badge badge-auto">Continuidad</span>
+        </div>
+        <p>Prioriza la coherencia del set. Busca canciones del mismo género y carpeta con transiciones armónicas suaves (mismo Camelot o vecinos inmediatos).</p>
+      </div>
+
+      <div class="mode-card">
+        <div class="mode-header">
+          <strong>Modo Estricto</strong>
+          <span class="mode-badge badge-strict">Carpeta Crate</span>
+        </div>
+        <p>Restringe las sugerencias únicamente a las canciones que pertenecen al Crate o subcarpeta que tienes abierta en Serato. Ideal para sets temáticos.</p>
+      </div>
+
+      <div class="mode-card">
+        <div class="mode-header">
+          <strong>Modo Monitor</strong>
+          <span class="mode-badge badge-monitor">Pasivo</span>
+        </div>
+        <p>Modo silencioso. No fuerza sugerencias pero registra en segundo plano cada transición y tiempo de mezcla para el reporte final del show.</p>
+      </div>
+
+      <div class="mode-card">
+        <div class="mode-header">
+          <strong>Modo Arriba</strong>
+          <span class="mode-badge badge-up">Energía +</span>
+        </div>
+        <p>Algoritmo agresivo para subir la energía de la pista. Busca temas con modulación ascendente (+1A/+2 Camelot o +2 a +4 BPM acelerado).</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SALTO DE PÁGINA -->
+  <div class="page-break"></div>
+
+  <!-- SECCIÓN 3: MOTOR ARMÓNICO & LIVE PITCH -->
+  <section class="no-break">
+    <h2>3. Motor Armónico Camelot y Algoritmo Live Pitch®</h2>
+    <p>
+      TrackAI utiliza la rueda armónica <strong>Camelot System</strong> combinada con un motor de modulación adaptativo.
+    </p>
+
+    <table class="no-break">
+      <thead>
+        <tr>
+          <th>Tipo de Transición</th>
+          <th>Movimiento Camelot</th>
+          <th>Efecto Psicoacústico en la Pista</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Mezcla Perfecta</strong></td>
+          <td>Mismo código (ej. 8A &rarr; 8A)</td>
+          <td>Continuidad armónica total, mashup natural sin disonancia.</td>
+        </tr>
+        <tr>
+          <td><strong>Transición Suave</strong></td>
+          <td>±1 Código (ej. 8A &rarr; 9A o 7A)</td>
+          <td>Cambio sutil de color manteniendo fluidez melódica.</td>
+        </tr>
+        <tr>
+          <td><strong>Modulación Relativa</strong></td>
+          <td>A &harr; B (ej. 8A &rarr; 8B)</td>
+          <td>Cambio de tonalidad Menor a Mayor o viceversa.</td>
+        </tr>
+        <tr>
+          <td><strong>Salto de Energía (+1)</strong></td>
+          <td>+7 Códigos / Quinta ascendente</td>
+          <td>Sensación de clímax y euforia en el drop.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout info no-break">
+      <strong>Live Pitch® — Autoaprendizaje de tu estilo:</strong>
+      Cada vez que mezclas dos pistas con éxito y mantienes la reproducción durante más de 45 segundos, TrackAI guarda la relación en su base de datos local (<code>brain.js</code>). Cuando vuelvas a tocar esa pista inicial en shows futuros, TrackAI recordará qué funcionó mejor y te sugerirá el pitch exacto al que hiciste el empate.
+    </div>
+  </section>
+
+  <!-- SECCIÓN 4: REGLAS DE CARGA AL PLATO -->
+  <section class="no-break">
+    <h2>4. Carga al Plato (Deck Load Protocol)</h2>
+    <p>
+      La carga automatizada de canciones al plato requiere respetar las secuencias de teclado nativas del sistema operativo:
+    </p>
+
+    <div class="callout warning no-break">
+      <strong>⚠️ Regla de Oro en Windows (PowerShell):</strong>
+      NUNCA se debe enviar la tecla <code>ESC</code> durante la secuencia de búsqueda de Serato en Windows. Al presionar <code>ESC</code>, Serato cierra el buscador y la siguiente combinación <code>Ctrl+A</code> seleccionaría todas las pistas de la biblioteca en lugar del texto del buscador.
+    </div>
+
+    <h3>Secuencia de Automatización:</h3>
+    <ol>
+      <li><strong>Enfoque de Ventana:</strong> Se activa Serato DJ Pro a primer plano mediante <code>SetForegroundWindow</code> (Windows) o <code>System Events</code> (macOS).</li>
+      <li><strong>Limpieza de Buscador:</strong> <code>Ctrl+F</code> &rarr; <code>Ctrl+A</code> &rarr; <code>Backspace</code> &rarr; Escribe el nombre sanitizado de la pista.</li>
+      <li><strong>Selección y Asignación:</strong> <code>Tab</code> para bajar al resultado &rarr; <code>Shift + Flecha Izquierda</code> (Carga a Deck 1) o <code>Shift + Flecha Derecha</code> (Carga a Deck 2).</li>
+    </ol>
+  </section>
+
+  <!-- SALTO DE PÁGINA -->
+  <div class="page-break"></div>
+
+  <!-- SECCIÓN 5: LICENCIAS Y CIERRE DE SESIÓN -->
+  <section class="no-break">
+    <h2>5. Modelos de Licencia y Reporte de Sesión</h2>
+
+    <table class="no-break">
+      <thead>
+        <tr>
+          <th>Característica</th>
+          <th>Versión GRATIS (Guest)</th>
+          <th>PRO De por Vida (Edición Fundador)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Cargas al plato</strong></td>
+          <td>30 cargas automáticas por día</td>
+          <td><strong>Ilimitadas</strong> de por vida</td>
+        </tr>
+        <tr>
+          <td><strong>Live Pitch IA</strong></td>
+          <td>Modo básico de sugerencias</td>
+          <td><strong>Autoaprendizaje completo activado</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Reportes de Set</strong></td>
+          <td>Resumen estándar al cerrar</td>
+          <td><strong>Métricas de energía + exportación</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Dispositivos</strong></td>
+          <td>1 equipo</td>
+          <td>1 equipo (Mac o Windows) con reset</td>
+        </tr>
+        <tr>
+          <td><strong>Costo</strong></td>
+          <td>$0 USD (Sin tarjeta)</td>
+          <td><strong>$39 USD (Pago único permanente v2.x)</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Reporte de Cierre de Set (Closing Window):</h3>
+    <p>
+      Al finalizar tu presentación y cerrar TrackAI, se despliega automáticamente la ventana de estadísticas donde podrás visualizar:
+    </p>
+    <ul>
+      <li>Duración total del set y conteo total de transiciones ejecutadas.</li>
+      <li>Histograma de BPMs dominantes a lo largo de la noche.</li>
+      <li>Gráfica de fluctuación de tonalidades armónicas Camelot.</li>
+      <li>Nuevas conexiones aprendidas por la IA para tus próximos eventos.</li>
+    </ul>
+  </section>
+
+  <!-- PIE DE DOCUMENTO -->
+  <footer style="margin-top: 50px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 11px; color: var(--text-muted); display: flex; justify-content: space-between; align-items: center;" class="no-break">
+    <span>TrackAI v2.3.2 · Documento de Operación Oficial</span>
+    <span>Soporte: contacto@tusitioya.cl</span>
+    <span>© 2026 TuSitioYa.cl · DJ Vlex</span>
+  </footer>
+
+</div>
+
+</body>
+</html>
