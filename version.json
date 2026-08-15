@@ -1,7 +1,7 @@
 {
-  "version": "2.3.2",
-  "url_mac": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.3.2/TrackAI-2.3.2-arm64.dmg",
-  "url_win": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.3.2/TrackAI-2.3.2-x64.exe",
-  "url": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.3.2/TrackAI-2.3.2-x64.exe",
-  "notes": "🚀 v2.3.2: Layout horizontal simétrico perfecto, motor Live Pitch® con sintonía de cerebro en vivo y simulador interactivo."
+  "version": "2.3.3",
+  "url_mac": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.3.3/TrackAI-2.3.3-arm64.dmg",
+  "url_win": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.3.3/TrackAI-2.3.3-x64.exe",
+  "url": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.3.3/TrackAI-2.3.3-x64.exe",
+  "notes": "🚀 v2.3.3: Modo Híbrido Streaming para TIDAL/SoundCloud, Smart Clipboard Fallback anti-fricción en macOS y blindaje de carga en Windows."
 }
