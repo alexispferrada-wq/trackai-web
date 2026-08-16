@@ -1,7 +1,7 @@
 {
-  "version": "2.4.0",
-  "url_mac": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.4.0/TrackAI-2.4.0-arm64.dmg",
-  "url_win": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.4.0/TrackAI-2.4.0-x64.exe",
-  "url": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.4.0/TrackAI-2.4.0-x64.exe",
-  "notes": "🚀 v2.4.0: Copiloto Universal Multi-DJ con soporte completo y en vivo para Serato DJ y Virtual DJ en macOS y Windows."
+  "version": "2.4.1",
+  "url_mac": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.4.1/TrackAI-2.4.1-arm64.dmg",
+  "url_win": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.4.1/TrackAI-2.4.1-x64.exe",
+  "url": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.4.1/TrackAI-2.4.1-x64.exe",
+  "notes": "🚀 v2.4.1: Pase Fiesta 24 Horas ($1 USD), soporte refinado para Virtual DJ & Serato en Windows 10/11 y macOS con telemetría en vivo."
 }
