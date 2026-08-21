@@ -1,0 +1,8 @@
+{
+  "version": "2.5.2",
+  "url_mac": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.5.2/TrackAI-2.5.2-arm64.dmg",
+  "url_mac_intel": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.5.2/TrackAI-2.5.2-x64.dmg",
+  "url_win": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.5.2/TrackAI-2.5.2-x64.exe",
+  "url": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.5.2/TrackAI-2.5.2-x64.exe",
+  "notes": "🚀 v2.5.2: Motor armónico de alta fidelidad, compatibilidad nativa con Serato DJ (3.x y 4.x), Virtual DJ y Rekordbox, lectura sombra en memoria RAM y soporte universal macOS Apple Silicon/Intel y Windows 10/11."
+}
