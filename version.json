@@ -1,7 +1,8 @@
 {
-  "version": "2.4.4",
-  "url_mac": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.4.4/TrackAI-2.4.4-arm64.dmg",
-  "url_win": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.4.4/TrackAI-2.4.4-x64.exe",
-  "url": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.4.4/TrackAI-2.4.4-x64.exe",
-  "notes": "🚀 v2.4.4: Estabilidad y sincronización ultrarrápida para Virtual DJ y Serato DJ en Windows 10/11 y macOS con transferencia precisa a los platos y atajos de teclado completos."
+  "version": "2.5.2",
+  "url_mac": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.5.2/TrackAI-2.5.2-arm64.dmg",
+  "url_mac_intel": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.5.2/TrackAI-2.5.2-x64.dmg",
+  "url_win": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.5.2/TrackAI-2.5.2-x64.exe",
+  "url": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.5.2/TrackAI-2.5.2-x64.exe",
+  "notes": "🚀 v2.5.2: REKORDBOX YA DISPONIBLE + motor armónico de alta fidelidad, Serato DJ 3.x/4.x y Virtual DJ nativos, lectura sombra en RAM (<0.1ms), Live Pitch® Neural mejorado y soporte universal macOS Apple Silicon/Intel y Windows 10/11. Actualización gratis — tu llave PRO sigue funcionando igual."
 }
