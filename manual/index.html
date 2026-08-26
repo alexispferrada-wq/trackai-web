@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/x-icon" href="/favicon-trackai.ico" />
+<link rel="icon" type="image/png" sizes="64x64" href="/favicon-trackai.png" />
+<title>Manual Oficial de Operación — TrackAI v2.5.3 (Copiloto Serato DJ, Virtual DJ & Rekordbox)</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700;800&family=Inter:wght@400;500;600;700;800;900&family=Fira+Code:wght@500;700&family=Archivo+Black&display=swap');
+
+  :root {
+    --primary: #0088c4;
+    --primary-dark: #005f8a;
+    --accent: #10b981;
+    --accent-glow: #00ff66;
+    --vdj-purple: #8b5cf6;
+    --gold: #f59e0b;
+    --text: #0f172a;
+    --text-muted: #475569;
+    --bg: #ffffff;
+    --bg-alt: #f8fafc;
+    --border: #e2e8f0;
+    --border-dark: #cbd5e1;
+    --code-bg: #f1f5f9;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: var(--text);
+    background: #090d16;
+    line-height: 1.55;
+    font-size: 13px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .action-bar {
+    position: sticky;
+    top: 0;
+    background: #090d16;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    color: #fff;
+    padding: 12px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    z-index: 1000;
+  }
+
+  .action-bar .brand {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 800;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .action-bar .brand span { color: #38bdf8; }
+
+  .print-btn {
+    background: linear-gradient(135deg, #00ff66, #00b8e8);
+    color: #03101b;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 999px;
+    font-weight: 900;
+    font-size: 12.5px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 4px 12px rgba(0,255,102,0.3);
+    transition: all 0.2s ease;
+  }
+
+  .print-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(0,255,102,0.45);
+  }
+
+  .manual-container {
+    max-width: 900px;
+    margin: 24px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .page-sheet {
+    background: #fff;
+    padding: 48px 56px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+    position: relative;
+    min-height: 1060px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1.5px solid var(--border);
+    padding-bottom: 10px;
+    margin-bottom: 22px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+
+  .page-header .doc-title {
+    color: var(--primary-dark);
+    font-weight: 800;
+  }
+
+  .page-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1.5px solid var(--border);
+    padding-top: 10px;
+    margin-top: 24px;
+    font-size: 10.5px;
+    color: var(--text-muted);
+  }
+
+  .page-body {
+    flex: 1;
+  }
+
+  /* Cover Styles */
+  .cover-header {
+    text-align: center;
+    padding: 20px 0 25px;
+    border-bottom: 2px solid var(--primary);
+    margin-bottom: 25px;
+  }
+
+  .cover-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(0,136,196,0.1);
+    border: 1px solid rgba(0,136,196,0.3);
+    color: var(--primary-dark);
+    padding: 4px 14px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 14px;
+  }
+
+  .cover-title {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 32px;
+    line-height: 1.15;
+    color: #0f172a;
+    margin-bottom: 10px;
+    letter-spacing: -1px;
+  }
+
+  .cover-title span { color: var(--primary); }
+
+  .cover-subtitle {
+    font-size: 14.5px;
+    color: var(--text-muted);
+    max-width: 680px;
+    margin: 0 auto 20px;
+    line-height: 1.5;
+  }
+
+  .meta-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    padding: 14px;
+    border-radius: 8px;
+    font-size: 11.5px;
+    text-align: left;
+  }
+
+  .meta-item strong {
+    display: block;
+    color: #0f172a;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 19px;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 18px 0 12px;
+    padding-bottom: 6px;
+    border-bottom: 1.5px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  h3 {
+    font-size: 13.5px;
+    font-weight: 800;
+    color: #1e293b;
+    margin: 14px 0 6px;
+  }
+
+  p { margin-bottom: 10px; color: #334155; }
+  ul, ol { margin-left: 18px; margin-bottom: 12px; color: #334155; }
+  li { margin-bottom: 4px; }
+
+  .callout {
+    background: #f0fdf4;
+    border-left: 4px solid var(--accent);
+    padding: 12px 16px;
+    border-radius: 0 8px 8px 0;
+    margin: 14px 0;
+    font-size: 12px;
+  }
+
+  .callout.warning {
+    background: #fffbeb;
+    border-left-color: var(--gold);
+  }
+
+  .callout.purple {
+    background: #faf5ff;
+    border-left-color: var(--vdj-purple);
+  }
+
+  .callout.info {
+    background: #eff6ff;
+    border-left-color: var(--primary);
+  }
+
+  .callout strong { display: block; margin-bottom: 2px; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 11.5px;
+  }
+
+  th, td {
+    padding: 8px 10px;
+    text-align: left;
+    border: 1px solid var(--border);
+  }
+
+  th {
+    background: #f1f5f9;
+    color: #0f172a;
+    font-weight: 800;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  tr:nth-child(even) { background: #f8fafc; }
+
+  .diagram {
+    background: #0f172a;
+    color: #e2e8f0;
+    font-family: 'Fira Code', monospace;
+    font-size: 11px;
+    padding: 14px;
+    border-radius: 8px;
+    margin: 12px 0;
+    line-height: 1.4;
+    overflow-x: auto;
+    white-space: pre;
+    border: 1px solid #334155;
+  }
+
+  .kbd {
+    display: inline-block;
+    background: #0f172a;
+    color: #38bdf8;
+    font-family: 'Fira Code', monospace;
+    font-weight: 800;
+    font-size: 11px;
+    padding: 1px 6px;
+    border-radius: 4px;
+    border: 1px solid #334155;
+  }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  .card-box {
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px;
+  }
+
+  .camelot-circle {
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 22px;
+    font-weight: 800;
+    font-size: 10px;
+    color: #fff;
+    margin-right: 4px;
+  }
+
+  @media print {
+    body { background: #fff !important; font-size: 10.5pt; color: #000 !important; }
+    .action-bar { display: none !important; }
+    .manual-container { margin: 0 !important; max-width: 100% !important; gap: 0 !important; }
+    .page-sheet {
+      margin: 0 !important;
+      padding: 30px 40px !important;
+      box-shadow: none !important;
+      border-radius: 0 !important;
+      page-break-after: always !important;
+      break-after: page !important;
+      min-height: auto !important;
+      height: 100vh !important;
+    }
+    .page-sheet:last-child {
+      page-break-after: auto !important;
+      break-after: auto !important;
+    }
+    .diagram {
+      background: #f8fafc !important;
+      color: #0f172a !important;
+      border: 1px solid #cbd5e0 !important;
+    }
+    .kbd {
+      background: #e2e8f0 !important;
+      color: #0f172a !important;
+      border: 1px solid #94a3b8 !important;
+    }
+  }
+
+  @page {
+    size: letter portrait;
+    margin: 1.2cm 1cm 1.2cm 1cm;
+  }
+</style>
+</head>
+<body>
+
+<div class="action-bar">
+  <div class="brand">
+    🎧 <span>TrackAI v2.5.3</span> · Manual Oficial de Cabina (7 Páginas)
+  </div>
+  <button class="print-btn" onclick="window.print()">
+    🖨️ Imprimir / Guardar en PDF
+  </button>
+</div>
+
+<div class="manual-container">
+
+  <!-- ==================== PÁGINA 1: PORTADA Y VISIÓN GENERAL ==================== -->
+  <div class="page-sheet">
+    <div class="page-header">
+      <span class="doc-title">TrackAI v2.5.3 · Manual Oficial</span>
+      <span>Página 1 de 7</span>
+    </div>
+
+    <div class="page-body">
+      <header class="cover-header">
+        <div class="cover-badge">Manual de Operación de Cabina · v2.5.3 Oficial</div>
+        <h1 class="cover-title">TrackAI <span>v2.5.3</span><br>Copiloto Universal de Mezcla en Vivo</h1>
+        <p class="cover-subtitle">
+          Guía integral de ingeniería y flujo de trabajo en cabina para Serato DJ (Pro/Lite 3.x/4.x), Virtual DJ y Rekordbox. Motor armónico Camelot con Live Pitch® Neural, lectura sombra en RAM y carga instantánea a los platos A/B.
+        </p>
+
+        <div class="meta-grid">
+          <div class="meta-item">
+            <strong>Versión Canónica</strong>
+            <span>v2.5.3 (Compilación Oficial)</span>
+          </div>
+          <div class="meta-item">
+            <strong>Softwares DJ</strong>
+            <span>Serato · Virtual DJ · Rekordbox</span>
+          </div>
+          <div class="meta-item">
+            <strong>Sistemas Soportados</strong>
+            <span>macOS (Apple Silicon/Intel) · Win 10/11</span>
+          </div>
+          <div class="meta-item">
+            <strong>Latencia de Lectura</strong>
+            <span>&lt; 0.1 ms (Cero Bloqueos)</span>
+          </div>
+        </div>
+      </header>
+
+      <h2>1. Visión General y Filosofía de Diseño</h2>
+      <p>
+        <strong>TrackAI v2.5.3</strong> es un copiloto de inteligencia armónica y predicción musical en tiempo real diseñado específicamente para DJs profesionales. Su objetivo principal es erradicar la <em>fatiga mental de búsqueda de canciones</em> durante sesiones en vivo, garantizando transiciones limpias y fluidas.
+      </p>
+
+      <div class="diagram">+------------------------------------------------------------------------+
+|        ARQUITECTURA MULTI-SOFTWARE EN VIVO (TRACKAI v2.5.3)            |
++------------------------------------------------------------------------+
+ [ Serato DJ Pro/Lite ]  [ Virtual DJ ]  [ Rekordbox ]
+            │                  │               │
+            ▼                  ▼               ▼
+ ┌──────────────────────────────────────────────────────────────────────┐
+ │ MOTOR DE DETECCIÓN AUTOMÁTICA EN CALIENTE (Zero-Lag Shadow Sync)     │
+ └──────────────────────────────────────────────────────────────────────┘
+                               │
+            ┌──────────────────┴──────────────────┐
+            ▼                                     ▼
+ ┌───────────────────────────┐         ┌───────────────────────────┐
+ │ MOTOR ARMÓNICO CAMELOT    │         │ CEREBRO IA (Brain.js)     │
+ │ • Key Match & Live Pitch  │         │ • Memoria de Transiciones │
+ │ • Compatibilidad de BPM   │         │ • Anti-repetición 45 días │
+ └───────────────────────────┘         └───────────────────────────┘
+                               │
+                               ▼
+ ┌──────────────────────────────────────────────────────────────────────┐
+ │ INYECCIÓN EN 1-CLIC AL PLATO A / PLATO B (AppleScript / Win32 PS)    │
+ └──────────────────────────────────────────────────────────────────────┘</div>
+
+      <div class="callout info">
+        <strong>🔒 Privacidad y Rendimiento 100% Offline-First:</strong>
+        TrackAI nunca sube tus archivos de audio ni invade tu privacidad. Analiza exclusivamente las bases de datos de metadatos locales de tu software en memoria RAM con verificación criptográfica instantánea.
+      </div>
+    </div>
+
+    <div class="page-footer">
+      <span>TrackAI v2.5.3 · Manual de Usuario</span>
+      <span>TuSitioYa.cl · Ingeniería de Audio</span>
+      <span>Página 1</span>
+    </div>
+  </div>
+
+
+  <!-- ==================== PÁGINA 2: SERATO DJ ==================== -->
+  <div class="page-sheet">
+    <div class="page-header">
+      <span class="doc-title">TrackAI v2.5.3 · Integración Serato DJ</span>
+      <span>Página 2 de 7</span>
+    </div>
+
+    <div class="page-body">
+      <h2>2. Conexión en Tiempo Real con Serato DJ (Pro & Lite)</h2>
+      <p>
+        TrackAI incluye un controlador nativo de alto rendimiento para Serato DJ 3.x y 4.x. Funciona leyendo el historial activo y la biblioteca general en modo réplica sin interferir con el motor de reproducción de Serato.
+      </p>
+
+      <h3>2.1. Tecnología de Lectura Sombra (Shadow DB Sync)</h3>
+      <p>
+        Para evitar colisiones de base de datos tipo <code>database is locked</code> mientras Serato escribe el historial en vivo, TrackAI utiliza una arquitectura de copia en sombra en memoria volátil:
+      </p>
+      <ul>
+        <li><strong>Ruta Original Serato:</strong> <code>~/Library/Application Support/Serato/Library/master.sqlite</code> (macOS) o <code>%LOCALAPPDATA%\Serato\Library\master.sqlite</code> (Windows).</li>
+        <li><strong>Copia Sombra en RAM:</strong> <code>/tmp/trackai-shadow/master.sqlite</code> sincronizada periódicamente y durante el arranque.</li>
+        <li><strong>Soporte WAL (Write-Ahead Logging):</strong> TrackAI procesa automáticamente los archivos <code>master.sqlite-wal</code> y <code>master.sqlite-shm</code> ejecutando checkpoints de truncamiento transparentes.</li>
+      </ul>
+
+      <div class="callout">
+        <strong>⚡ Detección de Now Playing en 4 Platos:</strong>
+        TrackAI consulta la tabla <code>session</code> y <code>asset</code> de Serato cada 1.5 segundos. Detecta al instante cuál pista acaba de entrar a los platos 1, 2, 3 o 4, extrayendo su BPM, Tonalidad Camelot, Artista, Nombre y Crate de origen.
+      </div>
+
+      <h3>2.2. Esquema de Extracción de Metadatos de Serato</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Campo Serato</th>
+            <th>Mapeo TrackAI</th>
+            <th>Propósito en el Motor</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>asset.bpm</code></td>
+            <td><code>track.bpm</code></td>
+            <td>Cálculo de tolerancia de tempo (±3%, ±6%, saltos de ritmo).</td>
+          </tr>
+          <tr>
+            <td><code>asset.key</code></td>
+            <td><code>track.key / camelot</code></td>
+            <td>Normalización a notación Camelot (1A-12B) para armonía.</td>
+          </tr>
+          <tr>
+            <td><code>asset.genre / crate</code></td>
+            <td><code>track.genre</code></td>
+            <td>Agrupación contextual de continuidad de estilo.</td>
+          </tr>
+          <tr>
+            <td><code>session.play_time</code></td>
+            <td><code>track.playCount</code></td>
+            <td>Penalización inteligente de temas sobre-tocados.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>2.3. Checklist para Serato DJ</h3>
+      <ol>
+        <li>Abre Serato DJ Pro o Lite y asegúrate de que tu biblioteca esté analizada (BPM y Key visibles).</li>
+        <li>Abre TrackAI: el indicador superior se iluminará en verde: <span class="kbd">SERATO DJ ACTIVO</span>.</li>
+        <li>Arrastra una canción al plato en Serato: en menos de 0.1s TrackAI te mostrará las 5 mejores opciones recomendadas.</li>
+      </ol>
+    </div>
+
+    <div class="page-footer">
+      <span>TrackAI v2.5.3 · Manual de Usuario</span>
+      <span>Conexión Serato DJ</span>
+      <span>Página 2</span>
+    </div>
+  </div>
+
+
+  <!-- ==================== PÁGINA 3: VIRTUAL DJ & REKORDBOX ==================== -->
+  <div class="page-sheet">
+    <div class="page-header">
+      <span class="doc-title">TrackAI v2.5.3 · Multi-Software (VDJ & Rekordbox)</span>
+      <span>Página 3 de 7</span>
+    </div>
+
+    <div class="page-body">
+      <h2>3. Integración Multi-Software (Virtual DJ y Rekordbox)</h2>
+      <p>
+        TrackAI no está atado a una sola marca. Si trabajas con Virtual DJ o Rekordbox, la app detecta automáticamente el proceso en ejecución y conmuta el motor de análisis en tiempo real.
+      </p>
+
+      <div class="grid-2">
+        <div class="card-box">
+          <h3 style="color:var(--vdj-purple); margin-top:0;">🎛️ Virtual DJ 2021 / 2023 / 2024</h3>
+          <p style="font-size:12px;">
+            Lectura ultrarrápida del archivo central <code>database.xml</code> ubicado en Documentos de VirtualDJ.
+          </p>
+          <ul style="font-size:11.5px; margin-left:14px;">
+            <li><strong>Parser SAX Zero-Allocation:</strong> Lee bibliotecas de más de 50.000 canciones sin saturar la memoria RAM.</li>
+            <li><strong>Detección de Decks A y B:</strong> Monitorea cambios de etiquetas <code>&lt;Song&gt;</code> y <code>&lt;Tags Flag="Played"&gt;</code>.</li>
+            <li><strong>Sincronización de Tags:</strong> Lectura de BPM decimales y notas musicales (Camelot, OpenKey o Clásicas).</li>
+          </ul>
+        </div>
+
+        <div class="card-box">
+          <h3 style="color:var(--primary); margin-top:0;">📀 Rekordbox (v6 y v7)</h3>
+          <p style="font-size:12px;">
+            Sincronización híbrida de colección local mediante exportación XML o base de datos SQLite de Pioneer DJ.
+          </p>
+          <ul style="font-size:11.5px; margin-left:14px;">
+            <li><strong>Análisis Armónico Nativo:</strong> Reconoce el cálculo de tono dinámico y grid de Rekordbox.</li>
+            <li><strong>Historial de Sesión en Vivo:</strong> Captura la lista de reproducción histórica <code>HISTORY</code> del set.</li>
+            <li><strong>Carga por Clipboard Focus:</strong> Asistencia rápida por atajo para cargar a la cubierta seleccionada.</li>
+          </ul>
+        </div>
+      </div>
+
+      <h3>3.1. Conmutación en Caliente (Auto-Detect Hot Switch)</h3>
+      <p>
+        ¿Tienes instalado Serato y Virtual DJ en la misma computadora? No necesitas configurar nada ni reiniciar la aplicación:
+      </p>
+      <div class="diagram">1. Si Serato está abierto ──────────► TrackAI activa el motor master.sqlite
+2. Si cierras Serato y abres VDJ ──► TrackAI conmuta a database.xml en 1.5s
+3. Si ambos están abiertos ────────► Prioriza el software que tenga audio activo</div>
+
+      <div class="callout purple">
+        <strong>💡 Modo Híbrido Streaming (TIDAL, SoundCloud, Beatport):</strong>
+        Si reproduces pistas desde servicios de streaming en Serato o Virtual DJ, TrackAI analiza la pista en reproducción actual y busca los matches armónicos en toda tu biblioteca local offline.
+      </div>
+    </div>
+
+    <div class="page-footer">
+      <span>TrackAI v2.5.3 · Manual de Usuario</span>
+      <span>Virtual DJ & Rekordbox</span>
+      <span>Página 3</span>
+    </div>
+  </div>
+
+
+  <!-- ==================== PÁGINA 4: MOTOR ARMÓNICO CAMELOT ==================== -->
+  <div class="page-sheet">
+    <div class="page-header">
+      <span class="doc-title">TrackAI v2.5.3 · Motor Armónico Camelot</span>
+      <span>Página 4 de 7</span>
+    </div>
+
+    <div class="page-body">
+      <h2>4. El Motor Armónico Camelot y Algoritmo de Mezcla</h2>
+      <p>
+        El corazón de TrackAI es un motor de armonía matemática basado en la <strong>Rueda Camelot</strong>. Cada tonalidad musical se asigna a un número del 1 al 12 y una letra (<strong>A</strong> para tonalidades Menores, <strong>B</strong> para tonalidades Mayores).
+      </p>
+
+      <h3>4.1. Reglas de Transición Armónica y Puntuación</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Tipo de Salto</th>
+            <th>Ejemplo de Tonalidad</th>
+            <th>Efecto Psicoacústico en la Pista</th>
+            <th>Score Base</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Match Directo (Identidad)</strong></td>
+            <td><code>8A ➔ 8A</code> (La menor)</td>
+            <td>Mezcla perfecta, fusión total de frecuencias e intros.</td>
+            <td><strong style="color:var(--accent);">100 pts</strong></td>
+          </tr>
+          <tr>
+            <td><strong>Energy Boost (+1 Hora)</strong></td>
+            <td><code>8A ➔ 9A</code> (Mi menor)</td>
+            <td>Eleva sutilmente la energía y emoción del público.</td>
+            <td><strong>90 pts</strong></td>
+          </tr>
+          <tr>
+            <td><strong>Descompresión (-1 Hora)</strong></td>
+            <td><code>8A ➔ 7A</code> (Re menor)</td>
+            <td>Baja la tensión suavemente; ideal para transicionar a coros.</td>
+            <td><strong>85 pts</strong></td>
+          </tr>
+          <tr>
+            <td><strong>Cambio Relativo (A ⟷ B)</strong></td>
+            <td><code>8A ➔ 8B</code> (Do mayor)</td>
+            <td>Mantiene la misma escala raíz pero cambia de oscuro a brillante.</td>
+            <td><strong>80 pts</strong></td>
+          </tr>
+          <tr>
+            <td><strong>Energy Jump (+2 Horas)</strong></td>
+            <td><code>8A ➔ 10A</code> (Si menor)</td>
+            <td>Impacto eufórico; salto armónico potente para momentos clímax.</td>
+            <td><strong>75 pts</strong></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>4.2. Live Pitch® Neural (Compensación Armónica de Pitch)</h3>
+      <p>
+        Cuando alteras la velocidad de un track en el pitch fader de tu consola, la tonalidad original puede subir o bajar si no tienes activado el <em>Master Tempo / Key Lock</em>.
+      </p>
+      <div class="callout">
+        <strong>🧠 Algoritmo de Compensación de BPM:</strong>
+        TrackAI calcula la compatibilidad armónica ponderada por la diferencia de BPM:
+        $$Score_{Total} = Score_{Camelot} \times \left(1 - \frac{|\Delta BPM|}{BPM_{Max}}\right) + Bonus_{Crate}$$
+        Si una pista requiere un ajuste menor al 3%, TrackAI le otorgará la máxima prioridad en el listado.
+      </div>
+    </div>
+
+    <div class="page-footer">
+      <span>TrackAI v2.5.3 · Manual de Usuario</span>
+      <span>Motor Armónico Camelot</span>
+      <span>Página 4</span>
+    </div>
+  </div>
+
+
+  <!-- ==================== PÁGINA 5: MODOS Y CEREBRO IA ==================== -->
+  <div class="page-sheet">
+    <div class="page-header">
+      <span class="doc-title">TrackAI v2.5.3 · Modos y Cerebro IA</span>
+      <span>Página 5 de 7</span>
+    </div>
+
+    <div class="page-body">
+      <h2>5. Los Modos de Recomendación y el Cerebro IA (Brain.js)</h2>
+      <p>
+        TrackAI ofrece tres modos de recomendación dinámica en cabina para responder exactamente a lo que el público necesita en cada etapa del set.
+      </p>
+
+      <div class="grid-2">
+        <div class="card-box">
+          <h3 style="color:var(--accent); margin-top:0;">📚 Modo Continuidad (Misma Carpeta)</h3>
+          <p style="font-size:12px;">
+            Ideal para mantener la vibra actual (ej. sesión de Tech House, Reggaeton Old School, Afrobeat).
+          </p>
+          <ul style="font-size:11.5px; margin-left:14px;">
+            <li>Filtra estrictamente dentro del mismo Crate, carpeta o género.</li>
+            <li>Tolerancia estricta de BPM: ±4%.</li>
+            <li>Garantiza que el set suene cohesivo y consistente.</li>
+          </ul>
+        </div>
+
+        <div class="card-box">
+          <h3 style="color:var(--gold); margin-top:0;">⚡ Modo Cambio de Ritmo / Energía</h3>
+          <p style="font-size:12px;">
+            Diseñado para girar la noche o transicionar entre géneros musicales diferentes.
+          </p>
+          <ul style="font-size:11.5px; margin-left:14px;">
+            <li>Permite saltos de tempo calculados (ej. de 95 BPM a 128 BPM mediante mezclas puente).</li>
+            <li>Explora Crates secundarios con alta afinidad armónica.</li>
+            <li>Evita baches de sonido o silencios abruptos.</li>
+          </ul>
+        </div>
+      </div>
+
+      <h3 style="margin-top:16px;">5.1. El Cerebro IA (Memoria Colectiva & Red de Transiciones)</h3>
+      <p>
+        El motor <code>brain.js</code> de TrackAI actúa como una memoria artificial de mezclas que evoluciona contigo:
+      </p>
+      <ul>
+        <li><strong>Memoria de Éxito:</strong> Si en un show mezclas la Canción A seguida de la Canción B y la dejas sonar más de 90 segundos, el Cerebro IA registra la conexión como una <em>transición dorada</em> y la priorizará en tus próximas presentaciones.</li>
+        <li><strong>Regla Anti-Repetición (45 Días):</strong> Para evitar que toques mecánicamente la misma secuencia cada fin de semana, TrackAI aplica un factor de enfriamiento temporal a las parejas de canciones ejecutadas recientemente.</li>
+        <li><strong>Rescate de Gemas Olvidadas:</strong> Pistas de tu biblioteca con coincidencia armónica perfecta que llevan meses sin sonar reciben un bonus de sugerencia.</li>
+      </ul>
+    </div>
+
+    <div class="page-footer">
+      <span>TrackAI v2.5.3 · Manual de Usuario</span>
+      <span>Cerebro IA & Modos</span>
+      <span>Página 5</span>
+    </div>
+  </div>
+
+
+  <!-- ==================== PÁGINA 6: CARGA AL PLATO Y ATAJOS ==================== -->
+  <div class="page-sheet">
+    <div class="page-header">
+      <span class="doc-title">TrackAI v2.5.3 · Carga al Plato y Atajos</span>
+      <span>Página 6 de 7</span>
+    </div>
+
+    <div class="page-body">
+      <h2>6. Carga Instantánea al Plato (A/B) y Atajos de Teclado</h2>
+      <p>
+        Olvídate de teclear en el buscador de Serato o arrastrar con el mouse en medio del show. Con TrackAI, cargar cualquier recomendación toma exactamente <strong>un toque de teclado</strong>.
+      </p>
+
+      <h3>6.1. Protocolo de Inyección Nativa Multiplataforma</h3>
+      <ul>
+        <li><strong>En macOS:</strong> Utiliza eventos de AppleScript ultrarrápidos con asignación directa al proceso de Serato DJ o Virtual DJ.</li>
+        <li><strong>En Windows (Win32):</strong> Inyección con PowerShell optimizado y <code>SetForegroundWindow</code>. <em>Regla de Oro:</em> Nunca envía la tecla <span class="kbd">ESC</span> (la cual cerraría el buscador y deseleccionaría la biblioteca en Serato).</li>
+        <li><strong>Smart Clipboard Fallback:</strong> Si faltan permisos del sistema operativo, TrackAI copia automáticamente el nombre exacto de la pista al portapapeles para que baste con presionar <span class="kbd">Cmd+V</span> o <span class="kbd">Ctrl+V</span>.</li>
+      </ul>
+
+      <h3>6.2. Mapa Completo de Atajos de Cabina</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Atajo de Teclado</th>
+            <th>Acción Inmediata en Cabina</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="kbd">1</span> o <span class="kbd">A</span></td>
+            <td>Cargar la canción seleccionada al <strong>Plato Izquierdo (Deck A / Plato 1)</strong>.</td>
+          </tr>
+          <tr>
+            <td><span class="kbd">2</span> o <span class="kbd">B</span></td>
+            <td>Cargar la canción seleccionada al <strong>Plato Derecho (Deck B / Plato 2)</strong>.</td>
+          </tr>
+          <tr>
+            <td><span class="kbd">↑</span> / <span class="kbd">↓</span> (Flechas)</td>
+            <td>Navegar hacia arriba o abajo entre la lista de recomendaciones.</td>
+          </tr>
+          <tr>
+            <td><span class="kbd">Espacio</span></td>
+            <td>Preescucha rápida o alternar vista de tarjeta expandida.</td>
+          </tr>
+          <tr>
+            <td><span class="kbd">R</span></td>
+            <td><strong>Forzar Refresco:</strong> Relee la biblioteca en disco de inmediato.</td>
+          </tr>
+          <tr>
+            <td><span class="kbd">F</span></td>
+            <td>Poner foco en el buscador asistido de TrackAI.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="page-footer">
+      <span>TrackAI v2.5.3 · Manual de Usuario</span>
+      <span>Carga al Plato & Atajos</span>
+      <span>Página 6</span>
+    </div>
+  </div>
+
+
+  <!-- ==================== PÁGINA 7: LICENCIAMIENTO Y TROUBLESHOOTING ==================== -->
+  <div class="page-sheet">
+    <div class="page-header">
+      <span class="doc-title">TrackAI v2.5.3 · Licencia y Diagnóstico</span>
+      <span>Página 7 de 7</span>
+    </div>
+
+    <div class="page-body">
+      <h2>7. Licenciamiento Offline-First y Resolución de Problemas</h2>
+      
+      <h3>7.1. Sistema de Licencia Criptográfica Local (ECDSA P-256)</h3>
+      <p>
+        TrackAI no depende de servidores externos para tocar en vivo. Tu llave de licencia PRO es un token criptográfico firmado que se valida localmente en memoria RAM en <strong>6 milisegundos</strong>.
+      </p>
+      <ul>
+        <li><strong>Sin Conexión a Internet Requerida:</strong> Puedes tocar en discotecas subterráneas, festivales en zonas rurales o cabinas sin WiFi. TrackAI no se bloqueará ni mostrará pantallas de carga.</li>
+        <li><strong>Revalidación Inteligente:</strong> Solo consulta la red si la licencia expiró o al activar una nueva llave explícitamente.</li>
+      </ul>
+
+      <h3>7.2. Exportación de Sesión y Análisis Web 3D</h3>
+      <p>
+        Al finalizar tu set, TrackAI guarda un reporte estadístico en <code>~/Documents/TrackAI-Sets/</code> con el historial completo de la noche: gráfico de evolución de BPM, tonalidades exploradas y duración de cada mezcla.
+      </p>
+
+      <h3>7.3. Guía de Solución de Problemas (Troubleshooting)</h3>
+      <div class="grid-2">
+        <div class="card-box">
+          <strong style="color:#0284c7;">🍎 Solución en macOS:</strong>
+          <ol style="font-size:11.5px; margin:6px 0 0 14px;">
+            <li>Si aparece "App dañada", ejecuta en Terminal:<br><span class="kbd">xattr -cr /Applications/TrackAI.app</span></li>
+            <li>Concede permisos en <em>Ajustes del Sistema ➔ Privacidad y Seguridad ➔ Accesibilidad & Automatización</em>.</li>
+          </ol>
+        </div>
+
+        <div class="card-box">
+          <strong style="color:var(--gold);">🪟 Solución en Windows:</strong>
+          <ol style="font-size:11.5px; margin:6px 0 0 14px;">
+            <li>Si aparece SmartScreen ("Windows protegió su PC"), haz clic en <em>Más información ➔ Ejecutar de todas formas</em>.</li>
+            <li>Ejecuta TrackAI como usuario normal (no requiere modo Administrador).</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="callout info" style="margin-top:16px;">
+        <strong>🎧 Soporte Técnico y Comunidad DJ:</strong>
+        Para asistencia directa o consultas sobre compatibilidad con tu controladora/consola, escríbenos a <strong>contacto@tusitioya.cl</strong> o ingresa a <a href="https://trackai.tusitioya.cl" style="color:var(--primary); font-weight:700;">trackai.tusitioya.cl</a>.
+      </div>
+    </div>
+
+    <div class="page-footer">
+      <span>TrackAI v2.5.3 · Manual de Usuario</span>
+      <span>Fin del Manual · Edición 2026</span>
+      <span>Página 7</span>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
