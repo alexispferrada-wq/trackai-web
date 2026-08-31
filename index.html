@@ -49,5 +49,294 @@
         } catch (e) {}
       })();
     </script>
-  </body>
+  
+<!-- ========================================================================= -->
+<!-- 💬 WIDGET FLOTANTE DE WHATSAPP BUSINESS 24/7 (TrackAI / Alexis Ferrada)    -->
+<!-- ========================================================================= -->
+
+<div id="ty-whatsapp-widget" class="ty-wa-container">
+  <!-- Ventana de Chat Emergente -->
+  <div id="ty-wa-modal" class="ty-wa-modal">
+    <!-- Header -->
+    <div class="ty-wa-header">
+      <div class="ty-wa-avatar-box">
+        <div class="ty-wa-avatar">🎧</div>
+        <span class="ty-wa-online-badge"></span>
+      </div>
+      <div class="ty-wa-info">
+        <h4>TrackAI · Soporte DJ Oficial</h4>
+        <p>🟢 En línea (Responde en 2 seg)</p>
+      </div>
+      <button class="ty-wa-close-btn" onclick="toggleTyWhatsApp()" aria-label="Cerrar">✕</button>
+    </div>
+
+    <!-- Cuerpo del Chat -->
+    <div class="ty-wa-body">
+      <div class="ty-wa-message">
+        <span class="ty-wa-author">TrackAI Copiloto</span>
+        <p>¡Hola DJ! 👋 ¿Tienes dudas con la instalación o quieres activar tu <strong>Licencia PRO Lifetime</strong> ($40 USD / $38.000 CLP)? Te respondo en 2 segundos.</p>
+        <span class="ty-wa-time" id="ty-wa-current-time"></span>
+      </div>
+
+      <!-- Opciones Rápidas -->
+      <div class="ty-wa-quick-options">
+        <button onclick="sendQuickWhatsApp('Hola, quiero comprar la Licencia PRO Lifetime de TrackAI ($38.000 CLP / $40 USD)')">
+          🎧 Comprar Licencia PRO ($38.000)
+        </button>
+        <button onclick="sendQuickWhatsApp('Hola, me interesa el Plan Anual con el cupón 50OFF')">
+          🏷️ Plan Anual Oferta ($23.000)
+        </button>
+        <button onclick="sendQuickWhatsApp('Hola, tengo una duda técnica sobre Serato / Virtual DJ / Rekordbox')">
+          ❓ Soporte Técnico / Compatibilidad
+        </button>
+      </div>
+    </div>
+
+    <!-- Input Footer -->
+    <div class="ty-wa-footer">
+      <input type="text" id="ty-wa-input" placeholder="Escribe tu consulta DJ aquí..." onkeypress="handleTyWaKey(event)" />
+      <button onclick="submitTyWhatsApp()" aria-label="Enviar">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+          <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Botón Flotante Principal -->
+  <button id="ty-wa-trigger" class="ty-wa-trigger" onclick="toggleTyWhatsApp()" aria-label="Abrir chat de WhatsApp">
+    <span class="ty-wa-badge">1</span>
+    <svg viewBox="0 0 32 32" width="34" height="34" fill="#ffffff">
+      <path d="M16 2C8.268 2 2 8.268 2 16c0 2.808.825 5.424 2.25 7.625L2.1 30.275l6.825-2.125C11.025 29.35 13.438 30 16 30c7.732 0 14-6.268 14-14S23.732 2 16 2zm0 25.625c-2.313 0-4.475-.638-6.338-1.75l-.45-.275-4.2 1.312 1.338-4.087-.3-.475C4.85 20.475 4.2 18.3 4.2 16c0-6.506 5.294-11.8 11.8-11.8 6.506 0 11.8 5.294 11.8 11.8 0 6.506-5.294 11.625-11.8 11.625zm6.463-8.813c-.35-.175-2.075-1.025-2.4-1.137-.325-.125-.563-.175-.8.175-.238.35-.913 1.137-1.125 1.375-.2.238-.412.262-.762.088-.35-.175-1.488-.55-2.837-1.75-1.05-.938-1.763-2.1-1.975-2.45-.2-.35-.025-.538.15-.713.162-.162.35-.412.525-.625.175-.2.238-.35.35-.575.125-.238.062-.438-.025-.612-.1-.175-.8-1.925-1.1-2.637-.287-.7-.575-.6-.8-.612-.2-.012-.438-.012-.675-.012s-.625.088-.95.438c-.325.35-1.25 1.225-1.25 2.988s1.275 3.475 1.45 3.712c.175.238 2.513 3.838 6.088 5.388.85.362 1.513.587 2.038.75.862.275 1.637.238 2.25.15.688-.1 2.075-.85 2.375-1.675.287-.825.287-1.525.2-1.675-.088-.138-.325-.225-.675-.4z"/>
+    </svg>
+  </button>
+</div>
+
+<style>
+  .ty-wa-container {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 999999;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+  .ty-wa-trigger {
+    width: 62px;
+    height: 62px;
+    border-radius: 50%;
+    background: #25D366;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(37, 211, 102, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .ty-wa-trigger:hover {
+    transform: scale(1.08);
+    box-shadow: 0 12px 30px rgba(37, 211, 102, 0.6);
+  }
+  .ty-wa-badge {
+    position: absolute;
+    top: -3px;
+    right: -3px;
+    background: #ff3b30;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 800;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #fff;
+    animation: ty-pulse 2s infinite;
+  }
+  @keyframes ty-pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+    100% { transform: scale(1); }
+  }
+  .ty-wa-modal {
+    display: none;
+    position: absolute;
+    bottom: 80px;
+    right: 0;
+    width: 350px;
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    overflow: hidden;
+    flex-direction: column;
+    animation: ty-fade-in 0.3s ease forwards;
+    border: 1px solid rgba(0,0,0,0.08);
+  }
+  @keyframes ty-fade-in {
+    from { opacity: 0; transform: translateY(20px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .ty-wa-header {
+    background: #075E54;
+    color: #fff;
+    padding: 16px 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .ty-wa-avatar-box { position: relative; }
+  .ty-wa-avatar {
+    width: 44px;
+    height: 44px;
+    background: #128C7E;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+  }
+  .ty-wa-online-badge {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 12px;
+    height: 12px;
+    background: #4ade80;
+    border: 2px solid #075E54;
+    border-radius: 50%;
+  }
+  .ty-wa-info h4 { margin: 0; font-size: 15px; font-weight: 700; color: #fff; }
+  .ty-wa-info p { margin: 3px 0 0 0; font-size: 11px; color: #a7f3d0; }
+  .ty-wa-close-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255,255,255,0.7);
+    font-size: 16px;
+    margin-left: auto;
+    cursor: pointer;
+    padding: 4px;
+  }
+  .ty-wa-close-btn:hover { color: #fff; }
+  .ty-wa-body {
+    background: #e5ddd5;
+    background-image: radial-gradient(rgba(0,0,0,0.06) 1px, transparent 0);
+    background-size: 16px 16px;
+    padding: 18px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-height: 320px;
+    overflow-y: auto;
+  }
+  .ty-wa-message {
+    background: #ffffff;
+    padding: 12px 14px;
+    border-radius: 0 16px 16px 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+    position: relative;
+    max-width: 88%;
+  }
+  .ty-wa-author {
+    font-size: 11px;
+    font-weight: 700;
+    color: #075E54;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .ty-wa-message p { margin: 0; font-size: 13.5px; color: #111827; line-height: 1.45; }
+  .ty-wa-time { font-size: 10px; color: #6b7280; float: right; margin-top: 6px; }
+  .ty-wa-quick-options { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; }
+  .ty-wa-quick-options button {
+    background: #ffffff;
+    border: 1px solid #10b981;
+    color: #065f46;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 8px 12px;
+    border-radius: 12px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s ease;
+  }
+  .ty-wa-quick-options button:hover {
+    background: #ecfdf5;
+    transform: translateX(4px);
+  }
+  .ty-wa-footer {
+    background: #f0f2f5;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .ty-wa-footer input {
+    flex: 1;
+    background: #ffffff;
+    border: 1px solid #d1d5db;
+    padding: 10px 14px;
+    border-radius: 24px;
+    font-size: 13px;
+    outline: none;
+  }
+  .ty-wa-footer input:focus { border-color: #25D366; }
+  .ty-wa-footer button {
+    background: #25D366;
+    border: none;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  .ty-wa-footer button:hover { transform: scale(1.08); }
+  @media (max-width: 480px) {
+    .ty-wa-container { bottom: 16px; right: 16px; }
+    .ty-wa-modal { width: calc(100vw - 32px); right: 0; bottom: 74px; }
+  }
+</style>
+
+<script>
+  const TY_WA_PHONE = '56992818104';
+  function toggleTyWhatsApp() {
+    const modal = document.getElementById('ty-wa-modal');
+    if (!modal) return;
+    const isVisible = modal.style.display === 'flex';
+    modal.style.display = isVisible ? 'none' : 'flex';
+    if (!isVisible) {
+      updateTyWaTime();
+      document.getElementById('ty-wa-input')?.focus();
+    }
+  }
+  function updateTyWaTime() {
+    const timeElem = document.getElementById('ty-wa-current-time');
+    if (timeElem) {
+      const now = new Date();
+      timeElem.innerText = now.toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' });
+    }
+  }
+  function sendQuickWhatsApp(customText) {
+    const url = "https://wa.me/" + TY_WA_PHONE + "?text=" + encodeURIComponent(customText);
+    window.open(url, '_blank');
+  }
+  function submitTyWhatsApp() {
+    const input = document.getElementById('ty-wa-input');
+    const msg = (input ? input.value : '').trim();
+    if (!msg) return;
+    sendQuickWhatsApp(msg);
+    input.value = '';
+    toggleTyWhatsApp();
+  }
+  function handleTyWaKey(e) {
+    if (e.key === 'Enter') submitTyWhatsApp();
+  }
+  updateTyWaTime();
+</script>
+
+</body>
 </html>
