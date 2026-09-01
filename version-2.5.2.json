@@ -1,8 +1,8 @@
 {
-  "version": "2.5.9",
-  "url_mac": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.5.9/TrackAI-2.5.9-arm64.dmg",
-  "url_mac_intel": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.5.9/TrackAI-2.5.9-x64.dmg",
-  "url_win": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.5.9/TrackAI-2.5.9-x64.exe",
-  "url": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.5.9/TrackAI-2.5.9-x64.exe",
-  "notes": "🩹 Versión de parche 2.5.9 sobre la base 2.5.8."
+  "version": "2.5.10",
+  "url_mac": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.5.10/TrackAI-2.5.10-arm64.dmg",
+  "url_mac_intel": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.5.10/TrackAI-2.5.10-x64.dmg",
+  "url_win": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.5.10/TrackAI-2.5.10-x64.exe",
+  "url": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.5.10/TrackAI-2.5.10-x64.exe",
+  "notes": "🩹 Versión de parche 2.5.10 sobre la base 2.5.9."
 }
