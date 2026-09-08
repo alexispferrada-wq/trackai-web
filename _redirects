@@ -1,1 +1,7 @@
+/checkout https://admin.tusitioya.cl/checkout 302
+/checkout/* https://admin.tusitioya.cl/checkout/:splat 302
+/flow https://admin.tusitioya.cl/flow 302
+/flow/* https://admin.tusitioya.cl/flow/:splat 302
+/pago https://admin.tusitioya.cl/pago 302
+/pago/* https://admin.tusitioya.cl/pago/:splat 302
 /* /index.html 200
