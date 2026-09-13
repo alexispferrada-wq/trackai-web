@@ -4,4 +4,3 @@
 /flow/* https://admin.tusitioya.cl/flow/:splat 302
 /pago https://admin.tusitioya.cl/pago 302
 /pago/* https://admin.tusitioya.cl/pago/:splat 302
-/* /index.html 200
