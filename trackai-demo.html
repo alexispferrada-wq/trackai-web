@@ -21,23 +21,23 @@
     --panel-hover: transparent;
     --row: transparent;
     --row-alt: transparent;
-    --border: rgba(255, 255, 255, 0.09);
-    --border-soft: rgba(255, 255, 255, 0.04);
+    --border: rgba(212, 175, 55, 0.18);
+    --border-soft: rgba(212, 175, 55, 0.08);
     --text: #ffffff;
-    --text-dim: #c5cce0;
-    --text-faint: #a0a8b8;
-    --accent: #2f80ed;        /* azul selección Serato */
-    --accent-soft: rgba(47, 128, 237, 0.16);
-    --key: #b877e0;           /* morado tonalidad */
-    --key-soft: rgba(184, 119, 224, 0.16);
-    --bpm: #d7dbe2;
-    --crate: #e8862a;         /* naranja crates */
-    --crate-soft: transparent;
-    --green: #46c37b;
-    --red: #ff5a5f;
-    --yellow: #f2c14e;
-    --shadow: 0 10px 34px rgba(0, 0, 0, 0.45);
-    --hi: rgba(255, 255, 255, 0.06);
+    --text-dim: #d8d0c2;
+    --text-faint: #948c7c;
+    --accent: #d4af37;        /* oro metálico clásico */
+    --accent-soft: rgba(212, 175, 55, 0.14);
+    --key: #faedd0;           /* champagne tonalidad armónica */
+    --key-soft: rgba(212, 175, 55, 0.12);
+    --bpm: #f5eedc;
+    --crate: #c59b27;         /* oro tostado crates */
+    --crate-soft: rgba(197, 155, 39, 0.12);
+    --green: #d4af37;         /* oro técnico unificado */
+    --red: #c59b27;
+    --yellow: #f5e2a3;
+    --shadow: 0 10px 34px rgba(0, 0, 0, 0.65);
+    --hi: rgba(212, 175, 55, 0.08);
     --header-bg: #000000;
 
     font-family: 'Segoe UI', 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', system-ui, sans-serif;
@@ -255,32 +255,32 @@
 
   /* Botones de Feedback Live Pitch */
   .lp-feedback-btn {
-    flex: 1; height: 28px; font-weight: 900; font-size: 10.5px; padding: 0 6px;
-    border-radius: 8px; cursor: pointer; transition: all 0.22s ease;
+    flex: 1; height: 28px; font-weight: 800; font-size: 10.5px; padding: 0 6px;
+    border-radius: 6px; cursor: pointer; transition: all 0.2s ease;
     display: flex; align-items: center; justify-content: center; gap: 4px;
     -webkit-app-region: no-drag; white-space: nowrap; min-width: 0;
   }
   .lp-feedback-btn.fire {
-    background: linear-gradient(135deg, rgba(255,110,64,0.3), rgba(255,90,95,0.15)) !important;
-    border: 1px solid rgba(255,110,64,0.6) !important; color: #ff8b66 !important;
+    background: #1c170d !important;
+    border: 1px solid #8c6c19 !important; color: #faedd0 !important;
   }
   .lp-feedback-btn.fire:hover {
-    background: linear-gradient(135deg, rgba(255,110,64,0.55), rgba(255,90,95,0.35)) !important;
-    border-color: #ff6e40 !important; color: #ffffff !important;
-    box-shadow: 0 4px 16px rgba(255,110,64,0.4) !important; transform: translateY(-1px);
+    background: #2a2212 !important;
+    border-color: #d4af37 !important; color: #ffffff !important;
+    box-shadow: 0 3px 12px rgba(212,175,55,0.2) !important; transform: translateY(-1px);
   }
   .lp-feedback-btn.bomba {
-    background: linear-gradient(135deg, rgba(0,210,255,0.28), rgba(0,125,255,0.12)) !important;
-    border: 1px solid rgba(0,210,255,0.6) !important; color: #38d9ff !important;
+    background: #221c10 !important;
+    border: 1px solid #a88428 !important; color: #faedd0 !important;
   }
   .lp-feedback-btn.bomba:hover {
-    background: linear-gradient(135deg, rgba(0,210,255,0.55), rgba(0,125,255,0.35)) !important;
-    border-color: #00d2ff !important; color: #ffffff !important;
-    box-shadow: 0 4px 16px rgba(0,210,255,0.4) !important; transform: translateY(-1px);
+    background: #332915 !important;
+    border-color: #f5e2a3 !important; color: #ffffff !important;
+    box-shadow: 0 3px 12px rgba(212,175,55,0.25) !important; transform: translateY(-1px);
   }
 
 
-  /* ============ BARRA DE MODOS — BOTONES SERATO SIMÉTRICOS Y TÁCTILES ============ */
+  /* ============ BARRA DE MODOS — BOTONES ELEGANTES ORO OSCURO ============ */
   .mode-bar {
     display: flex; gap: 4px; margin: 4px 0 0; padding: 3px 6px;
     background: transparent; border: none;
@@ -288,40 +288,29 @@
   }
   .mode-btn {
     flex: 1 1 0; min-width: 0; height: 26px; box-sizing: border-box;
-    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14); color: #c5cce0;
-    border-radius: 7px; padding: 0 4px; font-size: 9px; font-weight: 800; line-height: 1;
-    cursor: pointer; transition: all 0.15s ease-in-out; -webkit-app-region: no-drag; letter-spacing: 0.2px;
+    background: #0d0f14; border: 1px solid rgba(212, 175, 55, 0.16); color: #9c9584;
+    border-radius: 6px; padding: 0 4px; font-size: 9.5px; font-weight: 700; line-height: 1;
+    cursor: pointer; transition: all 0.15s ease-in-out; -webkit-app-region: no-drag; letter-spacing: 0.3px;
     display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 3px;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: center;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.5);
   }
   .mode-btn:hover {
-    color: #ffffff; background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.28);
-    transform: translateY(-1px); box-shadow: 0 3px 8px rgba(0,0,0,0.4);
+    color: #faedd0; background: #181510; border-color: rgba(212, 175, 55, 0.4);
+    transform: translateY(-1px); box-shadow: 0 3px 8px rgba(0,0,0,0.6);
   }
   .mode-btn:active { transform: translateY(0) scale(0.96); }
 
-  /* Colores neón táctiles cuando cada botón está ACTIVO */
-  .mode-btn.active, .mode-btn.btn-auto.active {
-    color: #ffffff; font-weight: 900;
-    background: rgba(47, 128, 237, 0.25); border-color: #2f80ed;
-    box-shadow: 0 0 10px rgba(47, 128, 237, 0.4), inset 0 0 6px rgba(255,255,255,0.15);
-  }
-  .mode-btn.btn-uia.active {
-    background: rgba(0, 238, 255, 0.25); border-color: #00eeff; color: #ffffff; font-weight: 900;
-    box-shadow: 0 0 10px rgba(0, 238, 255, 0.4), inset 0 0 6px rgba(255,255,255,0.15);
-  }
-  .mode-btn.btn-estricto.active {
-    background: rgba(255, 136, 0, 0.25); border-color: #ff8800; color: #ffffff; font-weight: 900;
-    box-shadow: 0 0 10px rgba(255, 136, 0, 0.4), inset 0 0 6px rgba(255,255,255,0.15);
-  }
-  .mode-btn.btn-up.active {
-    background: rgba(255, 51, 0, 0.25); border-color: #ff3300; color: #ffffff; font-weight: 900;
-    box-shadow: 0 0 10px rgba(255, 51, 0, 0.4), inset 0 0 6px rgba(255,255,255,0.15);
-  }
+  /* Estilos elegantes oro oscuro cuando cada botón está ACTIVO */
+  .mode-btn.active, .mode-btn.btn-auto.active,
+  .mode-btn.btn-uia.active,
+  .mode-btn.btn-estricto.active,
+  .mode-btn.btn-up.active,
   .mode-btn.btn-bajada.active {
-    background: rgba(0, 230, 118, 0.25); border-color: #00e676; color: #ffffff; font-weight: 900;
-    box-shadow: 0 0 10px rgba(0, 230, 118, 0.4), inset 0 0 6px rgba(255,255,255,0.15);
+    color: #faedd0 !important; font-weight: 900;
+    background: linear-gradient(180deg, #2c2210 0%, #171309 100%) !important;
+    border: 1px solid #d4af37 !important;
+    box-shadow: 0 0 12px rgba(212, 175, 55, 0.25), inset 0 0 6px rgba(212, 175, 55, 0.1) !important;
   }
   .mode-btn.btn-toggle-view {
     background: rgba(255, 202, 40, 0.08); border-color: rgba(255, 202, 40, 0.25); color: #ffca28;
@@ -1184,29 +1173,29 @@ html, body { height: 100%; width: 100%; overflow: hidden; }
       <div style="display: flex; align-items: center; gap: 8px;">
         <div class="wordmark" title="TrackAI Versión 2.3.1" style="display: flex; flex-direction: column; align-items: flex-start; gap: 2px; cursor: help;">
           <div style="font-weight: 900; letter-spacing: -0.5px; font-size: 15px; color: #ffffff; line-height: 1;">
-            Track<span style="color: #007dff;" id="wordmarkAi">AI</span>
+            Track<span style="color: #d4af37;" id="wordmarkAi">AI</span>
           </div>
-          <span class="app-version" style="font-size:9px;color:var(--text-dim);font-weight:700;line-height:1;">v2.3.2</span>
+          <span class="app-version" style="font-size:9px;color:#948c7c;font-weight:700;line-height:1;">v2.3.2</span>
         </div>
       </div>
     </div>
 
     <div class="header-center" style="display: flex; align-items: center; gap: 14px;">
-      <div class="clock" id="demoClock" style="font-weight: 800; color: var(--text);">🕒 16:47</div>
-      <div style="display:flex; align-items:center; padding:3px 8px; font-size:11px; border:1px solid #00ff66; color:#00ff66; background:rgba(0, 255, 102, 0.18); border-radius:99px; gap:4px; box-shadow: 0 0 12px rgba(0,255,102,0.3);">
+      <div class="clock" id="demoClock" style="font-weight: 800; color: #faedd0;">🕒 16:47</div>
+      <div style="display:flex; align-items:center; padding:3px 10px; font-size:10.5px; border:1px solid #d4af37; color:#faedd0; background:#1c170d; border-radius:99px; gap:5px; box-shadow: 0 0 10px rgba(212,175,55,0.15);">
         <span style="font-size:11px;">🌿</span> <b style="white-space:nowrap;" id="genreBanner">REGGAETON · TROPICAL</b>
       </div>
     </div>
 
     <div class="header-right">
       <div style="display:flex; align-items:center; gap: 4px; font-size:9.5px; color:var(--text-dim); margin-right:8px;">
-        <div style="color:var(--accent); font-weight:800; background:var(--accent-soft); padding:3px 6px; border-radius:4px; border:1px solid var(--accent);">LICENCIA: ILIMITADA</div>
+        <div style="color:#faedd0; font-weight:800; background:#1e180d; padding:3px 8px; border-radius:4px; border:1px solid #a88428;">LICENCIA: ILIMITADA</div>
       </div>
-      <button class="theme-toggle" style="font-weight:900;font-size:10px;padding:3px 10px;border-radius:99px;letter-spacing:0.5px;background:rgba(255,202,40,0.1);border:1px solid rgba(255,202,40,0.4);color:#ffca28;">⭐ PRO</button>
-      <button class="theme-toggle">📂</button>
-      <button class="theme-toggle">🌙</button>
-      <button class="min-btn">–</button>
-      <button class="close-btn" style="border-color: rgba(255,90,95,0.4); color: #ff5a5f;">✕</button>
+      <button class="theme-toggle" style="font-weight:900;font-size:10px;padding:3px 10px;border-radius:99px;letter-spacing:0.5px;background:#261f0e;border:1px solid #d4af37;color:#faedd0;">⭐ PRO</button>
+      <button class="theme-toggle" style="border-color:rgba(212,175,55,0.2);color:#faedd0;">📂</button>
+      <button class="theme-toggle" style="border-color:rgba(212,175,55,0.2);color:#faedd0;">🌙</button>
+      <button class="min-btn" style="border-color:rgba(212,175,55,0.2);color:#faedd0;">–</button>
+      <button class="close-btn" style="border-color:rgba(212,175,55,0.3); color:#d8d0c2;">✕</button>
     </div>
   </div>
   <!-- APP (LAYOUT HORIZONTAL EXACTO DE INDEX.HTML) -->
@@ -1368,18 +1357,25 @@ function trackCard(t, customTag) {
   const compatBadge = '<span style="font-size: 8.5px; font-weight: 800; padding: 2px 6px; border-radius: 4px; background: rgba(70,195,123,0.15); border: 1px solid #46c37b; color: #46c37b;">✔ ' + t.compat + '</span>';
   const pitchBadge = '<span style="font-size: 8.5px; font-weight: 800; padding: 2px 6px; border-radius: 4px; background: rgba(255,202,40,0.12); border: 1px solid rgba(255,202,40,0.35); color: #ffca28;">' + t.pitch + '</span>';
   const freshBadge = '<span style="font-size: 8.5px; font-weight: 800; padding: 2px 6px; border-radius: 4px; background: rgba(70,195,123,0.15); border: 1px solid #46c37b; color: #46c37b;">' + t.fresh + '</span>';
-  const structBadge = '<span style="font-size: 7.5px; font-weight: 800; padding: 2px 6px; border-radius: 4px; background: rgba(232,134,42,0.15); border: 1px solid rgba(232,134,42,0.4); color: #e8862a;">📍 ' + t.struct + '</span>';
-  const webBadge = '<span style="font-size: 7.5px; color: rgba(160,176,216,0.7); font-weight: 600;">' + t.web + '</span>';
+function trackCard(t, customTag) {
+  if (!t) return '';
+  const mixTag = t.tag ? '<span style="font-size: 8.5px; padding: 1.5px 5px; background: #d4af37; color: #08090c; border-radius: 4px; font-weight: 900; letter-spacing: 0.5px; vertical-align: middle;">' + t.tag + '</span>' : '';
+  const crateBadge = '<span style="font-size: 8.5px; font-weight: 700; padding: 2px 6px; border-radius: 4px; background: rgba(212,175,55,0.1); border: 1px solid rgba(212,175,55,0.3); color: #d4af37;">🗂️ ' + t.crate + '</span>';
+  const compatBadge = '<span style="font-size: 8.5px; font-weight: 800; padding: 2px 6px; border-radius: 4px; background: rgba(212,175,55,0.14); border: 1px solid #d4af37; color: #faedd0;">✔ ' + t.compat + '</span>';
+  const pitchBadge = '<span style="font-size: 8.5px; font-weight: 700; padding: 2px 6px; border-radius: 4px; background: rgba(212,175,55,0.08); border: 1px solid rgba(212,175,55,0.25); color: #edd899;">' + t.pitch + '</span>';
+  const freshBadge = '<span style="font-size: 8.5px; font-weight: 700; padding: 2px 6px; border-radius: 4px; background: rgba(212,175,55,0.1); border: 1px solid rgba(212,175,55,0.3); color: #faedd0;">' + t.fresh + '</span>';
+  const structBadge = '<span style="font-size: 7.5px; font-weight: 700; padding: 2px 6px; border-radius: 4px; background: rgba(166,131,38,0.12); border: 1px solid rgba(166,131,38,0.35); color: #d4af37;">📍 ' + t.struct + '</span>';
+  const webBadge = '<span style="font-size: 7.5px; color: #948c7c; font-weight: 600;">' + t.web + '</span>';
 
   return `
     <div class="track" style="display:flex;flex-direction:column;justify-content:space-between;height:100%;box-sizing:border-box;">
-      <div class="card-section-tag" style="color: #ffffff !important; letter-spacing: 2.5px; text-align:center; display:flex; align-items:center; justify-content:center; gap:6px; margin-bottom: 6px;">` + customTag + `</div>
+      <div class="card-section-tag" style="color: #d4af37 !important; letter-spacing: 2px; text-align:center; display:flex; align-items:center; justify-content:center; gap:6px; margin-bottom: 6px; font-weight: 800;">` + customTag + `</div>
       <div class="t" title="` + t.title + ` — ` + t.artist + `"><div>` + t.title + `</div> ` + mixTag + `</div>
       <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 3px; margin-bottom: 2px;">
-        <span class="artist-name" style="font-size: 10.5px; color: #ffffff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 8px; font-weight: 700;">` + t.artist + `</span>
+        <span class="artist-name" style="font-size: 10.5px; color: #d8d0c2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 8px; font-weight: 700;">` + t.artist + `</span>
         <div style="display: flex; gap: 4px; flex-shrink: 0; align-items: center;">
-          <span style="font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 4px; background: rgba(184,119,224,0.15); border: 1px solid rgba(184,119,224,0.4); color: var(--key);">` + t.key + `</span>
-          <span style="font-size: 9px; font-weight: 900; padding: 2px 6px; border-radius: 4px; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.3); color: #ffffff;">` + t.bpm + `</span>
+          <span style="font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 4px; background: #1c170d; border: 1px solid #a88428; color: #faedd0;">` + t.key + `</span>
+          <span style="font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 4px; background: rgba(255,255,255,0.08); border: 1px solid rgba(212,175,55,0.25); color: #ffffff;">` + t.bpm + `</span>
         </div>
       </div>
       <div style="display: flex; gap: 3px; align-items: center; flex-wrap: wrap; margin-bottom: 4px;">
@@ -1392,9 +1388,9 @@ function trackCard(t, customTag) {
         ` + webBadge + `
       </div>
       <div style="display:flex;gap:6px;align-items:center;margin-top:auto;">
-        <button class="btn deck-btn" onclick="loadNextTrack('A')" style="flex:1;height:32px;padding:0 6px;font-size:11px;border-radius:8px;background:linear-gradient(135deg,rgba(70,195,123,0.2),rgba(70,195,123,0.05));border:1px solid rgba(70,195,123,0.5);color:var(--green);cursor:pointer;font-weight:900;letter-spacing:0.5px;min-width:0;display:flex;align-items:center;justify-content:center;gap:4px;">▶ PLATO A</button>
-        <button class="btn deck-btn" onclick="loadNextTrack('B')" style="flex:1;height:32px;padding:0 6px;font-size:11px;border-radius:8px;background:linear-gradient(135deg,rgba(70,195,123,0.2),rgba(70,195,123,0.05));border:1px solid rgba(70,195,123,0.5);color:var(--green);cursor:pointer;font-weight:900;letter-spacing:0.5px;min-width:0;display:flex;align-items:center;justify-content:center;gap:4px;">▶ PLATO B</button>
-        <button class="btn swap-btn" onclick="rotateDemo()" style="flex:0 0 32px;width:32px;height:32px;padding:0;font-size:13px;border-radius:8px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);color:#a0b0d8;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">🔄</button>
+        <button class="btn deck-btn" onclick="loadNextTrack('A')" style="flex:1;height:32px;padding:0 6px;font-size:11px;border-radius:6px;background:linear-gradient(180deg,#2a2010 0%,#151108 100%);border:1px solid #d4af37;color:#faedd0;cursor:pointer;font-weight:900;letter-spacing:0.5px;min-width:0;display:flex;align-items:center;justify-content:center;gap:4px;box-shadow:0 2px 8px rgba(0,0,0,0.5);">▶ PLATO A</button>
+        <button class="btn deck-btn" onclick="loadNextTrack('B')" style="flex:1;height:32px;padding:0 6px;font-size:11px;border-radius:6px;background:linear-gradient(180deg,#2a2010 0%,#151108 100%);border:1px solid #d4af37;color:#faedd0;cursor:pointer;font-weight:900;letter-spacing:0.5px;min-width:0;display:flex;align-items:center;justify-content:center;gap:4px;box-shadow:0 2px 8px rgba(0,0,0,0.5);">▶ PLATO B</button>
+        <button class="btn swap-btn" onclick="rotateDemo()" style="flex:0 0 32px;width:32px;height:32px;padding:0;font-size:13px;border-radius:6px;background:#14120c;border:1px solid rgba(212,175,55,0.25);color:#d4af37;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">🔄</button>
       </div>
     </div>
   `;
@@ -1403,15 +1399,15 @@ function trackCard(t, customTag) {
 function searchingHTML() {
   return `
     <div class="searching searching-ai-beam" style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 8px; padding: 12px; box-sizing: border-box; position: relative; overflow: hidden;">
-      <div class="ai-scan-beam"></div>
+      <div class="ai-scan-beam" style="background:linear-gradient(180deg,transparent,rgba(212,175,55,0.3),transparent);"></div>
       <div style="position: relative; width: 34px; height: 34px;">
-        <div class="brain-glow-ring"></div>
+        <div class="brain-glow-ring" style="border-color:#d4af37;"></div>
         <span style="font-size: 20px; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; animation: brainPulse 1.5s ease-in-out infinite;">🧠</span>
       </div>
-      <div style="font-size: 11px; font-weight: 900; color: #00d2ff; text-transform: uppercase; letter-spacing: 1px; text-shadow: 0 0 8px rgba(0,210,255,0.6);">
+      <div style="font-size: 11px; font-weight: 800; color: #faedd0; text-transform: uppercase; letter-spacing: 1px; text-shadow: 0 0 8px rgba(212,175,55,0.5);">
         ⚡ Razonando sugerencias<span class="searching-dots"></span>
       </div>
-      <div style="font-size: 9px; color: rgba(255,255,255,0.6); font-weight: 700;">Neural Engine escaneando</div>
+      <div style="font-size: 9px; color: #a88428; font-weight: 600;">Neural Engine escaneando</div>
     </div>
   `;
 }
@@ -1431,74 +1427,74 @@ function renderApp() {
   `;
 
   const heroWrapperHTML = `
-    <div class="hero-wrapper" style="position: relative; overflow: hidden; display: flex; flex-direction: row; flex: 1 1 0; width: 50%; min-width: 0; align-items: stretch; border-right: 1px solid rgba(255,255,255,0.15);">
-      <div class="now" style="position: relative; z-index: 1; flex: 1 1 0; width: 50%; min-width: 0; box-sizing: border-box; display: flex; flex-direction: column; gap: 4px; text-align: center; border-right: 1px solid rgba(255,255,255,0.15); padding: 8px 8px; justify-content: center;">
-        <div class="card-section-tag" style="color: #ffffff !important; letter-spacing: 2.5px; text-align:center; display:flex; align-items:center; justify-content:center; gap:6px;"><span class="hp-icon-anim">🎧</span> SONANDO AHORA</div>
-        <div class="artist" style="font-size: 11px; font-weight: 700; color: #ffffff; width: 100%; text-align:center; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">` + c.artist + `</div>
-        <div class="title" style="overflow: hidden; font-size: 17px; font-weight: 900; text-transform: uppercase; letter-spacing: -0.3px; line-height: 1.1; width: 100%; text-align:center;"><div>` + c.title + `</div></div>
+    <div class="hero-wrapper" style="position: relative; overflow: hidden; display: flex; flex-direction: row; flex: 1 1 0; width: 50%; min-width: 0; align-items: stretch; border-right: 1px solid rgba(212,175,55,0.18);">
+      <div class="now" style="position: relative; z-index: 1; flex: 1 1 0; width: 50%; min-width: 0; box-sizing: border-box; display: flex; flex-direction: column; gap: 4px; text-align: center; border-right: 1px solid rgba(212,175,55,0.18); padding: 8px 8px; justify-content: center;">
+        <div class="card-section-tag" style="color: #d4af37 !important; letter-spacing: 2px; text-align:center; display:flex; align-items:center; justify-content:center; gap:6px; font-weight:800;"><span class="hp-icon-anim">🎧</span> SONANDO AHORA</div>
+        <div class="artist" style="font-size: 11px; font-weight: 700; color: #d8d0c2; width: 100%; text-align:center; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">` + c.artist + `</div>
+        <div class="title" style="overflow: hidden; font-size: 17px; font-weight: 900; text-transform: uppercase; letter-spacing: -0.3px; line-height: 1.1; width: 100%; text-align:center; color:#ffffff;"><div>` + c.title + `</div></div>
         <div style="display:flex;align-items:center;justify-content:center;gap:6px;margin-top:4px;">
-          <span class="chip" style="font-size:10px;color:#ffffff;font-weight:700;">▶ ` + c.bpm + ` BPM</span>
-          <span style="font-size:14px;color:#ffca28;font-weight:800;">→</span>
-          <span class="chip" style="font-size:11px;color:#fff;border-color:rgba(255,202,40,0.45);background:rgba(255,202,40,0.08);">` + c.liveBpm + `</span>
-          <span style="font-size:8px;color:#ffffff;font-weight:800;letter-spacing:1px;">BPM</span>
+          <span class="chip" style="font-size:10px;color:#d8d0c2;font-weight:700;">▶ ` + c.bpm + ` BPM</span>
+          <span style="font-size:14px;color:#d4af37;font-weight:800;">→</span>
+          <span class="chip" style="font-size:11px;color:#faedd0;border-color:rgba(212,175,55,0.4);background:#1a150c;">` + c.liveBpm + `</span>
+          <span style="font-size:8px;color:#d4af37;font-weight:800;letter-spacing:1px;">BPM</span>
         </div>
         <div style="display:flex;align-items:baseline;justify-content:center;gap:6px;margin-top:2px;">
-          <b style="font-size:26px;font-weight:900;color:` + c.pitchColor + `;line-height:1;">` + c.pitch + `</b>
-          <span style="font-size:8px;color:#ffffff;font-weight:800;letter-spacing:1px;">PITCH</span>
-          <span class="chip" style="font-size:9px;font-weight:800;color:var(--key);border-color:rgba(184,119,224,0.4);background:rgba(184,119,224,0.1);">` + c.key + `</span>
+          <b style="font-size:26px;font-weight:900;color:#faedd0;line-height:1;">` + c.pitch + `</b>
+          <span style="font-size:8px;color:#a88428;font-weight:800;letter-spacing:1px;">PITCH</span>
+          <span class="chip" style="font-size:9px;font-weight:800;color:#faedd0;border-color:#a88428;background:#1c170d;">` + c.key + `</span>
         </div>
         <div style="display:flex;align-items:center;justify-content:center;gap:5px;margin-top:2px;flex-wrap:wrap;">
-          <span style="font-size:9px;font-weight:700;color:var(--crate);">📁 ` + c.folder + `</span>
-          <span class="chip" style="font-size:9px;font-weight:800;color:#ffca28;background:rgba(255,202,40,0.12);border:1px solid rgba(255,202,40,0.35);">🎧 ` + c.plays + ` plays</span>
+          <span style="font-size:9px;font-weight:700;color:#d4af37;">📁 ` + c.folder + `</span>
+          <span class="chip" style="font-size:9px;font-weight:800;color:#faedd0;background:#1c170d;border:1px solid #8c6c19;">🎧 ` + c.plays + ` plays</span>
         </div>
       </div>
 
       <div class="livepitch live-pitch-ai" style="position:relative; flex: 1 1 0; min-width: 0; border-radius:0; overflow:hidden; background:transparent; border:none; padding:0; display:flex; flex-direction:column;">
-        <div style="position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0;opacity:0.4;">
-          <div style="position:absolute;width:4px;height:4px;background:#ffd873;border-radius:50%;left:10%;top:25%;animation:lp-particle-float 3s ease-in-out infinite;filter:blur(1px);box-shadow:0 0 6px #ffd873;"></div>
-          <div style="position:absolute;width:3px;height:3px;background:#ffd873;border-radius:50%;left:28%;top:60%;animation:lp-particle-float 3.7s ease-in-out infinite;animation-delay:0.5s;filter:blur(1px);box-shadow:0 0 6px #ffd873;"></div>
-          <div style="position:absolute;width:3px;height:3px;background:#ffca28;border-radius:50%;left:55%;top:20%;animation:lp-particle-float 4.2s ease-in-out infinite;animation-delay:1s;filter:blur(1px);box-shadow:0 0 6px #ffca28;"></div>
+        <div style="position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0;opacity:0.35;">
+          <div style="position:absolute;width:4px;height:4px;background:#d4af37;border-radius:50%;left:10%;top:25%;animation:lp-particle-float 3s ease-in-out infinite;filter:blur(1px);box-shadow:0 0 6px #d4af37;"></div>
+          <div style="position:absolute;width:3px;height:3px;background:#faedd0;border-radius:50%;left:28%;top:60%;animation:lp-particle-float 3.7s ease-in-out infinite;animation-delay:0.5s;filter:blur(1px);box-shadow:0 0 6px #faedd0;"></div>
+          <div style="position:absolute;width:3px;height:3px;background:#a88428;border-radius:50%;left:55%;top:20%;animation:lp-particle-float 4.2s ease-in-out infinite;animation-delay:1s;filter:blur(1px);box-shadow:0 0 6px #a88428;"></div>
         </div>
         <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 8px 0;position:relative;z-index:1;">
           <div style="display:flex;align-items:center;gap:10px;">
             <div style="position:relative;width:28px;height:28px;flex-shrink:0;">
-              <div style="position:absolute;inset:0;border:2px solid rgba(0,210,255,0.6);border-radius:50%;border-top-color:transparent;animation:lp-neural-spin 2s linear infinite;"></div>
-              <div style="position:absolute;inset:3px;border:1.5px solid rgba(0,210,255,0.3);border-radius:50%;border-bottom-color:transparent;animation:lp-neural-spin 3s linear infinite reverse;"></div>
+              <div style="position:absolute;inset:0;border:2px solid rgba(212,175,55,0.7);border-radius:50%;border-top-color:transparent;animation:lp-neural-spin 2s linear infinite;"></div>
+              <div style="position:absolute;inset:3px;border:1.5px solid rgba(212,175,55,0.35);border-radius:50%;border-bottom-color:transparent;animation:lp-neural-spin 3s linear infinite reverse;"></div>
               <span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12px;">🧠</span>
             </div>
             <div>
-              <div style="font-size:11px;font-weight:900;letter-spacing:1.5px;color:#fff;text-shadow:0 0 10px #ffca28,0 0 5px #ffca28;">LIVE PITCH<span style="font-size:7px;opacity:0.7;">®</span></div>
-              <div style="font-size:7px;font-weight:600;color:rgba(0,210,255,0.7);letter-spacing:2px;text-transform:uppercase;">Neural Engine</div>
+              <div style="font-size:11px;font-weight:900;letter-spacing:1.5px;color:#faedd0;text-shadow:0 0 8px rgba(212,175,55,0.5);">LIVE PITCH<span style="font-size:7px;opacity:0.7;">®</span></div>
+              <div style="font-size:7px;font-weight:700;color:#a88428;letter-spacing:2px;text-transform:uppercase;">Neural Engine</div>
             </div>
           </div>
-          <span style="font-size:7px;font-weight:700;color:#00e676;background:rgba(0,230,118,0.12);border:1px solid rgba(0,230,118,0.3);border-radius:4px;padding:2px 7px;letter-spacing:0.5px;">● ACTIVE</span>
+          <span style="font-size:7px;font-weight:800;color:#faedd0;background:#211a0c;border:1px solid #d4af37;border-radius:4px;padding:2px 7px;letter-spacing:0.5px;">● ACTIVE</span>
         </div>
         <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:4px 8px 10px;position:relative;z-index:1;width:100%;box-sizing:border-box;">
           <span style="display:inline-flex;align-items:baseline;gap:4px;cursor:pointer;">
-            <b style="font-size:42px;font-weight:900;line-height:1;background:linear-gradient(135deg,#ffd873,#ffca28,#ffe082,#ffca28,#ffd873);background-size:300% 300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 18px rgba(255,202,40,0.4));">` + c.liveBpm + `</b>
+            <b style="font-size:42px;font-weight:900;line-height:1;background:linear-gradient(135deg,#ffffff 0%,#faedd0 30%,#d4af37 70%,#a88428 100%);background-size:200% 200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 16px rgba(212,175,55,0.35));">` + c.liveBpm + `</b>
           </span>
           <div style="display:flex;align-items:center;gap:8px;margin-top:1px;">
-            <span style="color:#9ccc65;font-weight:800;font-size:10px;background:rgba(0,0,0,0.4);padding:2px 8px;border-radius:4px;border:1px solid rgba(156,204,101,0.33);">✅ Tu rango</span>
-            <span style="color:rgba(160,176,216,0.7);font-size:8px;font-weight:600;">0min · 01 BPM</span>
-            <span style="font-size:10px;color:#ffca28;font-weight:800;letter-spacing:1px;">BPM</span>
+            <span style="color:#faedd0;font-weight:800;font-size:10px;background:#1a150c;padding:2px 8px;border-radius:4px;border:1px solid #a88428;">✅ Tu rango</span>
+            <span style="color:#948c7c;font-size:8px;font-weight:600;">0min · 01 BPM</span>
+            <span style="font-size:10px;color:#d4af37;font-weight:800;letter-spacing:1px;">BPM</span>
           </div>
-          <div class="lp-brain-badge" style="margin-top:6px;padding:6px 12px;border-radius:10px;background:linear-gradient(135deg,rgba(0,210,255,0.14),rgba(0,125,255,0.08));border:1px solid rgba(0,210,255,0.45);font-size:11px;font-weight:900;letter-spacing:0.4px;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;box-sizing:border-box;">
+          <div class="lp-brain-badge" style="margin-top:6px;padding:6px 12px;border-radius:6px;background:#17130a;border:1px solid rgba(212,175,55,0.35);font-size:11px;font-weight:900;letter-spacing:0.4px;color:#faedd0;display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;box-sizing:border-box;">
             <div style="display:flex;align-items:center;gap:6px;min-width:0;flex:1;">
               <span style="font-size:13px;flex-shrink:0;">🧠</span>
-              <span style="background:linear-gradient(90deg,#00d2ff,#ffca28,#00e676,#00d2ff);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:10.5px;font-weight:900;">🧠 SINTONÍA MAESTRA</span>
+              <span style="background:linear-gradient(90deg,#d4af37,#faedd0,#d4af37);-webkit-background-clip:text;-webkit-text-fill-color:transparent;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:10.5px;font-weight:900;">🧠 SINTONÍA MAESTRA</span>
             </div>
             <div style="display:flex;align-items:center;gap:5px;flex-shrink:0;">
               <span style="width:34px;height:4px;border-radius:99px;background:rgba(255,255,255,0.12);overflow:hidden;display:block;">
-                <span style="display:block;height:100%;width:85%;background:linear-gradient(90deg,#00d2ff,#00e676);border-radius:99px;"></span>
+                <span style="display:block;height:100%;width:85%;background:linear-gradient(90deg,#8c6c19,#d4af37,#faedd0);border-radius:99px;"></span>
               </span>
-              <span style="font-size:9.5px;font-weight:900;color:#00d2ff;">85%</span>
+              <span style="font-size:9.5px;font-weight:900;color:#faedd0;">85%</span>
             </div>
           </div>
           <div style="display:flex;gap:6px;margin-top:6px;width:100%;">
-            <button class="lp-feedback-btn fire" onclick="rotateDemo()" style="flex:1;height:28px;font-weight:900;font-size:10.5px;padding:0 6px;border-radius:8px;cursor:pointer;background:linear-gradient(135deg,rgba(255,110,64,0.3),rgba(255,90,95,0.15));border:1px solid rgba(255,110,64,0.6);color:#ff8b66;">🔥 Me gustó</button>
-            <button class="lp-feedback-btn bomba" onclick="rotateDemo()" style="flex:1;height:28px;font-weight:900;font-size:10.5px;padding:0 6px;border-radius:8px;cursor:pointer;background:linear-gradient(135deg,rgba(0,210,255,0.28),rgba(0,125,255,0.12));border:1px solid rgba(0,210,255,0.6);color:#38d9ff;">💣 ¡Bomba!</button>
+            <button class="lp-feedback-btn fire" onclick="rotateDemo()" style="flex:1;height:28px;font-weight:800;font-size:10.5px;padding:0 6px;border-radius:6px;cursor:pointer;background:#1c170d;border:1px solid #8c6c19;color:#faedd0;">🔥 Me gustó</button>
+            <button class="lp-feedback-btn bomba" onclick="rotateDemo()" style="flex:1;height:28px;font-weight:800;font-size:10.5px;padding:0 6px;border-radius:6px;cursor:pointer;background:#221c10;border:1px solid #a88428;color:#faedd0;">💣 ¡Bomba!</button>
           </div>
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:6px;border-top:1px solid rgba(255,255,255,0.05);font-size:7px;color:rgba(160,176,216,0.5);font-weight:600;width:100%;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:6px;border-top:1px solid rgba(212,175,55,0.1);font-size:7px;color:#948c7c;font-weight:600;width:100%;">
             <span>🎵 4 tracks</span>
             <span>❤️ ` + c.liveBpm + ` avg</span>
             <span>⚡ ` + c.bpm + ` BPM</span>
@@ -1513,7 +1509,7 @@ function renderApp() {
 
   const sugSectionHTML = `
     <div class="sug-section" style="flex: 1 1 0; width: 50%; min-width: 0; display: flex; flex-direction: row; align-items: stretch;">
-      <div class="sug-row" style="flex: 1 1 0; width: 50%; min-width: 0; display: flex; flex-direction: row; align-items: stretch; border-right: 1px solid rgba(255,255,255,0.15);">
+      <div class="sug-row" style="flex: 1 1 0; width: 50%; min-width: 0; display: flex; flex-direction: row; align-items: stretch; border-right: 1px solid rgba(212,175,55,0.18);">
         ` + phase1Html + `
       </div>
       <div id="comodin-slot" style="flex: 1 1 0; width: 50%; min-width: 0; display: flex; align-items: stretch;">
