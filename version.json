@@ -1,8 +1,8 @@
 {
-  "version": "2.7.0",
-  "url_mac": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.7.0/TrackAI-2.7.0-arm64.dmg",
-  "url_mac_intel": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.7.0/TrackAI-2.7.0-x64.dmg",
-  "url_win": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.7.0/TrackAI-2.7.0-x64.exe",
-  "url": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.7.0/TrackAI-2.7.0-x64.exe",
-  "notes": "TrackAI v2.7.0 — Soporte oficial trackai.party, mejoras críticas de carga al plato y validación offline resiliente"
+  "version": "2.6.0",
+  "url_mac": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.6.0/TrackAI-2.6.0-arm64.dmg",
+  "url_mac_intel": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.6.0/TrackAI-2.6.0-x64.dmg",
+  "url_win": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.6.0/TrackAI-2.6.0-x64.exe",
+  "url": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.6.0/TrackAI-2.6.0-x64.exe",
+  "notes": "TrackAI v2.6.0"
 }
