@@ -1352,13 +1352,6 @@ function selectMode(m) {
 
 function trackCard(t, customTag) {
   if (!t) return '';
-  const mixTag = t.tag ? '<span style="font-size: 8.5px; padding: 1.5px 5px; background: #ffffff; color: #000000; border-radius: 4px; font-weight: 950; letter-spacing: 0.5px; box-shadow: 0 1px 4px rgba(255,255,255,0.3); vertical-align: middle; text-shadow: none;">' + t.tag + '</span>' : '';
-  const crateBadge = '<span style="font-size: 8.5px; font-weight: 800; padding: 2px 6px; border-radius: 4px; background: ' + (t.sameCrate ? 'rgba(70,195,123,0.15)' : 'rgba(232,134,42,0.15)') + '; border: 1px solid ' + (t.sameCrate ? '#46c37b' : '#e8862a') + '; color: ' + (t.sameCrate ? '#46c37b' : '#e8862a') + ';">🗂️ ' + t.crate + '</span>';
-  const compatBadge = '<span style="font-size: 8.5px; font-weight: 800; padding: 2px 6px; border-radius: 4px; background: rgba(70,195,123,0.15); border: 1px solid #46c37b; color: #46c37b;">✔ ' + t.compat + '</span>';
-  const pitchBadge = '<span style="font-size: 8.5px; font-weight: 800; padding: 2px 6px; border-radius: 4px; background: rgba(255,202,40,0.12); border: 1px solid rgba(255,202,40,0.35); color: #ffca28;">' + t.pitch + '</span>';
-  const freshBadge = '<span style="font-size: 8.5px; font-weight: 800; padding: 2px 6px; border-radius: 4px; background: rgba(70,195,123,0.15); border: 1px solid #46c37b; color: #46c37b;">' + t.fresh + '</span>';
-function trackCard(t, customTag) {
-  if (!t) return '';
   const mixTag = t.tag ? '<span style="font-size: 8.5px; padding: 1.5px 5px; background: #d4af37; color: #08090c; border-radius: 4px; font-weight: 900; letter-spacing: 0.5px; vertical-align: middle;">' + t.tag + '</span>' : '';
   const crateBadge = '<span style="font-size: 8.5px; font-weight: 700; padding: 2px 6px; border-radius: 4px; background: rgba(212,175,55,0.1); border: 1px solid rgba(212,175,55,0.3); color: #d4af37;">🗂️ ' + t.crate + '</span>';
   const compatBadge = '<span style="font-size: 8.5px; font-weight: 800; padding: 2px 6px; border-radius: 4px; background: rgba(212,175,55,0.14); border: 1px solid #d4af37; color: #faedd0;">✔ ' + t.compat + '</span>';
