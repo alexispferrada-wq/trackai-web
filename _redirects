@@ -1,6 +1,6 @@
-/checkout https://siti.work/trackai/pagar?plan=annual 302
-/checkout/* https://siti.work/trackai/pagar?plan=annual 302
-/flow https://siti.work/trackai/pagar?plan=annual 302
-/flow/* https://siti.work/trackai/pagar?plan=annual 302
-/pago https://siti.work/trackai/pagar?plan=annual 302
-/pago/* https://siti.work/trackai/pagar?plan=annual 302
+/checkout https://trackai.party/suscribir?plan=anual 302
+/checkout/* https://trackai.party/suscribir?plan=anual 302
+/flow https://trackai.party/suscribir?plan=anual 302
+/flow/* https://trackai.party/suscribir?plan=anual 302
+/pago https://trackai.party/suscribir?plan=anual 302
+/pago/* https://trackai.party/suscribir?plan=anual 302
