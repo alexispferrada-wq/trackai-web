@@ -4,3 +4,6 @@
 /flow/* https://trackai.party/suscribir?plan=anual 302
 /pago https://trackai.party/suscribir?plan=anual 302
 /pago/* https://trackai.party/suscribir?plan=anual 302
+
+# trackai.tusitioya.cl queda descontinuado: todo lo demás va a trackai.party (26-sep-2026)
+/* https://trackai.party/:splat 301!
