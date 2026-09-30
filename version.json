@@ -4,5 +4,6 @@
   "url_mac_intel": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.7.0/TrackAI-2.7.0-x64.dmg",
   "url_win": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.7.0/TrackAI-2.7.0-x64.exe",
   "url": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.7.0/TrackAI-2.7.0-x64.exe",
-  "notes": "TrackAI v2.7.0 — Soporte oficial trackai.party, mejoras críticas de carga al plato y validación offline resiliente"
+  "notes": "TrackAI v2.7.0 (Pre) - Compatible con Serato DJ, Virtual DJ y Rekordbox",
+  "updated_at": "2026-09-25T20:41:00Z"
 }
