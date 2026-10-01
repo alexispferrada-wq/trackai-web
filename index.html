@@ -35,6 +35,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
     <script type="module" crossorigin src="/assets/index-cMaP9uSH.js"></script>
     <link rel="stylesheet" crossorigin href="/assets/index-9disNIiu.css">
+    <!-- TikTok Pixel — reemplazar TRACKAI_TIKTOK_PIXEL_ID con tu ID real de TikTok Ads Manager -->
+    <script>
+      !function (w, d, t) {
+        w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","optIn"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=r,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};var a=document.createElement("script");a.type="text/javascript",a.async=!0,a.src=r+"?sdkid="+e+"&lib="+t+(o?"&partner="+o:"");var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(a,s)};
+        ttq.load("TRACKAI_TIKTOK_PIXEL_ID");
+        ttq.page();
+      }(window, document, "ttq");
+    </script>
   </head>
   <body>
     <div id="root"></div>
@@ -48,6 +56,28 @@
             payload: { page: "trackai", path: window.location.pathname, referrer: document.referrer || "" }
           }));
         } catch (e) {}
+      })();
+    </script>
+    <!-- Tracker visitantes en vivo — servidor.siti.work -->
+    <script>
+      (function () {
+        var PANEL = "https://servidor.siti.work";
+        var KEY = "tv_sid_web";
+        var sid = localStorage.getItem(KEY);
+        if (!sid) { sid = "tv_" + Date.now() + "_" + Math.random().toString(36).slice(2, 9); localStorage.setItem(KEY, sid); }
+        function ping() {
+          try {
+            fetch(PANEL + "/api/live/ping", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ sid: sid, page: window.location.pathname, referrer: document.referrer || "directo" }),
+              keepalive: true
+            }).catch(function () {});
+          } catch (e) {}
+        }
+        ping();
+        setInterval(ping, 30000);
+        document.addEventListener("visibilitychange", function () { if (!document.hidden) ping(); });
       })();
     </script>
   </body>
