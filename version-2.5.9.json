@@ -1,8 +1,12 @@
 {
-  "version": "2.6.0",
-  "url_mac": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.6.0/TrackAI-2.6.0-arm64.dmg",
-  "url_mac_intel": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.6.0/TrackAI-2.6.0-x64.dmg",
-  "url_win": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.6.0/TrackAI-2.6.0-x64.exe",
-  "url": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.6.0/TrackAI-2.6.0-x64.exe",
-  "notes": "TrackAI v2.6.0"
+  "version": "2.7.2",
+  "name": "TrackAI 2.7.2 Oficial",
+  "min_version": "2.7.0",
+  "force_update": true,
+  "url_mac": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.7.2/TrackAI-2.7.2-arm64.dmg",
+  "url_mac_intel": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.7.2/TrackAI-2.7.2-x64.dmg",
+  "url_win": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.7.2/TrackAI-2.7.2-x64.exe",
+  "url": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.7.2/TrackAI-2.7.2-x64.exe",
+  "notes": "ACTUALIZACIÓN OBLIGATORIA: TrackAI 2.7.2 Oficial. Las versiones 2.6 y anteriores han sido descontinuadas. Incluye soporte oficial para Serato, Rekordbox y Virtual DJ.",
+  "updated_at": "2026-10-02T17:00:00Z"
 }

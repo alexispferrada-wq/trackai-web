@@ -373,5 +373,28 @@ footer{border-top:1px solid var(--line);padding:56px 0 28px;background:#07070a}
   // La descarga y selección de SO se gestiona en /download
 })();
 </script>
+    <!-- Tracker visitantes en vivo — servidor.siti.work -->
+    <script>
+      (function () {
+        var PANEL = "https://servidor.siti.work";
+        var KEY = "tv_sid_trackai";
+        var sid = localStorage.getItem(KEY);
+        if (!sid) { sid = "tv_" + Date.now() + "_" + Math.random().toString(36).slice(2, 9); localStorage.setItem(KEY, sid); }
+        function ping() {
+          try {
+            fetch(PANEL + "/api/live/ping", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ sid: sid, page: window.location.pathname, referrer: document.referrer || "directo" }),
+              keepalive: true
+            }).catch(function () {});
+          } catch (e) {}
+        }
+        ping();
+        setInterval(ping, 30000);
+        document.addEventListener("visibilitychange", function () { if (!document.hidden) ping(); });
+      })();
+    </script>
+
 </body>
 </html>
