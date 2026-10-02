@@ -1,9 +1,10 @@
 {
-  "version": "2.7.0",
-  "url_mac": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.7.0/TrackAI-2.7.0-arm64.dmg",
-  "url_mac_intel": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.7.0/TrackAI-2.7.0-x64.dmg",
-  "url_win": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.7.0/TrackAI-2.7.0-x64.exe",
-  "url": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.7.0/TrackAI-2.7.0-x64.exe",
-  "notes": "TrackAI v2.7.0 (Pre) - Compatible con Serato DJ, Virtual DJ y Rekordbox",
-  "updated_at": "2026-09-25T20:41:00Z"
+  "version": "2.7.2",
+  "name": "TrackAI 2.7.2 Beta (TikTok LIVE & 10 Skins Edition)",
+  "url_mac": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.7.2/TrackAI-2.7.2-arm64.dmg",
+  "url_mac_intel": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.7.2/TrackAI-2.7.2-x64.dmg",
+  "url_win": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.7.2/TrackAI-2.7.2-x64.exe",
+  "url": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.7.2/TrackAI-2.7.2-x64.exe",
+  "notes": "TrackAI 2.7.2 Beta — Integración oficial TikTok LIVE Studio + 10 Skins visuales dinámicos. Soporte Serato DJ Pro, Virtual DJ y Rekordbox con recomendación armónica en tiempo real.",
+  "updated_at": "2026-10-01T16:57:51.341Z"
 }
