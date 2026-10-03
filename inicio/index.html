@@ -263,7 +263,7 @@ footer{border-top:1px solid var(--line);padding:56px 0 28px;background:#07070a}
         <div class="price hot rv">
           <span class="badge">Más elegido</span>
           <h3>Pro mensual</h3>
-          <div class="amount">US$5,99 <small>/ mes</small></div>
+          <div class="amount">US$6 <small>/ mes</small></div>
           <p class="fine">Cancelas cuando quieras</p>
           <ul><li>Cargas al plato ilimitadas</li><li>Ultra IA y todos los modos</li><li>Cerebro que aprende de tus mezclas</li><li>2 computadores</li></ul>
           <a class="btn btn-gold" href="/suscribir?plan=mensual">Hazte Pro</a>
@@ -373,28 +373,5 @@ footer{border-top:1px solid var(--line);padding:56px 0 28px;background:#07070a}
   // La descarga y selección de SO se gestiona en /download
 })();
 </script>
-    <!-- Tracker visitantes en vivo — servidor.siti.work -->
-    <script>
-      (function () {
-        var PANEL = "https://servidor.siti.work";
-        var KEY = "tv_sid_trackai";
-        var sid = localStorage.getItem(KEY);
-        if (!sid) { sid = "tv_" + Date.now() + "_" + Math.random().toString(36).slice(2, 9); localStorage.setItem(KEY, sid); }
-        function ping() {
-          try {
-            fetch(PANEL + "/api/live/ping", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ sid: sid, page: window.location.pathname, referrer: document.referrer || "directo" }),
-              keepalive: true
-            }).catch(function () {});
-          } catch (e) {}
-        }
-        ping();
-        setInterval(ping, 30000);
-        document.addEventListener("visibilitychange", function () { if (!document.hidden) ping(); });
-      })();
-    </script>
-
 </body>
 </html>
