@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRE-SET by TrackAI · Infraestructura de Almacenamiento DJ de Alta Fidelidad</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="favicon.ico" sizes="any">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <meta property="og:image" content="https://preset.trackai.party/og-image-1200x630.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #04060a;
+            --bg-card: rgba(13, 18, 30, 0.78);
+            --bg-card-hover: rgba(20, 27, 44, 0.92);
+            --border: rgba(255, 255, 255, 0.08);
+            --border-glow: rgba(0, 242, 254, 0.35);
+            --neon-cyan: #00f2fe;
+            --neon-blue: #38bdf8;
+            --neon-purple: #c084fc;
+            --neon-green: #10b981;
+            --neon-gold: #f59e0b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(0, 242, 254, 0.08) 0%, transparent 45%),
+                radial-gradient(circle at 85% 85%, rgba(192, 132, 252, 0.08) 0%, transparent 45%);
+            color: var(--text-main);
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* NAVBAR */
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            background: rgba(4, 6, 10, 0.85);
+            backdrop-filter: blur(16px);
+            z-index: 100;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 900;
+            font-size: 20px;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-box {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover { color: #fff; }
+
+        .btn-cta {
+            background: linear-gradient(135deg, var(--neon-cyan), #0284c7);
+            color: #031019;
+            font-weight: 900;
+            font-size: 14px;
+            padding: 10px 24px;
+            border-radius: 999px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0, 242, 254, 0.35);
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 242, 254, 0.55);
+        }
+
+        /* HERO */
+        .hero {
+            text-align: center;
+            padding: 80px 20px 40px 20px;
+            max-width: 980px;
+            margin: 0 auto;
+        }
+
+        .hero-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            background: rgba(0, 242, 254, 0.08);
+            border: 1px solid rgba(0, 242, 254, 0.3);
+            border-radius: 999px;
+            color: var(--neon-cyan);
+            font-size: 13px;
+            font-weight: 800;
+            margin-bottom: 24px;
+            letter-spacing: 0.5px;
+        }
+
+        .hero h1 {
+            font-size: 58px;
+            font-weight: 900;
+            line-height: 1.1;
+            letter-spacing: -2px;
+            margin-bottom: 24px;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 19px;
+            color: var(--text-muted);
+            max-width: 760px;
+            margin: 0 auto 36px auto;
+            line-height: 1.6;
+        }
+
+        /* ARQUITECTURA DE FLUJO Y CONEXIONES (THE SYSTEM FLOW) */
+        .architecture-section {
+            max-width: 1100px;
+            margin: 0 auto 100px auto;
+            padding: 0 20px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            font-size: 38px;
+            font-weight: 900;
+            letter-spacing: -1.2px;
+            margin-bottom: 12px;
+        }
+
+        .section-sub {
+            color: var(--text-muted);
+            font-size: 16px;
+            max-width: 620px;
+            margin: 0 auto;
+        }
+
+        /* DIAGRAMA DE FLUJO INTERACTIVO CON FLECHAS */
+        .flow-diagram-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border-glow);
+            border-radius: 28px;
+            padding: 44px 32px;
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.7), 0 0 50px rgba(0, 242, 254, 0.1);
+            position: relative;
+        }
+
+        .flow-stages-grid {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .flow-node-card {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 24px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .flow-node-card:hover {
+            border-color: var(--neon-cyan);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(0, 242, 254, 0.15);
+        }
+
+        .flow-node-card.highlight {
+            border-color: rgba(0, 242, 254, 0.5);
+            background: linear-gradient(180deg, rgba(0, 242, 254, 0.08), rgba(0, 0, 0, 0.6));
+        }
+
+        .node-step-tag {
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--neon-cyan);
+            background: rgba(0, 242, 254, 0.1);
+            padding: 4px 8px;
+            border-radius: 6px;
+            align-self: flex-start;
+        }
+
+        .node-icon {
+            font-size: 32px;
+        }
+
+        .node-title {
+            font-size: 16px;
+            font-weight: 800;
+            line-height: 1.3;
+        }
+
+        .node-desc {
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .node-badge-bottom {
+            font-size: 11px;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--neon-green);
+            font-weight: 700;
+        }
+
+        /* FLECHAS DE FLUJO ANIMADAS */
+        .flow-arrow-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--neon-cyan);
+            font-size: 20px;
+            animation: pulseArrow 1.5s infinite ease-in-out;
+        }
+
+        @keyframes pulseArrow {
+            0%, 100% { opacity: 0.4; transform: translateX(0); }
+            50% { opacity: 1; transform: translateX(4px); }
+        }
+
+        .flow-arrow-label {
+            font-size: 9px;
+            text-transform: uppercase;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            margin-top: 4px;
+            text-align: center;
+            max-width: 60px;
+        }
+
+        /* EXPLICACIÓN DETALLADA DEL FLUJO */
+        .flow-breakdown-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 36px;
+        }
+
+        .breakdown-box {
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 22px 24px;
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+
+        .breakdown-num {
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            background: rgba(0, 242, 254, 0.15);
+            color: var(--neon-cyan);
+            font-weight: 900;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .breakdown-texts h4 { font-size: 15px; font-weight: 800; margin-bottom: 6px; }
+        .breakdown-texts p { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+
+        /* CALCULADORA DE RETORNO DE INVERSIÓN (ROI DEL DJ) */
+        .roi-section {
+            max-width: 1000px;
+            margin: 0 auto 100px auto;
+            padding: 0 20px;
+        }
+
+        .roi-card {
+            background: linear-gradient(180deg, rgba(192, 132, 252, 0.08), rgba(15, 20, 32, 0.95));
+            border: 1px solid rgba(192, 132, 252, 0.35);
+            border-radius: 28px;
+            padding: 44px 36px;
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .roi-title { font-size: 32px; font-weight: 900; line-height: 1.2; margin-bottom: 16px; }
+        .roi-desc { font-size: 15px; color: var(--text-muted); line-height: 1.6; margin-bottom: 24px; }
+
+        .roi-math-box {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .roi-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+        }
+
+        .roi-row strong { font-family: 'JetBrains Mono', monospace; font-size: 16px; }
+
+        .roi-divider { height: 1px; background: rgba(255, 255, 255, 0.08); margin: 4px 0; }
+
+        .roi-total-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 16px;
+            font-weight: 900;
+        }
+
+        .roi-saved-pill {
+            font-size: 22px;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--neon-green);
+        }
+
+        /* PRICING (EXACTLY 2 PLANS - NO TRIALS) */
+        .pricing-section {
+            max-width: 950px;
+            margin: 0 auto 100px auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 32px;
+            text-align: left;
+            margin-top: 40px;
+        }
+
+        .price-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 44px 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .price-card:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-4px);
+        }
+
+        .price-card.featured {
+            border-color: rgba(0, 242, 254, 0.45);
+            background: linear-gradient(180deg, rgba(0, 242, 254, 0.09), rgba(15, 20, 32, 0.95));
+            box-shadow: 0 20px 60px rgba(0, 242, 254, 0.2);
+            transform: scale(1.03);
+        }
+
+        .badge-lifetime {
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--neon-purple), #7c3aed);
+            color: #fff;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 5px 18px;
+            border-radius: 999px;
+            letter-spacing: 0.8px;
+            box-shadow: 0 4px 15px rgba(192, 132, 252, 0.4);
+        }
+
+        .price-name { font-size: 20px; font-weight: 800; margin-bottom: 8px; }
+        .price-num { font-size: 50px; font-weight: 900; font-family: 'JetBrains Mono', monospace; margin-bottom: 8px; }
+        .price-num span { font-size: 16px; color: var(--text-muted); font-weight: 500; }
+        .price-desc { font-size: 14px; color: var(--text-muted); margin-bottom: 28px; line-height: 1.5; }
+
+        .price-features {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            font-size: 14px;
+            margin-bottom: 36px;
+        }
+
+        .price-features li { display: flex; align-items: center; gap: 10px; color: #cbd5e1; }
+        .price-features li span { color: var(--neon-green); font-weight: 900; font-size: 16px; }
+
+        .btn-card {
+            width: 100%;
+            padding: 16px;
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            font-weight: 800;
+            font-size: 15px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-card.btn-primary {
+            background: linear-gradient(135deg, var(--neon-cyan), #0284c7);
+            color: #031019;
+            border: none;
+            box-shadow: 0 8px 24px rgba(0, 242, 254, 0.35);
+        }
+
+        .btn-card.btn-lifetime {
+            background: linear-gradient(135deg, var(--neon-purple), #9333ea);
+            color: #fff;
+            border: none;
+            box-shadow: 0 8px 24px rgba(192, 132, 252, 0.35);
+        }
+
+        /* GATEWAYS RIBBON */
+        .gateways-ribbon {
+            margin-top: 36px;
+            padding: 20px;
+            background: rgba(15, 20, 32, 0.5);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .gateways-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .gateway-pill {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* MODAL DE CHECKOUT */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(3, 5, 10, 0.88);
+            backdrop-filter: blur(14px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active { display: flex; }
+
+        .checkout-box {
+            background: #0d121f;
+            border: 1px solid rgba(0, 242, 254, 0.3);
+            border-radius: 24px;
+            width: 100%;
+            max-width: 520px;
+            padding: 32px;
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.9), 0 0 50px rgba(0, 242, 254, 0.15);
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px; right: 20px;
+            background: rgba(255, 255, 255, 0.08);
+            border: none;
+            color: #fff;
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .checkout-title { font-size: 22px; font-weight: 800; margin-bottom: 6px; }
+        .checkout-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+
+        .order-summary {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .order-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .order-row:last-child {
+            margin-bottom: 0;
+            padding-top: 8px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            font-weight: 800;
+            font-size: 16px;
+        }
+
+        .input-group { margin-bottom: 20px; text-align: left; }
+        .input-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .input-group input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 14px 16px;
+            color: #fff;
+            font-size: 15px;
+            font-family: inherit;
+            outline: none;
+        }
+
+        .gateways-tabs {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+
+        .gw-tab {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border);
+            padding: 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 700;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .gw-tab.active {
+            border-color: var(--neon-cyan);
+            background: rgba(0, 242, 254, 0.1);
+            color: var(--neon-cyan);
+        }
+
+        .crypto-details {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px dashed var(--border);
+            padding: 14px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: none;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            word-break: break-all;
+            text-align: center;
+        }
+
+        .btn-pay-action {
+            width: 100%;
+            padding: 16px;
+            border-radius: 14px;
+            border: none;
+            background: linear-gradient(135deg, var(--neon-cyan), #0284c7);
+            color: #031019;
+            font-weight: 900;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 6px 25px rgba(0, 242, 254, 0.4);
+            transition: all 0.2s;
+        }
+
+        .success-license-box {
+            display: none;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            padding: 20px;
+            border-radius: 16px;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .success-license-code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--neon-green);
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 8px;
+            margin: 12px 0;
+            letter-spacing: 1px;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 13px;
+            color: #475569;
+            padding: 50px 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        @media (max-width: 900px) {
+            .flow-stages-grid { grid-template-columns: 1fr; gap: 20px; }
+            .flow-arrow-col { transform: rotate(90deg); margin: 10px 0; }
+            .flow-breakdown-grid { grid-template-columns: 1fr; }
+            .roi-card { grid-template-columns: 1fr; }
+            .pricing-grid { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 40px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="nav">
+        <div class="brand">
+            <div class="logo-box">🎛️</div>
+            <span>PRE SET <span style="font-size: 12px; color: var(--neon-cyan); font-weight: 700; margin-left: 4px;">by TrackAI</span></span>
+        </div>
+        <div class="nav-links">
+            <a href="#arquitectura">Cómo Funciona</a>
+            <a href="#roi">Ahorro y ROI</a>
+            <a href="#planes">Planes</a>
+            <a href="javascript:void(0)" onclick="openCheckout('lifetime', 349)" class="btn-cta">⚡ Comprar Ahora</a>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <header class="hero">
+        <div class="hero-pill">🔥 Motor Autónomo de Almacenamiento DJ</div>
+        <h1>Lleva 2 TB de Música en tu Mac de 256 GB.<br><span>Cero Cables. Cero Cortes.</span></h1>
+        <p>El único software en el mundo que conecta la nube con Serato DJ Pro mediante el sistema nativo de desalojo de macOS. Toda tu biblioteca vive en 0 Bytes y descargas únicamente el set de hoy con 1 solo clic antes del show.</p>
+        <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+            <a href="javascript:void(0)" onclick="openCheckout('lifetime', 349)" class="btn-cta" style="font-size: 16px; padding: 16px 36px;">💎 Comprar Licencia Lifetime ($349 USD)</a>
+            <a href="#arquitectura" class="btn-card" style="width: auto; padding: 16px 28px; border-radius: 999px;">Ver Diagrama de Flujo</a>
+        </div>
+    </header>
+
+    <!-- ARQUITECTURA VISUAL: CÓMO FUNCIONA CON FLECHAS Y CONEXIONES -->
+    <section class="architecture-section" id="arquitectura">
+        <div class="section-header">
+            <div class="hero-pill" style="margin-bottom: 12px;">⚡ Arquitectura de Flujo</div>
+            <h2 class="section-title">El Flujo de 4 Etapas de PRE SET</h2>
+            <p class="section-sub">Entiende con exactitud cómo funciona la tecnología que protege tu cabina y multiplica el espacio de tu Mac.</p>
+        </div>
+
+        <div class="flow-diagram-container">
+            <div class="flow-stages-grid">
+                
+                <!-- NODO 1: CLOUD -->
+                <div class="flow-node-card">
+                    <span class="node-step-tag">Etapa 1</span>
+                    <div class="node-icon">☁️</div>
+                    <div class="node-title">Google Drive Bóveda Maestra</div>
+                    <div class="node-desc">Tu música entera (2 TB a 4 TB) vive segura y encriptada en la nube contra robos o daños de Mac.</div>
+                    <div class="node-badge-bottom">100% Respaldado</div>
+                </div>
+
+                <!-- FLECHA 1 -->
+                <div class="flow-arrow-col">
+                    ➔
+                    <span class="flow-arrow-label">Metadatos Finder</span>
+                </div>
+
+                <!-- NODO 2: MOTOR PRE SET -->
+                <div class="flow-node-card highlight">
+                    <span class="node-step-tag">Etapa 2</span>
+                    <div class="node-icon">⚙️</div>
+                    <div class="node-title">Motor Nativo PRE SET</div>
+                    <div class="node-desc">macOS FileProvider API. Crea punteros fantasma de 0 Bytes sin ocupar espacio físico en tu disco.</div>
+                    <div class="node-badge-bottom" style="color: var(--neon-cyan);">0 Bytes en Mac</div>
+                </div>
+
+                <!-- FLECHA 2 -->
+                <div class="flow-arrow-col">
+                    ➔
+                    <span class="flow-arrow-label">Rutas Fijas Serato</span>
+                </div>
+
+                <!-- NODO 3: SERATO DJ PRO -->
+                <div class="flow-node-card">
+                    <span class="node-step-tag">Etapa 3</span>
+                    <div class="node-icon">🎧</div>
+                    <div class="node-title">Serato DJ Pro Database</div>
+                    <div class="node-desc">Serato lee la ruta exacta sin errores. Hot Cues, Beatgrids, Loops y Stems permanecen intactos.</div>
+                    <div class="node-badge-bottom">Cero Errores "?"</div>
+                </div>
+
+                <!-- FLECHA 3 (DOBLE VÍA) -->
+                <div class="flow-arrow-col">
+                    ⇄
+                    <span class="flow-arrow-label">On-Demand Cache</span>
+                </div>
+
+                <!-- NODO 4: SSD LOCAL -->
+                <div class="flow-node-card highlight">
+                    <span class="node-step-tag">Etapa 4</span>
+                    <div class="node-icon">⚡</div>
+                    <div class="node-title">SSD Show Mode (Cabina)</div>
+                    <div class="node-desc">1 Clic antes del show descarga el set al SSD. Tocas 100% offline. 1 Clic al terminar lo regresa a 0 KB.</div>
+                    <div class="node-badge-bottom" style="color: var(--neon-gold);">100% Offline</div>
+                </div>
+
+            </div>
+
+            <!-- EXPLICACIÓN PASO A PASO -->
+            <div class="flow-breakdown-grid">
+                <div class="breakdown-box">
+                    <div class="breakdown-num">1</div>
+                    <div class="breakdown-texts">
+                        <h4>¿Por qué Serato normal crashea con la nube y PRE SET no?</h4>
+                        <p>Google Drive estándar descarga o desaloja archivos de forma errática mientras estás mezclando. PRE SET bloquea la sincronización no deseada e interviene a nivel de kernel para descargar atómicamente el set completo antes de subir al escenario.</p>
+                    </div>
+                </div>
+
+                <div class="breakdown-box">
+                    <div class="breakdown-num">2</div>
+                    <div class="breakdown-texts">
+                        <h4>El Algoritmo Autónomo no te hace pensar</h4>
+                        <p>PRE SET diagnostica tu Mac automáticamente. Si tienes archivos descargados tras una fiesta, te sugiere un botón para liberar el espacio. Si vas a tocar, te prepara el set con un toque y activa el escudo anti-suspensión (Live Show Shield).</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CALCULADORA DE RETORNO DE INVERSIÓN (ROI DEL DJ) -->
+    <section class="roi-section" id="roi">
+        <div class="roi-card">
+            <div>
+                <div class="hero-pill" style="margin-bottom: 12px; color: var(--neon-purple); border-color: rgba(192, 132, 252, 0.4);">💰 Retorno de Inversión (ROI)</div>
+                <h2 class="roi-title">Una Inversión que se Paga Sola en el Primer Show.</h2>
+                <p class="roi-desc">
+                    Actualizar tu MacBook a 2 TB o 4 TB con Apple te cuesta entre **$800 y $1,400 USD adicionales**. Un disco externo en cabina pone en riesgo tu contrato si un cable se suelta. PRE SET soluciona ambos problemas de raíz por una fracción de ese costo.
+                </p>
+                <a href="#planes" class="btn-card btn-primary" style="display: inline-flex; width: auto; padding: 14px 30px;">
+                    Obtener PRE SET Hoy
+                </a>
+            </div>
+
+            <div class="roi-math-box">
+                <div class="roi-row">
+                    <span>MacBook Pro con 2 TB SSD de fábrica</span>
+                    <strong style="color: #ef4444;">+$1,200 USD</strong>
+                </div>
+                <div class="roi-row">
+                    <span>Riesgo de corte por cable USB en vivo</span>
+                    <strong style="color: #ef4444;">Pérdida de Contrato</strong>
+                </div>
+                <div class="roi-divider"></div>
+                <div class="roi-row">
+                    <span>MacBook Pro estándar (256 GB) + PRE SET</span>
+                    <strong style="color: var(--neon-green);">$349 USD</strong>
+                </div>
+                <div class="roi-divider"></div>
+                <div class="roi-total-row">
+                    <span>Tu Ahorro Neto Inmediato:</span>
+                    <div class="roi-saved-pill">+$851 USD</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRICING SECTION (EXACTLY 2 PLANS - NO TRIALS) -->
+    <section class="pricing-section" id="planes">
+        <div class="section-header">
+            <div class="hero-pill" style="margin-bottom: 12px;">💎 Licencias Oficiales</div>
+            <h2 class="section-title">Elige tu Licencia Profesional</h2>
+            <p class="section-sub">Sin versiones de prueba ni demos reducidas. Software de grado profesional para DJs de élite.</p>
+        </div>
+
+        <div class="pricing-grid">
+            <!-- 1 AÑO -->
+            <div class="price-card">
+                <div>
+                    <div class="price-name">Licencia Anual (1 Año)</div>
+                    <div class="price-num">$199 <span>/ año</span></div>
+                    <div class="price-desc">Pago anual directo. Sin versiones de prueba. Acceso completo inmediato para tu temporada.</div>
+                    <ul class="price-features">
+                        <li><span>✓</span> Hasta 2 MacBooks activadas (Cabina + Respaldo)</li>
+                        <li><span>✓</span> Motor nativo FileProvider con Evicción a 0 Bytes</li>
+                        <li><span>✓</span> Algoritmo Autónomo con recomendación de 1 clic</li>
+                        <li><span>✓</span> Live Show Shield (Bloqueo Anti-Sleep y Buffer)</li>
+                        <li><span>✓</span> Purgador de Stems temporales de Serato</li>
+                        <li><span>✓</span> 1 Año completo de soporte y actualizaciones</li>
+                    </ul>
+                </div>
+                <button onclick="openCheckout('annual', 199)" class="btn-card btn-primary">
+                    ⚡ Comprar Licencia Anual ($199)
+                </button>
+            </div>
+
+            <!-- LIFETIME -->
+            <div class="price-card featured">
+                <div class="badge-lifetime">👑 Acceso Vitalicio · Pago Único</div>
+                <div>
+                    <div class="price-name">Lifetime Founding Member</div>
+                    <div class="price-num">$349 <span>pago único</span></div>
+                    <div class="price-desc">Inversión definitiva. Olvídate de mensualidades o renovaciones para siempre.</div>
+                    <ul class="price-features">
+                        <li><span>✓</span> <strong>Todas las actualizaciones futuras de por vida (Lifetime Updates)</strong></li>
+                        <li><span>✓</span> Hasta 3 MacBooks activadas simultáneamente</li>
+                        <li><span>✓</span> Motor universal (Serato DJ Pro + próximos Rekordbox / VirtualDJ)</li>
+                        <li><span>✓</span> Soporte VIP directo 1-a-1 de optimización de biblioteca</li>
+                        <li><span>✓</span> Licencia perpetua garantizada</li>
+                    </ul>
+                </div>
+                <button onclick="openCheckout('lifetime', 349)" class="btn-card btn-lifetime">
+                    💎 Comprar Lifetime ($349)
+                </button>
+            </div>
+        </div>
+
+        <!-- GATEWAYS RIBBON -->
+        <div class="gateways-ribbon">
+            <span class="gateways-label">Pasarelas de Pago Oficiales Habilitadas:</span>
+            <div class="gateway-pill">💳 Stripe (Visa / Mastercard / AMEX / Apple Pay)</div>
+            <div class="gateway-pill">🤝 Mercado Pago (Tarjetas Locales, Débito, Pix)</div>
+            <div class="gateway-pill">🌐 PayPal Express</div>
+            <div class="gateway-pill">⚡ Crypto / Web3 (USDT · USDC en Solana / Polygon)</div>
+        </div>
+    </section>
+
+    <!-- MODAL DE CHECKOUT -->
+    <div class="modal-overlay" id="checkoutModal">
+        <div class="checkout-box">
+            <button class="modal-close" onclick="closeCheckout()">✕</button>
+            <div class="checkout-title" id="modalPlanTitle">Comprar Licencia</div>
+            <div class="checkout-sub">Completa tu pago seguro y recibe tu clave de activación de PRE SET al instante.</div>
+
+            <div class="order-summary">
+                <div class="order-row">
+                    <span id="summaryPlanName">Licencia Lifetime (Acceso Vitalicio)</span>
+                    <strong id="summaryPlanPrice">$349 USD</strong>
+                </div>
+                <div class="order-row">
+                    <span>Actualizaciones de por vida</span>
+                    <span style="color: var(--neon-green); font-weight: 700;">INCLUIDAS</span>
+                </div>
+                <div class="order-row">
+                    <span>Total a Pagar</span>
+                    <span style="color: var(--neon-cyan); font-size: 18px;" id="summaryTotal">$349 USD</span>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>Tu Correo Electrónico (Para recibir tu Licencia)</label>
+                <input type="email" id="customerEmail" placeholder="dj@tudominio.com" required>
+            </div>
+
+            <div class="input-group">
+                <label>Selecciona tu Pasarela de Pago</label>
+                <div class="gateways-tabs">
+                    <div class="gw-tab active" id="tab-stripe" onclick="selectGateway('stripe')">
+                        <strong>💳 Stripe</strong>
+                        <span style="font-size: 11px; color: var(--text-muted);">Tarjetas / Apple Pay</span>
+                    </div>
+                    <div class="gw-tab" id="tab-mercadopago" onclick="selectGateway('mercadopago')">
+                        <strong>🤝 Mercado Pago</strong>
+                        <span style="font-size: 11px; color: var(--text-muted);">Latinoamérica</span>
+                    </div>
+                    <div class="gw-tab" id="tab-paypal" onclick="selectGateway('paypal')">
+                        <strong>🌐 PayPal</strong>
+                        <span style="font-size: 11px; color: var(--text-muted);">Checkout Express</span>
+                    </div>
+                    <div class="gw-tab" id="tab-crypto" onclick="selectGateway('crypto')">
+                        <strong>⚡ Crypto (USDT)</strong>
+                        <span style="font-size: 11px; color: var(--text-muted);">Solana / Polygon</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="crypto-details" id="cryptoDetails">
+                <p style="margin-bottom: 6px; color: var(--neon-cyan);">Envía el equivalente exacto en USDT/USDC:</p>
+                <div style="background: rgba(255,255,255,0.06); padding: 8px; border-radius: 6px; margin-bottom: 6px;">
+                    Red: <strong>Solana (SOL)</strong><br>
+                    Dirección: <code>7xKXtg2CW87d97TXJSD98124YHDs82374Hsd82</code>
+                </div>
+                <span style="color: var(--neon-green); font-size: 11px;">Detección automática en blockchain (30 seg)</span>
+            </div>
+
+            <button class="btn-pay-action" id="btnPayAction" onclick="processPayment()">
+                🔒 Pagar y Obtener Licencia Inmediata
+            </button>
+
+            <div class="success-license-box" id="successBox">
+                <div style="font-size: 24px; margin-bottom: 4px;">🎉</div>
+                <strong style="color: var(--neon-green); font-size: 16px;">¡Pago Confirmado con Éxito!</strong>
+                <p style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">Tu licencia PRE SET ha sido generada y enviada a tu correo:</p>
+                <div class="success-license-code" id="generatedLicenseCode">PRESET-LIFETIME-XXXX-XXXX</div>
+                <p style="font-size: 12px; color: #cbd5e1;">Pega esta clave en tu app <strong>Pre Set.app</strong> para activar el acceso.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <p>© 2026 PRE SET by TrackAI. Desarrollado para DJs profesionales de todo el mundo.</p>
+        <p style="margin-top: 6px; color: #334155;">Tecnología nativa Apple Silicon & Serato Database Engine. Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        let currentPlan = 'lifetime';
+        let currentPrice = 349;
+        let selectedGw = 'stripe';
+
+        function openCheckout(plan, price) {
+            currentPlan = plan;
+            currentPrice = price;
+            
+            document.getElementById('checkoutModal').classList.add('active');
+            document.getElementById('successBox').style.display = 'none';
+            document.getElementById('btnPayAction').style.display = 'block';
+
+            if (plan === 'annual') {
+                document.getElementById('modalPlanTitle').innerText = 'Licencia Anual (1 Año)';
+                document.getElementById('summaryPlanName').innerText = 'Licencia Anual (1 Año)';
+                document.getElementById('summaryPlanPrice').innerText = '$199 USD';
+                document.getElementById('summaryTotal').innerText = '$199 USD';
+            } else {
+                document.getElementById('modalPlanTitle').innerText = 'Licencia Lifetime (Acceso Vitalicio)';
+                document.getElementById('summaryPlanName').innerText = 'Licencia Lifetime (Acceso Vitalicio)';
+                document.getElementById('summaryPlanPrice').innerText = '$349 USD';
+                document.getElementById('summaryTotal').innerText = '$349 USD';
+            }
+            selectGateway('stripe');
+        }
+
+        function closeCheckout() {
+            document.getElementById('checkoutModal').classList.remove('active');
+        }
+
+        function selectGateway(gw) {
+            selectedGw = gw;
+            document.querySelectorAll('.gw-tab').forEach(el => el.classList.remove('active'));
+            document.getElementById('tab-' + gw).classList.add('active');
+
+            const cryptoBox = document.getElementById('cryptoDetails');
+            const payBtn = document.getElementById('btnPayAction');
+
+            if (gw === 'crypto') {
+                cryptoBox.style.display = 'block';
+                payBtn.innerText = `⚡ He enviado $${currentPrice} USDT · Confirmar`;
+            } else {
+                cryptoBox.style.display = 'none';
+                if (gw === 'mercadopago') {
+                    payBtn.innerText = `🤝 Pagar $${currentPrice} USD con Mercado Pago`;
+                } else if (gw === 'paypal') {
+                    payBtn.innerText = `🌐 Pagar $${currentPrice} USD con PayPal`;
+                } else {
+                    payBtn.innerText = `💳 Pagar $${currentPrice} USD con Stripe`;
+                }
+            }
+        }
+
+        function processPayment() {
+            const email = document.getElementById('customerEmail').value.trim();
+            if (!email || !email.includes('@')) {
+                alert('Por favor ingresa un correo electrónico válido para recibir tu licencia.');
+                document.getElementById('customerEmail').focus();
+                return;
+            }
+
+            const payBtn = document.getElementById('btnPayAction');
+            payBtn.disabled = true;
+            payBtn.innerText = `⏳ Conectando con ${selectedGw.toUpperCase()}...`;
+
+            setTimeout(() => {
+                payBtn.style.display = 'none';
+                const successBox = document.getElementById('successBox');
+                const randomHex = () => Math.random().toString(36).substring(2, 6).toUpperCase();
+                const prefix = currentPlan === 'annual' ? 'ANNUAL' : 'LIFETIME';
+                const license = `PRESET-${prefix}-${randomHex()}-${randomHex()}-${randomHex()}`;
+                
+                document.getElementById('generatedLicenseCode').innerText = license;
+                successBox.style.display = 'block';
+            }, 1200);
+        }
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeCheckout();
+        });
+    </script>
+</body>
+</html>
