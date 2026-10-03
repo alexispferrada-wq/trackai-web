@@ -2045,17 +2045,30 @@
             }
 
             const amount = currentPlan === 'earlybird' ? 79 : 349;
-            const paypalUrl = `https://trackai.party/suscribir?plan=preset_${currentPlan}&amount=${amount}&email=${encodeURIComponent(email)}&dj=${encodeURIComponent(djName)}`;
+            const apiPlan = currentPlan === 'earlybird' ? 'annual' : 'lifetime';
 
             const btn = document.querySelector('.btn-paypal-checkout');
             if (btn) {
-                btn.innerHTML = `⏳ Conectando a PayPal ($${amount} USD)...`;
+                btn.innerHTML = `⏳ Conectando con PayPal ($${amount} USD)...`;
                 btn.disabled = true;
             }
 
-            setTimeout(() => {
-                window.location.href = paypalUrl;
-            }, 600);
+            fetch('https://api.trackai.party/preset/v1/orders', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ plan: apiPlan })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data && data.id) {
+                    window.location.href = `https://www.paypal.com/checkoutnow?token=${data.id}`;
+                } else {
+                    window.location.href = `https://trackai.party/suscribir?plan=preset_${currentPlan}&amount=${amount}&email=${encodeURIComponent(email)}&dj=${encodeURIComponent(djName)}`;
+                }
+            })
+            .catch(() => {
+                window.location.href = `https://trackai.party/suscribir?plan=preset_${currentPlan}&amount=${amount}&email=${encodeURIComponent(email)}&dj=${encodeURIComponent(djName)}`;
+            });
         }
 
         // ACCIÓN: PAGAR CON FLOW / WEBPAY
