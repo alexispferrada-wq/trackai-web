@@ -378,20 +378,185 @@
             color: var(--neon-green);
         }
 
-        /* PRICING (EXACTLY 2 PLANS - NO TRIALS) */
+        /* PRICING & DUAL CURRENCY */
         .pricing-section {
-            max-width: 950px;
+            max-width: 980px;
             margin: 0 auto 100px auto;
             padding: 0 20px;
             text-align: center;
         }
 
+        /* CURRENCY SELECTOR PILL */
+        .currency-toggle-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 28px auto 26px auto;
+            gap: 10px;
+        }
+
+        .currency-toggle-pills {
+            display: inline-flex;
+            background: rgba(13, 18, 30, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            padding: 5px;
+            gap: 6px;
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5);
+        }
+
+        .curr-pill-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 10px 22px;
+            border-radius: 999px;
+            font-size: 14px;
+            font-weight: 800;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .curr-pill-btn:hover {
+            color: #fff;
+        }
+
+        .curr-pill-btn.active {
+            background: linear-gradient(135deg, rgba(0, 242, 254, 0.18), rgba(2, 132, 199, 0.35));
+            color: var(--neon-cyan);
+            border: 1px solid rgba(0, 242, 254, 0.5);
+            box-shadow: 0 0 18px rgba(0, 242, 254, 0.35);
+        }
+
+        .currency-info-hint {
+            font-size: 13px;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* PROMO COUPON BANNER (60% OFF) */
+        .promo-coupon-bar {
+            max-width: 860px;
+            margin: 0 auto 34px auto;
+            background: linear-gradient(135deg, rgba(255, 95, 46, 0.14), rgba(245, 158, 11, 0.09));
+            border: 1px solid rgba(255, 95, 46, 0.45);
+            border-radius: 18px;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+            box-shadow: 0 10px 30px rgba(255, 95, 46, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .promo-coupon-bar::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 3px;
+            background: linear-gradient(90deg, #ff5f2e, #f59e0b, #00f2fe);
+        }
+
+        .promo-coupon-info {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-align: left;
+        }
+
+        .promo-fire-icon {
+            font-size: 26px;
+            filter: drop-shadow(0 0 8px rgba(255, 95, 46, 0.8));
+            animation: flameFlicker 2s infinite ease-in-out;
+        }
+
+        @keyframes flameFlicker {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15) rotate(-3deg); }
+        }
+
+        .promo-title-text {
+            font-size: 15px;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: -0.2px;
+        }
+
+        .promo-sub-text {
+            font-size: 12.5px;
+            color: #fed7aa;
+        }
+
+        .promo-chip-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .promo-code-chip {
+            background: rgba(0, 0, 0, 0.65);
+            border: 1px dashed rgba(255, 95, 46, 0.7);
+            border-radius: 10px;
+            padding: 8px 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .promo-code-chip:hover {
+            transform: scale(1.04);
+            border-color: #ff5f2e;
+            box-shadow: 0 0 16px rgba(255, 95, 46, 0.4);
+        }
+
+        .promo-code-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 16px;
+            font-weight: 900;
+            color: #ffedd5;
+            letter-spacing: 1.5px;
+        }
+
+        .promo-chip-tag {
+            font-size: 10px;
+            font-weight: 900;
+            background: #ff5f2e;
+            color: #fff;
+            padding: 3px 8px;
+            border-radius: 6px;
+            text-transform: uppercase;
+        }
+
+        .promo-applied-pill {
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--neon-green);
+            background: rgba(16, 185, 129, 0.12);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 6px 12px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* PRICING GRID */
         .pricing-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 32px;
             text-align: left;
-            margin-top: 40px;
+            margin-top: 10px;
         }
 
         .price-card {
@@ -412,10 +577,112 @@
         }
 
         .price-card.featured {
-            border-color: rgba(0, 242, 254, 0.45);
-            background: linear-gradient(180deg, rgba(0, 242, 254, 0.09), rgba(15, 20, 32, 0.95));
-            box-shadow: 0 20px 60px rgba(0, 242, 254, 0.2);
+            border-color: rgba(192, 132, 252, 0.45);
+            background: linear-gradient(180deg, rgba(192, 132, 252, 0.09), rgba(15, 20, 32, 0.95));
+            box-shadow: 0 20px 60px rgba(192, 132, 252, 0.2);
             transform: scale(1.03);
+        }
+
+        /* CENTERED HIGHLIGHTED PRICE DISPLAY */
+        .price-header-centered {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .badge-early-bird {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, #ff5f2e, #f97316);
+            color: #fff;
+            font-size: 11.5px;
+            font-weight: 900;
+            text-transform: uppercase;
+            padding: 6px 16px;
+            border-radius: 999px;
+            letter-spacing: 0.8px;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 18px rgba(255, 95, 46, 0.45);
+            animation: pulseSubtle 2.4s infinite;
+        }
+
+        .delivery-notice-pill {
+            background: rgba(0, 242, 254, 0.08);
+            border: 1px solid rgba(0, 242, 254, 0.3);
+            border-radius: 999px;
+            color: var(--neon-cyan);
+            font-size: 12px;
+            font-weight: 700;
+            padding: 5px 14px;
+            margin: 6px 0 16px 0;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .price-box-centered {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1.5px solid rgba(255, 95, 46, 0.4);
+            border-radius: 20px;
+            padding: 20px 24px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 0 20px rgba(255, 95, 46, 0.08);
+            margin-bottom: 16px;
+        }
+
+        .price-old-centered {
+            font-size: 14px;
+            color: #94a3b8;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .price-old-val {
+            text-decoration: line-through;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            color: #64748b;
+            font-size: 18px;
+        }
+
+        .price-highlight-main {
+            font-size: 56px;
+            font-weight: 900;
+            font-family: 'JetBrains Mono', monospace;
+            color: #fff;
+            line-height: 1;
+            margin: 8px 0;
+            background: linear-gradient(135deg, #ffffff 40%, #ffedd5 70%, #ff5f2e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 4px 16px rgba(255, 95, 46, 0.3));
+        }
+
+        .price-highlight-main .unit-text {
+            font-size: 18px;
+            color: #ffaa80;
+            -webkit-text-fill-color: #ffaa80;
+            font-weight: 700;
+        }
+
+        .price-promo-tag {
+            display: inline-block;
+            background: rgba(255, 95, 46, 0.2);
+            color: #ff7849;
+            border: 1px solid rgba(255, 95, 46, 0.5);
+            padding: 4px 12px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
         }
 
         .badge-lifetime {
@@ -435,9 +702,10 @@
         }
 
         .price-name { font-size: 20px; font-weight: 800; margin-bottom: 8px; }
-        .price-num { font-size: 50px; font-weight: 900; font-family: 'JetBrains Mono', monospace; margin-bottom: 8px; }
-        .price-num span { font-size: 16px; color: var(--text-muted); font-weight: 500; }
-        .price-desc { font-size: 14px; color: var(--text-muted); margin-bottom: 28px; line-height: 1.5; }
+
+        .price-num { font-size: 48px; font-weight: 900; font-family: 'JetBrains Mono', monospace; margin-bottom: 8px; }
+        .price-num span { font-size: 15px; color: var(--text-muted); font-weight: 500; }
+        .price-desc { font-size: 14px; color: var(--text-muted); margin-bottom: 24px; line-height: 1.5; }
 
         .price-features {
             list-style: none;
@@ -471,10 +739,15 @@
         }
 
         .btn-card.btn-primary {
-            background: linear-gradient(135deg, var(--neon-cyan), #0284c7);
-            color: #031019;
+            background: linear-gradient(135deg, #ff5f2e, #f97316);
+            color: #fff;
             border: none;
-            box-shadow: 0 8px 24px rgba(0, 242, 254, 0.35);
+            box-shadow: 0 8px 24px rgba(255, 95, 46, 0.4);
+        }
+
+        .btn-card.btn-primary:hover {
+            box-shadow: 0 12px 30px rgba(255, 95, 46, 0.6);
+            transform: translateY(-2px);
         }
 
         .btn-card.btn-lifetime {
@@ -482,6 +755,11 @@
             color: #fff;
             border: none;
             box-shadow: 0 8px 24px rgba(192, 132, 252, 0.35);
+        }
+
+        .btn-card.btn-lifetime:hover {
+            box-shadow: 0 12px 30px rgba(192, 132, 252, 0.55);
+            transform: translateY(-2px);
         }
 
         /* GATEWAYS RIBBON */
@@ -494,7 +772,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 20px;
+            gap: 16px;
             flex-wrap: wrap;
         }
 
@@ -517,6 +795,12 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
+        .gateway-pill.highlight-gw {
+            border-color: rgba(0, 242, 254, 0.4);
+            background: rgba(0, 242, 254, 0.08);
+            color: var(--neon-cyan);
+        }
+
         /* MODAL DE CHECKOUT */
         .modal-overlay {
             position: fixed;
@@ -534,18 +818,20 @@
 
         .checkout-box {
             background: #0d121f;
-            border: 1px solid rgba(0, 242, 254, 0.3);
+            border: 1px solid rgba(0, 242, 254, 0.35);
             border-radius: 24px;
             width: 100%;
-            max-width: 520px;
-            padding: 32px;
+            max-width: 560px;
+            max-height: 92vh;
+            overflow-y: auto;
+            padding: 30px;
             box-shadow: 0 25px 70px rgba(0, 0, 0, 0.9), 0 0 50px rgba(0, 242, 254, 0.15);
             position: relative;
         }
 
         .modal-close {
             position: absolute;
-            top: 20px; right: 20px;
+            top: 18px; right: 18px;
             background: rgba(255, 255, 255, 0.08);
             border: none;
             color: #fff;
@@ -556,17 +842,30 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.18);
+            transform: scale(1.1);
+        }
+
+        .modal-currency-selector {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 16px;
         }
 
         .checkout-title { font-size: 22px; font-weight: 800; margin-bottom: 6px; }
-        .checkout-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+        .checkout-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; }
 
+        /* ORDER SUMMARY */
         .order-summary {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--border);
             border-radius: 14px;
             padding: 16px;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
         }
 
         .order-row {
@@ -580,18 +879,89 @@
         .order-row:last-child {
             margin-bottom: 0;
             padding-top: 8px;
-            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
             font-weight: 800;
             font-size: 16px;
         }
 
-        .input-group { margin-bottom: 20px; text-align: left; }
+        /* COUPON INPUT ROW */
+        .coupon-section {
+            background: rgba(255, 95, 46, 0.06);
+            border: 1px dashed rgba(255, 95, 46, 0.35);
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 18px;
+            text-align: left;
+        }
+
+        .coupon-label {
+            font-size: 11px;
+            font-weight: 800;
+            color: #fed7aa;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .coupon-input-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        .coupon-input {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 95, 46, 0.4);
+            border-radius: 8px;
+            padding: 10px 14px;
+            color: #fff;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            outline: none;
+        }
+
+        .coupon-input:focus {
+            border-color: #ff5f2e;
+            box-shadow: 0 0 10px rgba(255, 95, 46, 0.3);
+        }
+
+        .btn-apply-coupon {
+            background: #ff5f2e;
+            color: #fff;
+            border: none;
+            padding: 0 18px;
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-apply-coupon:hover {
+            background: #ea580c;
+        }
+
+        .coupon-msg {
+            font-size: 12px;
+            margin-top: 6px;
+            display: block;
+            font-weight: 600;
+        }
+
+        .coupon-msg.success { color: var(--neon-green); }
+        .coupon-msg.warning { color: #f59e0b; }
+        .coupon-msg.error { color: #ef4444; }
+
+        .input-group { margin-bottom: 18px; text-align: left; }
         .input-group label {
             display: block;
             font-size: 12px;
             font-weight: 700;
             color: var(--text-muted);
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             text-transform: uppercase;
         }
 
@@ -600,24 +970,30 @@
             background: rgba(0, 0, 0, 0.4);
             border: 1px solid var(--border);
             border-radius: 12px;
-            padding: 14px 16px;
+            padding: 12px 16px;
             color: #fff;
-            font-size: 15px;
+            font-size: 14.5px;
             font-family: inherit;
             outline: none;
         }
 
+        .input-group input:focus {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 10px rgba(0, 242, 254, 0.25);
+        }
+
+        /* GATEWAYS TABS */
         .gateways-tabs {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin-bottom: 24px;
+            gap: 8px;
+            margin-bottom: 20px;
         }
 
         .gw-tab {
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid var(--border);
-            padding: 12px;
+            padding: 11px;
             border-radius: 12px;
             cursor: pointer;
             text-align: center;
@@ -627,22 +1003,226 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 4px;
+            gap: 3px;
+        }
+
+        .gw-tab:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.08);
         }
 
         .gw-tab.active {
             border-color: var(--neon-cyan);
-            background: rgba(0, 242, 254, 0.1);
+            background: rgba(0, 242, 254, 0.12);
+            color: var(--neon-cyan);
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
+        }
+
+        /* GATEWAY PANELS */
+        .gw-panel {
+            display: none;
+            animation: fadeInGw 0.25s ease;
+        }
+
+        .gw-panel.active { display: block; }
+
+        @keyframes fadeInGw {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* PAYPAL PANEL */
+        .paypal-box {
+            background: rgba(0, 112, 186, 0.08);
+            border: 1px solid rgba(0, 112, 186, 0.35);
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 18px;
+            text-align: left;
+        }
+
+        .paypal-box-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .btn-paypal-checkout {
+            width: 100%;
+            padding: 16px;
+            border-radius: 14px;
+            border: none;
+            background: #ffc439;
+            color: #003087;
+            font-weight: 900;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(255, 196, 57, 0.35);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-paypal-checkout:hover {
+            background: #ffb71b;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 196, 57, 0.5);
+        }
+
+        /* FLOW PANEL */
+        .flow-box {
+            background: rgba(0, 184, 232, 0.08);
+            border: 1px solid rgba(0, 184, 232, 0.35);
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 18px;
+            text-align: left;
+        }
+
+        .flow-badges-row {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+
+        .flow-badge {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 6px;
+            color: #e2e8f0;
+        }
+
+        .btn-flow-checkout {
+            width: 100%;
+            padding: 16px;
+            border-radius: 14px;
+            border: none;
+            background: linear-gradient(135deg, #00b8e8, #0070ba);
+            color: #fff;
+            font-weight: 900;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(0, 184, 232, 0.35);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-flow-checkout:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 184, 232, 0.55);
+        }
+
+        /* BANK TRANSFER DETAILS CARD */
+        .bank-card {
+            background: rgba(16, 185, 129, 0.06);
+            border: 1px solid rgba(16, 185, 129, 0.35);
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 18px;
+            text-align: left;
+        }
+
+        .bank-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            font-size: 13.5px;
+        }
+
+        .bank-row:last-child { border-bottom: none; }
+        .bank-label { color: var(--text-muted); font-size: 12px; }
+        .bank-val { font-weight: 800; color: #fff; font-family: 'JetBrains Mono', monospace; }
+
+        .btn-copy-bank {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #fff;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-copy-bank:hover {
+            background: rgba(0, 242, 254, 0.2);
+            border-color: var(--neon-cyan);
             color: var(--neon-cyan);
         }
 
+        .bank-action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        .btn-transfer-email {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            border: 1px solid rgba(0, 242, 254, 0.4);
+            background: rgba(0, 242, 254, 0.12);
+            color: var(--neon-cyan);
+            font-weight: 800;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-transfer-email:hover {
+            background: rgba(0, 242, 254, 0.22);
+            box-shadow: 0 4px 15px rgba(0, 242, 254, 0.25);
+        }
+
+        .btn-transfer-wa {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            border: none;
+            background: #25D366;
+            color: #040711;
+            font-weight: 900;
+            font-size: 14.5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 18px rgba(37, 211, 102, 0.35);
+            transition: all 0.2s;
+        }
+
+        .btn-transfer-wa:hover {
+            background: #20bd5a;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 22px rgba(37, 211, 102, 0.5);
+        }
+
+        /* STRIPE / CRYPTO DETAILS */
         .crypto-details {
             background: rgba(0, 0, 0, 0.5);
             border: 1px dashed var(--border);
             padding: 14px;
             border-radius: 12px;
             margin-bottom: 20px;
-            display: none;
             font-family: 'JetBrains Mono', monospace;
             font-size: 12px;
             word-break: break-all;
@@ -715,7 +1295,7 @@
             <a href="#arquitectura">Cómo Funciona</a>
             <a href="#roi">Ahorro y ROI</a>
             <a href="#planes">Planes</a>
-            <a href="javascript:void(0)" onclick="openCheckout('lifetime', 349)" class="btn-cta">⚡ Comprar Ahora</a>
+            <a href="javascript:void(0)" onclick="openCheckout('earlybird')" class="btn-cta">🚀 Early Bird 60% OFF</a>
         </div>
     </nav>
 
@@ -725,8 +1305,8 @@
         <h1>Lleva 2 TB de Música en tu Mac de 256 GB.<br><span>Cero Cables. Cero Cortes.</span></h1>
         <p>El único software en el mundo que conecta la nube con Serato DJ Pro mediante el sistema nativo de desalojo de macOS. Toda tu biblioteca vive en 0 Bytes y descargas únicamente el set de hoy con 1 solo clic antes del show.</p>
         <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
-            <a href="javascript:void(0)" onclick="openCheckout('lifetime', 349)" class="btn-cta" style="font-size: 16px; padding: 16px 36px;">💎 Comprar Licencia Lifetime ($349 USD)</a>
-            <a href="#arquitectura" class="btn-card" style="width: auto; padding: 16px 28px; border-radius: 999px;">Ver Diagrama de Flujo</a>
+            <a href="javascript:void(0)" onclick="openCheckout('earlybird')" class="btn-cta" style="font-size: 16px; padding: 16px 36px; background: linear-gradient(135deg, #ff5f2e, #f97316); box-shadow: 0 8px 30px rgba(255, 95, 46, 0.45);">🚀 Reservar Early Bird · 60% OFF ($79 USD)</a>
+            <a href="javascript:void(0)" onclick="openCheckout('lifetime')" class="btn-card" style="width: auto; padding: 16px 28px; border-radius: 999px;">💎 Licencia Lifetime ($349 USD)</a>
         </div>
     </header>
 
@@ -855,52 +1435,135 @@
         </div>
     </section>
 
-    <!-- PRICING SECTION (EXACTLY 2 PLANS - NO TRIALS) -->
+    <!-- PRICING SECTION (EARLY BIRD ACCESO ANTICIPADO) -->
     <section class="pricing-section" id="planes">
         <div class="section-header">
-            <div class="hero-pill" style="margin-bottom: 12px;">💎 Licencias Oficiales</div>
+            <div class="hero-pill" style="margin-bottom: 12px;">🚀 Preventa Oficial Early Bird</div>
             <h2 class="section-title">Elige tu Licencia Profesional</h2>
-            <p class="section-sub">Sin versiones de prueba ni demos reducidas. Software de grado profesional para DJs de élite.</p>
+            <p class="section-sub">Acceso anticipado exclusivo. Software personalizado con tu nombre de DJ compilado a medida.</p>
         </div>
 
+        <!-- SELECTOR DE MONEDA (USD / CLP) -->
+        <div class="currency-toggle-wrapper">
+            <div class="currency-toggle-pills">
+                <button type="button" class="curr-pill-btn active" id="btnCurrencyUSD" onclick="setCurrency('usd')">
+                    <span>🇺🇸</span> Dólares (USD)
+                </button>
+                <button type="button" class="curr-pill-btn" id="btnCurrencyCLP" onclick="setCurrency('clp')">
+                    <span>🇨🇱</span> Pesos Chilenos (CLP)
+                </button>
+            </div>
+            <div class="currency-info-hint" id="currencyHintText">
+                <span>🌐 Pasarelas globales en USD: <strong>PayPal Express</strong>, Stripe y Crypto.</span>
+            </div>
+        </div>
+
+        <!-- BANNER DE EARLY BIRD DESTACADO -->
+        <div class="promo-coupon-bar">
+            <div class="promo-coupon-info">
+                <div class="promo-fire-icon">🚀</div>
+                <div>
+                    <div class="promo-title-text">VENTA OFICIAL EARLY BIRD: 60% DE DESCUENTO DIRECTO</div>
+                    <div class="promo-sub-text">Tu app irá compilada y <strong>personalizada con tu nombre de DJ</strong>. Entrega por lotes a contar del <strong>05/10/2026</strong>. A partir de esa fecha el precio sube al original ($199 USD) y la versión normal ya no será personalizada.</div>
+                </div>
+            </div>
+            <div class="promo-chip-wrapper">
+                <div class="promo-applied-pill" style="font-size: 13px; padding: 8px 16px;">
+                    <span>⚡</span> 60% OFF Automático
+                </div>
+            </div>
+        </div>
+
+        <!-- GRID DE PRECIOS -->
         <div class="pricing-grid">
-            <!-- 1 AÑO -->
+            <!-- EARLY BIRD 1 AÑO (PRECIO CENTRADO Y SUPER DESTACADO) -->
             <div class="price-card">
                 <div>
-                    <div class="price-name">Licencia Anual (1 Año)</div>
-                    <div class="price-num">$199 <span>/ año</span></div>
-                    <div class="price-desc">Pago anual directo. Sin versiones de prueba. Acceso completo inmediato para tu temporada.</div>
+                    <div class="price-header-centered">
+                        <div class="badge-early-bird">🚀 ACCESO ANTICIPADO · 60% OFF DIRECTO</div>
+                        <div class="price-name" style="text-align: center; font-size: 23px;">Licencia Early Bird (1 Año)</div>
+                        <div class="delivery-notice-pill">
+                            📅 Entrega a contar del <strong>05/10/2026</strong>
+                        </div>
+
+                        <!-- CAJA DE PRECIO CENTRADA Y SUPER DESTACADA -->
+                        <div class="price-box-centered">
+                            <div class="price-old-centered">
+                                <span>Precio Original:</span>
+                                <span class="price-old-val" id="cardAnnualOldPrice">$199 USD</span>
+                            </div>
+                            <div class="price-highlight-main" id="cardAnnualPrice">
+                                $79 <span class="unit-text" id="cardAnnualUnit">USD</span>
+                            </div>
+                            <div class="price-promo-tag" id="cardAnnualPromoTag">
+                                🔥 60% OFF · AHORRAS $120 USD
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="price-desc" id="cardAnnualDesc" style="text-align: center; margin-bottom: 20px;">
+                        Tarifa de lanzamiento anticipado por tiempo limitado. Incluye <strong>compilación personalizada</strong> con tu nombre de DJ.
+                    </div>
+
                     <ul class="price-features">
-                        <li><span>✓</span> Hasta 2 MacBooks activadas (Cabina + Respaldo)</li>
+                        <li><span>✓</span> <strong>Compilación Personalizada con tu Nombre de DJ</strong> (Grabado en el software)</li>
+                        <li><span>✓</span> <strong>1 Computador (1 MacBook activada)</strong></li>
+                        <li><span>✓</span> <strong>Entrega por lotes a contar del 05/10/2026</strong> por orden de reserva</li>
+                        <li><span>✓</span> A contar del 05/10/2026 sube al precio original ($199 USD) sin personalización</li>
                         <li><span>✓</span> Motor nativo FileProvider con Evicción a 0 Bytes</li>
                         <li><span>✓</span> Algoritmo Autónomo con recomendación de 1 clic</li>
                         <li><span>✓</span> Live Show Shield (Bloqueo Anti-Sleep y Buffer)</li>
                         <li><span>✓</span> Purgador de Stems temporales de Serato</li>
-                        <li><span>✓</span> 1 Año completo de soporte y actualizaciones</li>
+                        <li><span>✓</span> 1 Año completo de soporte prioritario y actualizaciones</li>
                     </ul>
                 </div>
-                <button onclick="openCheckout('annual', 199)" class="btn-card btn-primary">
-                    ⚡ Comprar Licencia Anual ($199)
+                <button onclick="openCheckout('earlybird')" class="btn-card btn-primary" id="btnBuyAnnual" style="font-size: 16px; padding: 18px;">
+                    🚀 Reservar Early Bird ($79 USD)
                 </button>
             </div>
 
-            <!-- LIFETIME -->
+            <!-- LIFETIME FOUNDING MEMBER (TARIFA DEFINITIVA) -->
             <div class="price-card featured">
                 <div class="badge-lifetime">👑 Acceso Vitalicio · Pago Único</div>
                 <div>
-                    <div class="price-name">Lifetime Founding Member</div>
-                    <div class="price-num">$349 <span>pago único</span></div>
-                    <div class="price-desc">Inversión definitiva. Olvídate de mensualidades o renovaciones para siempre.</div>
+                    <div class="price-header-centered" style="margin-top: 10px;">
+                        <div class="price-name" style="text-align: center; font-size: 23px;">Lifetime Founding Member</div>
+                        <div class="delivery-notice-pill" style="color: var(--neon-purple); border-color: rgba(192, 132, 252, 0.4); background: rgba(192, 132, 252, 0.08);">
+                            💎 Compilación Personalizada VIP + De Por Vida
+                        </div>
+
+                        <!-- CAJA DE PRECIO CENTRADA -->
+                        <div class="price-box-centered" style="border-color: rgba(192, 132, 252, 0.45); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 0 20px rgba(192, 132, 252, 0.08);">
+                            <div class="price-old-centered">
+                                <span style="color: #c084fc;">Tarifa Definitiva:</span>
+                                <span style="font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #e2e8f0; font-size: 14px;">Sin Mensualidades</span>
+                            </div>
+                            <div class="price-highlight-main" id="cardLifetimePrice" style="background: linear-gradient(135deg, #fff 40%, #f3e8ff 70%, #c084fc 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 4px 16px rgba(192, 132, 252, 0.3));">
+                                $349 <span class="unit-text" id="cardLifetimeUnit" style="-webkit-text-fill-color: #c084fc;">USD</span>
+                            </div>
+                            <div class="price-promo-tag" style="background: rgba(192, 132, 252, 0.2); color: #d8b4fe; border-color: rgba(192, 132, 252, 0.5);">
+                                👑 PAGO ÚNICO PERPETUO
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="price-desc" style="text-align: center; margin-bottom: 20px;">
+                        Inversión definitiva sin cuotas ni renovaciones nunca más. (Tarifa vitalicia fija sin descuentos).
+                    </div>
+
                     <ul class="price-features">
+                        <li><span>✓</span> <strong>Compilación Personalizada VIP grabada a tu nombre</strong></li>
+                        <li><span>✓</span> <strong>Hasta 2 MacBooks activadas simultáneamente</strong></li>
                         <li><span>✓</span> <strong>Todas las actualizaciones futuras de por vida (Lifetime Updates)</strong></li>
-                        <li><span>✓</span> Hasta 3 MacBooks activadas simultáneamente</li>
                         <li><span>✓</span> Motor universal (Serato DJ Pro + próximos Rekordbox / VirtualDJ)</li>
                         <li><span>✓</span> Soporte VIP directo 1-a-1 de optimización de biblioteca</li>
+                        <li><span>✓</span> Entrega prioritaria preferente a contar del 05/10/2026</li>
+                        <li><span>✓</span> Sin mensualidades ni cobros adicionales en el futuro</li>
                         <li><span>✓</span> Licencia perpetua garantizada</li>
                     </ul>
                 </div>
-                <button onclick="openCheckout('lifetime', 349)" class="btn-card btn-lifetime">
-                    💎 Comprar Lifetime ($349)
+                <button onclick="openCheckout('lifetime')" class="btn-card btn-lifetime" id="btnBuyLifetime" style="font-size: 16px; padding: 18px;">
+                    💎 Comprar Lifetime ($349 USD)
                 </button>
             </div>
         </div>
@@ -908,80 +1571,202 @@
         <!-- GATEWAYS RIBBON -->
         <div class="gateways-ribbon">
             <span class="gateways-label">Pasarelas de Pago Oficiales Habilitadas:</span>
-            <div class="gateway-pill">💳 Stripe (Visa / Mastercard / AMEX / Apple Pay)</div>
-            <div class="gateway-pill">🤝 Mercado Pago (Tarjetas Locales, Débito, Pix)</div>
-            <div class="gateway-pill">🌐 PayPal Express</div>
-            <div class="gateway-pill">⚡ Crypto / Web3 (USDT · USDC en Solana / Polygon)</div>
+            <div class="gateway-pill highlight-gw">🌐 PayPal Express (Internacional USD)</div>
+            <div class="gateway-pill highlight-gw">💳 Flow (Webpay / Tarjetas Chilenas CLP)</div>
+            <div class="gateway-pill highlight-gw">🏦 Transferencia Directa (CuentaRUT / Banco)</div>
+            <div class="gateway-pill">💳 Stripe (Visa / Mastercard / Apple Pay)</div>
+            <div class="gateway-pill">⚡ Crypto Web3 (USDT / USDC en Solana)</div>
         </div>
     </section>
 
-    <!-- MODAL DE CHECKOUT -->
+    <!-- MODAL DE CHECKOUT MULTI-MONEDA -->
     <div class="modal-overlay" id="checkoutModal">
         <div class="checkout-box">
-            <button class="modal-close" onclick="closeCheckout()">✕</button>
-            <div class="checkout-title" id="modalPlanTitle">Comprar Licencia</div>
-            <div class="checkout-sub">Completa tu pago seguro y recibe tu clave de activación de PRE SET al instante.</div>
+            <button class="modal-close" onclick="closeCheckout()" aria-label="Cerrar modal">✕</button>
+            
+            <div class="modal-currency-selector">
+                <div class="currency-toggle-pills" style="transform: scale(0.92);">
+                    <button type="button" class="curr-pill-btn active" id="modalCurrUSD" onclick="setCurrency('usd')">
+                        🇺🇸 USD ($ Dólares)
+                    </button>
+                    <button type="button" class="curr-pill-btn" id="modalCurrCLP" onclick="setCurrency('clp')">
+                        🇨🇱 CLP ($ Chileno)
+                    </button>
+                </div>
+            </div>
 
+            <div class="checkout-title" id="modalPlanTitle">Reserva tu Licencia Early Bird</div>
+            <div class="checkout-sub">Tu compilación a medida se entregará a contar del <strong>05/10/2026</strong>.</div>
+
+            <!-- AVISO DE PERSONALIZACIÓN Y ENTREGA -->
+            <div style="background: rgba(0, 242, 254, 0.08); border: 1px solid rgba(0, 242, 254, 0.35); border-radius: 14px; padding: 14px; margin-bottom: 18px; font-size: 12.5px; text-align: left; display: flex; align-items: flex-start; gap: 12px;">
+                <span style="font-size: 22px; line-height: 1;">📅</span>
+                <div>
+                    <strong style="color: var(--neon-cyan); font-size: 13.5px;">Entrega por lotes a contar del 05/10/2026</strong><br>
+                    <span style="color: #cbd5e1; line-height: 1.4; display: block; margin-top: 3px;">
+                        Las versiones Early Bird van personalizadas con tu Nombre de DJ grabado en la app. A partir del 05/10/2026 el precio vuelve a ser el original ($199 USD / $199.000 CLP) y se entregará la versión normal sin personalización.
+                    </span>
+                </div>
+            </div>
+
+            <!-- RESUMEN DEL PEDIDO -->
             <div class="order-summary">
                 <div class="order-row">
-                    <span id="summaryPlanName">Licencia Lifetime (Acceso Vitalicio)</span>
-                    <strong id="summaryPlanPrice">$349 USD</strong>
+                    <span id="summaryPlanName">Licencia Early Bird (1 Año · 1 Computador)</span>
+                    <strong id="summaryPlanBasePrice" style="text-decoration: line-through; color: #64748b;">$199 USD</strong>
+                </div>
+                <div class="order-row" id="summaryDiscountRow">
+                    <span id="summaryDiscountLabel" style="color: #ff5f2e; font-weight: 700;">🔥 Descuento Early Bird (60% OFF Automático)</span>
+                    <strong id="summaryDiscountAmount" style="color: #ff5f2e;">-$120 USD</strong>
                 </div>
                 <div class="order-row">
-                    <span>Actualizaciones de por vida</span>
-                    <span style="color: var(--neon-green); font-weight: 700;">INCLUIDAS</span>
+                    <span>Compilación Personalizada de la App</span>
+                    <span style="color: var(--neon-green); font-weight: 800;">INCLUIDA (05/10/2026)</span>
                 </div>
                 <div class="order-row">
                     <span>Total a Pagar</span>
-                    <span style="color: var(--neon-cyan); font-size: 18px;" id="summaryTotal">$349 USD</span>
+                    <span style="color: var(--neon-cyan); font-size: 22px; font-weight: 900;" id="summaryTotalAmount">$79 USD</span>
                 </div>
             </div>
 
+            <!-- DATOS PARA PERSONALIZAR LA APP -->
             <div class="input-group">
-                <label>Tu Correo Electrónico (Para recibir tu Licencia)</label>
+                <label for="customerDjName">Nombre Artístico / DJ Name (Para personalizar tu App) *</label>
+                <input type="text" id="customerDjName" placeholder="Ej. DJ Alex Ferrada / DJ Phoenix" required>
+                <span style="font-size: 11px; color: #94a3b8; margin-top: 4px; display: block;">Se grabará en la ventana principal y firma de tu build de Pre Set.app</span>
+            </div>
+
+            <div class="input-group">
+                <label for="customerEmail">Tu Correo Electrónico (Para recibir tu Instalador y Clave) *</label>
                 <input type="email" id="customerEmail" placeholder="dj@tudominio.com" required>
             </div>
 
+            <!-- SELECTOR DE PASARELAS -->
             <div class="input-group">
-                <label>Selecciona tu Pasarela de Pago</label>
-                <div class="gateways-tabs">
-                    <div class="gw-tab active" id="tab-stripe" onclick="selectGateway('stripe')">
-                        <strong>💳 Stripe</strong>
-                        <span style="font-size: 11px; color: var(--text-muted);">Tarjetas / Apple Pay</span>
+                <label>Selecciona tu Método de Pago</label>
+                <div class="gateways-tabs" id="gatewaysTabContainer">
+                    <!-- Dinámico según USD o CLP -->
+                </div>
+            </div>
+
+            <!-- PANEL 1: PAYPAL EXPRESS (USD) -->
+            <div class="gw-panel" id="panel-paypal">
+                <div class="paypal-box">
+                    <div class="paypal-box-header">
+                        <strong style="color: #ffc439; font-size: 15px;">🌐 PayPal Checkout Express Oficial</strong>
                     </div>
-                    <div class="gw-tab" id="tab-mercadopago" onclick="selectGateway('mercadopago')">
-                        <strong>🤝 Mercado Pago</strong>
-                        <span style="font-size: 11px; color: var(--text-muted);">Latinoamérica</span>
+                    <p style="font-size: 12.5px; color: #cbd5e1; margin-bottom: 12px; line-height: 1.5;">
+                        Procesa tu pago protegido con el 60% de descuento directo en dólares. Recibirás tu confirmación de reserva y clave inmediatamente.
+                    </p>
+                    <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 14px;">
+                        Monto a procesar en PayPal: <strong id="paypalChargeAmount" style="color: #fff; font-size: 14px;">$79 USD</strong>
                     </div>
-                    <div class="gw-tab" id="tab-paypal" onclick="selectGateway('paypal')">
-                        <strong>🌐 PayPal</strong>
-                        <span style="font-size: 11px; color: var(--text-muted);">Checkout Express</span>
+                    <button type="button" class="btn-paypal-checkout" onclick="payWithPayPal()">
+                        <span style="font-size: 18px;">🌐</span> Pagar con PayPal (<span id="btnPaypalPriceText">$79 USD</span>)
+                    </button>
+                </div>
+            </div>
+
+            <!-- PANEL 2: FLOW / WEBPAY (CLP) -->
+            <div class="gw-panel" id="panel-flow">
+                <div class="flow-box">
+                    <strong style="color: #00b8e8; font-size: 15px;">💳 Flow / Webpay Plus (Tarjetas Chilenas)</strong>
+                    <p style="font-size: 12.5px; color: #cbd5e1; margin: 6px 0 10px 0; line-height: 1.5;">
+                        Paga en pesos chilenos con cualquier tarjeta de débito, CuentaRUT, Redcompra o crédito en cuotas mediante Flow.
+                    </p>
+                    <div class="flow-badges-row">
+                        <span class="flow-badge">Webpay Plus</span>
+                        <span class="flow-badge">CuentaRUT</span>
+                        <span class="flow-badge">Redcompra</span>
+                        <span class="flow-badge">Débito / Crédito</span>
+                        <span class="flow-badge">Mach / Chek</span>
                     </div>
-                    <div class="gw-tab" id="tab-crypto" onclick="selectGateway('crypto')">
-                        <strong>⚡ Crypto (USDT)</strong>
-                        <span style="font-size: 11px; color: var(--text-muted);">Solana / Polygon</span>
+                    <div style="font-size: 12px; color: var(--text-muted); margin: 12px 0 14px 0;">
+                        Monto oficial en pesos chilenos: <strong id="flowChargeAmount" style="color: #00b8e8; font-size: 15px;">$79.000 CLP</strong>
+                    </div>
+                    <button type="button" class="btn-flow-checkout" onclick="payWithFlow()">
+                        <span>💳</span> Pagar con Flow / Webpay (<span id="btnFlowPriceText">$79.000 CLP</span>)
+                    </button>
+                </div>
+            </div>
+
+            <!-- PANEL 3: TRANSFERENCIA BANCARIA DIRECTA (CLP) -->
+            <div class="gw-panel" id="panel-transfer">
+                <div class="bank-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <strong style="color: var(--neon-green); font-size: 14.5px;">🏦 Datos de Transferencia Directa</strong>
+                        <span style="font-size: 11px; background: rgba(16, 185, 129, 0.2); color: var(--neon-green); padding: 2px 8px; border-radius: 99px; font-weight: 800;">0% Comisión</span>
+                    </div>
+                    <div class="bank-row">
+                        <span class="bank-label">Banco:</span>
+                        <span class="bank-val">BancoEstado</span>
+                    </div>
+                    <div class="bank-row">
+                        <span class="bank-label">Tipo de Cuenta:</span>
+                        <span class="bank-val">CuentaRUT / Cuenta Vista</span>
+                    </div>
+                    <div class="bank-row">
+                        <span class="bank-label">N° de Cuenta:</span>
+                        <span class="bank-val">18.928.104 <button type="button" class="btn-copy-bank" onclick="copyText('18928104')">Copiar</button></span>
+                    </div>
+                    <div class="bank-row">
+                        <span class="bank-label">RUT:</span>
+                        <span class="bank-val">18.928.104-5 <button type="button" class="btn-copy-bank" onclick="copyText('18928104-5')">Copiar</button></span>
+                    </div>
+                    <div class="bank-row">
+                        <span class="bank-label">Titular:</span>
+                        <span class="bank-val">Alexis Ferrada (TrackAI)</span>
+                    </div>
+                    <div class="bank-row">
+                        <span class="bank-label">Email comprobante:</span>
+                        <span class="bank-val" style="font-size: 12px;">soporte@trackai.party <button type="button" class="btn-copy-bank" onclick="copyText('soporte@trackai.party')">Copiar</button></span>
+                    </div>
+                    <div class="bank-row">
+                        <span class="bank-label">Monto exacto:</span>
+                        <strong id="bankTransferAmount" style="color: var(--neon-cyan); font-size: 16px;">$79.000 CLP</strong>
+                    </div>
+
+                    <div class="bank-action-buttons">
+                        <button type="button" class="btn-transfer-email" onclick="requestBankDataByEmail()">
+                            <span>✉️</span> Pedir Datos a mi Correo Electrónico
+                        </button>
+                        <a href="javascript:void(0)" class="btn-transfer-wa" id="btnWaTransferLink" onclick="sendTransferReceiptWhatsApp()">
+                            <span>💬</span> Enviar Comprobante por WhatsApp (+56 9 9281 8104)
+                        </a>
                     </div>
                 </div>
             </div>
 
-            <div class="crypto-details" id="cryptoDetails">
-                <p style="margin-bottom: 6px; color: var(--neon-cyan);">Envía el equivalente exacto en USDT/USDC:</p>
-                <div style="background: rgba(255,255,255,0.06); padding: 8px; border-radius: 6px; margin-bottom: 6px;">
-                    Red: <strong>Solana (SOL)</strong><br>
-                    Dirección: <code>7xKXtg2CW87d97TXJSD98124YHDs82374Hsd82</code>
-                </div>
-                <span style="color: var(--neon-green); font-size: 11px;">Detección automática en blockchain (30 seg)</span>
+            <!-- PANEL 4: STRIPE (USD) -->
+            <div class="gw-panel" id="panel-stripe">
+                <button type="button" class="btn-pay-action" id="btnStripeAction" onclick="processGenericCardPayment()">
+                    💳 Pagar con Tarjeta Internacional (Stripe)
+                </button>
             </div>
 
-            <button class="btn-pay-action" id="btnPayAction" onclick="processPayment()">
-                🔒 Pagar y Obtener Licencia Inmediata
-            </button>
+            <!-- PANEL 5: CRYPTO USDT (USD) -->
+            <div class="gw-panel" id="panel-crypto">
+                <div class="crypto-details">
+                    <p style="margin-bottom: 6px; color: var(--neon-cyan);">Envía el monto equivalente en USDT o USDC:</p>
+                    <div style="background: rgba(255,255,255,0.06); padding: 8px; border-radius: 6px; margin-bottom: 6px;">
+                        Red: <strong>Solana (SOL)</strong><br>
+                        Dirección: <code>7xKXtg2CW87d97TXJSD98124YHDs82374Hsd82</code>
+                    </div>
+                    <span style="color: var(--neon-green); font-size: 11px;">Detección automática en blockchain (30 seg)</span>
+                </div>
+                <button type="button" class="btn-pay-action" onclick="processCryptoPayment()">
+                    ⚡ He enviado el pago USDT · Confirmar
+                </button>
+            </div>
 
+            <!-- RESULTADO Y LICENCIA -->
             <div class="success-license-box" id="successBox">
-                <div style="font-size: 24px; margin-bottom: 4px;">🎉</div>
-                <strong style="color: var(--neon-green); font-size: 16px;">¡Pago Confirmado con Éxito!</strong>
-                <p style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">Tu licencia PRE SET ha sido generada y enviada a tu correo:</p>
-                <div class="success-license-code" id="generatedLicenseCode">PRESET-LIFETIME-XXXX-XXXX</div>
+                <div style="font-size: 26px; margin-bottom: 4px;">🎉</div>
+                <strong style="color: var(--neon-green); font-size: 17px;" id="successBoxTitle">¡Reserva Registrada con Éxito!</strong>
+                <p style="font-size: 13px; color: var(--text-muted); margin-top: 4px;" id="successBoxSubtitle">
+                    Tu orden Early Bird y clave de activación han sido registradas. Tu software compilado a tu nombre se entregará a contar del 05/10/2026:
+                </p>
+                <div class="success-license-code" id="generatedLicenseCode">PRESET-EARLYBIRD-XXXX-XXXX</div>
                 <p style="font-size: 12px; color: #cbd5e1;">Pega esta clave en tu app <strong>Pre Set.app</strong> para activar el acceso.</p>
             </div>
         </div>
@@ -993,87 +1778,407 @@
         <p style="margin-top: 6px; color: #334155;">Tecnología nativa Apple Silicon & Serato Database Engine. Todos los derechos reservados.</p>
     </footer>
 
+    <!-- SCRIPT DE CHECKOUT Y PASARELAS DUALES -->
     <script>
-        let currentPlan = 'lifetime';
-        let currentPrice = 349;
-        let selectedGw = 'stripe';
+        // CONFIGURACIÓN DE PRECIOS BASE
+        const PRICING = {
+            usd: {
+                earlybird: { base: 199, final: 79, discount: 120, percent: 60, formattedBase: '$199 USD', formattedFinal: '$79 USD' },
+                lifetime: { base: 349, final: 349, discount: 0, percent: 0, formattedBase: '$349 USD', formattedFinal: '$349 USD' }
+            },
+            clp: {
+                earlybird: { base: 199000, final: 79000, discount: 120000, percent: 60, formattedBase: '$199.000 CLP', formattedFinal: '$79.000 CLP' },
+                lifetime: { base: 349000, final: 349000, discount: 0, percent: 0, formattedBase: '$349.000 CLP', formattedFinal: '$349.000 CLP' }
+            }
+        };
 
-        function openCheckout(plan, price) {
-            currentPlan = plan;
-            currentPrice = price;
-            
+        // ESTADO GLOBAL
+        let currentCurrency = 'usd';
+        let currentPlan = 'earlybird';
+        let activeGateway = 'paypal';
+
+        // FORMATEO DE MONEDA
+        function formatPrice(amount, curr) {
+            if (curr === 'clp') {
+                return '$' + amount.toLocaleString('es-CL') + ' CLP';
+            }
+            return '$' + amount + ' USD';
+        }
+
+        // CAMBIO DE MONEDA (USD / CLP)
+        function setCurrency(curr) {
+            currentCurrency = curr;
+
+            // Actualizar botones de moneda
+            document.querySelectorAll('.curr-pill-btn').forEach(btn => btn.classList.remove('active'));
+            if (curr === 'usd') {
+                document.getElementById('btnCurrencyUSD')?.classList.add('active');
+                document.getElementById('modalCurrUSD')?.classList.add('active');
+                if (document.getElementById('currencyHintText')) {
+                    document.getElementById('currencyHintText').innerHTML = '<span>🌐 Pasarelas globales en USD: <strong>PayPal Express</strong>, Stripe y Crypto.</span>';
+                }
+            } else {
+                document.getElementById('btnCurrencyCLP')?.classList.add('active');
+                document.getElementById('modalCurrCLP')?.classList.add('active');
+                if (document.getElementById('currencyHintText')) {
+                    document.getElementById('currencyHintText').innerHTML = '<span>🇨🇱 Pasarelas locales Chile: <strong>Flow (Webpay/Débito)</strong> y <strong>Transferencia Bancaria Directa</strong> (CuentaRUT).</span>';
+                }
+            }
+
+            // Actualizar tarjetas de precios en la landing
+            updatePricingCards();
+
+            // Si el modal está abierto, refrescar resumen y pasarelas
+            if (document.getElementById('checkoutModal').classList.contains('active')) {
+                updateModalView();
+            }
+        }
+
+        // ACTUALIZAR CARDS DE LA LANDING
+        function updatePricingCards() {
+            const eb = PRICING[currentCurrency].earlybird;
+            const lt = PRICING[currentCurrency].lifetime;
+
+            // Card Early Bird
+            const cardAnnualOld = document.getElementById('cardAnnualOldPrice');
+            const cardAnnualPrice = document.getElementById('cardAnnualPrice');
+            const cardAnnualUnit = document.getElementById('cardAnnualUnit');
+            const cardAnnualPromoTag = document.getElementById('cardAnnualPromoTag');
+            const btnBuyAnnual = document.getElementById('btnBuyAnnual');
+
+            if (currentCurrency === 'usd') {
+                cardAnnualOld.innerText = '$199 USD';
+                cardAnnualPrice.innerHTML = `$79 <span class="unit-text" id="cardAnnualUnit">USD</span>`;
+                cardAnnualPromoTag.innerText = '🔥 60% OFF · AHORRAS $120 USD';
+                btnBuyAnnual.innerText = '🚀 Reservar Early Bird ($79 USD)';
+            } else {
+                cardAnnualOld.innerText = '$199.000 CLP';
+                cardAnnualPrice.innerHTML = `$79.000 <span class="unit-text" id="cardAnnualUnit">CLP</span>`;
+                cardAnnualPromoTag.innerText = '🔥 60% OFF · AHORRAS $120.000 CLP';
+                btnBuyAnnual.innerText = '🚀 Reservar Early Bird ($79.000 CLP)';
+            }
+
+            // Card Lifetime
+            const cardLifetimePrice = document.getElementById('cardLifetimePrice');
+            const btnBuyLifetime = document.getElementById('btnBuyLifetime');
+
+            if (currentCurrency === 'usd') {
+                cardLifetimePrice.innerHTML = `$349 <span class="unit-text" id="cardLifetimeUnit" style="-webkit-text-fill-color: #c084fc;">USD</span>`;
+                btnBuyLifetime.innerText = '💎 Comprar Lifetime ($349 USD)';
+            } else {
+                cardLifetimePrice.innerHTML = `$349.000 <span class="unit-text" id="cardLifetimeUnit" style="-webkit-text-fill-color: #c084fc;">CLP</span>`;
+                btnBuyLifetime.innerText = '💎 Comprar Lifetime ($349.000 CLP)';
+            }
+        }
+
+        function copyText(str) {
+            navigator.clipboard.writeText(str).then(() => {
+                alert('Copiado al portapapeles: ' + str);
+            });
+        }
+
+        // ABRIR CHECKOUT
+        function openCheckout(plan) {
+            currentPlan = (plan === 'annual' || plan === 'earlybird') ? 'earlybird' : 'lifetime';
             document.getElementById('checkoutModal').classList.add('active');
             document.getElementById('successBox').style.display = 'none';
-            document.getElementById('btnPayAction').style.display = 'block';
 
-            if (plan === 'annual') {
-                document.getElementById('modalPlanTitle').innerText = 'Licencia Anual (1 Año)';
-                document.getElementById('summaryPlanName').innerText = 'Licencia Anual (1 Año)';
-                document.getElementById('summaryPlanPrice').innerText = '$199 USD';
-                document.getElementById('summaryTotal').innerText = '$199 USD';
+            // Auto-seleccionar pasarela según moneda
+            if (currentCurrency === 'clp') {
+                activeGateway = 'flow';
             } else {
-                document.getElementById('modalPlanTitle').innerText = 'Licencia Lifetime (Acceso Vitalicio)';
-                document.getElementById('summaryPlanName').innerText = 'Licencia Lifetime (Acceso Vitalicio)';
-                document.getElementById('summaryPlanPrice').innerText = '$349 USD';
-                document.getElementById('summaryTotal').innerText = '$349 USD';
+                activeGateway = 'paypal';
             }
-            selectGateway('stripe');
+
+            updateModalView();
         }
 
         function closeCheckout() {
             document.getElementById('checkoutModal').classList.remove('active');
         }
 
-        function selectGateway(gw) {
-            selectedGw = gw;
-            document.querySelectorAll('.gw-tab').forEach(el => el.classList.remove('active'));
-            document.getElementById('tab-' + gw).classList.add('active');
+        // ACTUALIZAR VISTA DEL MODAL
+        function updateModalView() {
+            const planCfg = PRICING[currentCurrency][currentPlan];
 
-            const cryptoBox = document.getElementById('cryptoDetails');
-            const payBtn = document.getElementById('btnPayAction');
+            // Título
+            const titleEl = document.getElementById('modalPlanTitle');
+            const summaryPlanName = document.getElementById('summaryPlanName');
+            const summaryPlanBase = document.getElementById('summaryPlanBasePrice');
+            const summaryDiscountRow = document.getElementById('summaryDiscountRow');
+            const summaryDiscountLabel = document.getElementById('summaryDiscountLabel');
+            const summaryDiscountAmount = document.getElementById('summaryDiscountAmount');
+            const summaryTotal = document.getElementById('summaryTotalAmount');
 
-            if (gw === 'crypto') {
-                cryptoBox.style.display = 'block';
-                payBtn.innerText = `⚡ He enviado $${currentPrice} USDT · Confirmar`;
+            if (currentPlan === 'earlybird') {
+                titleEl.innerText = 'Reserva tu Licencia Early Bird Personalizada';
+                summaryPlanName.innerText = 'Licencia Early Bird (1 Año · 1 Computador)';
+                summaryPlanBase.style.textDecoration = 'line-through';
+                summaryPlanBase.style.color = '#64748b';
+                summaryPlanBase.innerText = planCfg.formattedBase;
+                summaryDiscountRow.style.display = 'flex';
+                summaryDiscountLabel.innerText = '🔥 Descuento Early Bird (60% OFF Automático)';
+                summaryDiscountAmount.innerText = `-${formatPrice(planCfg.discount, currentCurrency)}`;
             } else {
-                cryptoBox.style.display = 'none';
-                if (gw === 'mercadopago') {
-                    payBtn.innerText = `🤝 Pagar $${currentPrice} USD con Mercado Pago`;
-                } else if (gw === 'paypal') {
-                    payBtn.innerText = `🌐 Pagar $${currentPrice} USD con PayPal`;
-                } else {
-                    payBtn.innerText = `💳 Pagar $${currentPrice} USD con Stripe`;
-                }
+                titleEl.innerText = 'Comprar Licencia Lifetime Founding Member';
+                summaryPlanName.innerText = 'Licencia Lifetime (Hasta 2 Computadores · Vitalicia)';
+                summaryPlanBase.style.textDecoration = 'none';
+                summaryPlanBase.style.color = '#fff';
+                summaryPlanBase.innerText = planCfg.formattedBase;
+                summaryDiscountRow.style.display = 'none';
+            }
+
+            summaryTotal.innerText = formatPrice(planCfg.final, currentCurrency);
+
+            // Renderizar Tabs de Pasarelas según moneda
+            renderGatewayTabs();
+
+            // Actualizar textos de los paneles de pago
+            updateGatewayPanels(planCfg);
+        }
+
+        // RENDERIZAR TABS DE PASARELAS
+        function renderGatewayTabs() {
+            const container = document.getElementById('gatewaysTabContainer');
+            if (!container) return;
+
+            if (currentCurrency === 'clp') {
+                container.innerHTML = `
+                    <div class="gw-tab ${activeGateway === 'flow' ? 'active' : ''}" onclick="selectGateway('flow')">
+                        <strong>💳 Flow / Webpay</strong>
+                        <span style="font-size: 11px; color: var(--text-muted);">Redcompra · Débito · Crédito</span>
+                    </div>
+                    <div class="gw-tab ${activeGateway === 'transfer' ? 'active' : ''}" onclick="selectGateway('transfer')">
+                        <strong>🏦 Transferencia Directa</strong>
+                        <span style="font-size: 11px; color: var(--text-muted);">CuentaRUT · 0% Comisión</span>
+                    </div>
+                    <div class="gw-tab ${activeGateway === 'paypal' ? 'active' : ''}" onclick="selectGateway('paypal')">
+                        <strong>🌐 PayPal</strong>
+                        <span style="font-size: 11px; color: var(--text-muted);">Pagar en Dólares ($79 USD)</span>
+                    </div>
+                    <div class="gw-tab ${activeGateway === 'stripe' ? 'active' : ''}" onclick="selectGateway('stripe')">
+                        <strong>💳 Stripe</strong>
+                        <span style="font-size: 11px; color: var(--text-muted);">Tarjeta Internacional</span>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = `
+                    <div class="gw-tab ${activeGateway === 'paypal' ? 'active' : ''}" onclick="selectGateway('paypal')">
+                        <strong>🌐 PayPal Express</strong>
+                        <span style="font-size: 11px; color: var(--text-muted);">Recomendado Internacional</span>
+                    </div>
+                    <div class="gw-tab ${activeGateway === 'stripe' ? 'active' : ''}" onclick="selectGateway('stripe')">
+                        <strong>💳 Stripe / Apple Pay</strong>
+                        <span style="font-size: 11px; color: var(--text-muted);">Visa · Master · AMEX</span>
+                    </div>
+                    <div class="gw-tab ${activeGateway === 'flow' ? 'active' : ''}" onclick="selectGateway('flow')">
+                        <strong>🇨🇱 Flow / Webpay</strong>
+                        <span style="font-size: 11px; color: var(--text-muted);">Tarjetas Chilenas (CLP)</span>
+                    </div>
+                    <div class="gw-tab ${activeGateway === 'crypto' ? 'active' : ''}" onclick="selectGateway('crypto')">
+                        <strong>⚡ Crypto (USDT)</strong>
+                        <span style="font-size: 11px; color: var(--text-muted);">Solana / Polygon</span>
+                    </div>
+                `;
             }
         }
 
-        function processPayment() {
+        // SELECCIONAR PASARELA
+        function selectGateway(gw) {
+            activeGateway = gw;
+            renderGatewayTabs();
+            
+            // Ocultar todos los paneles
+            document.querySelectorAll('.gw-panel').forEach(p => p.classList.remove('active'));
+            
+            // Mostrar el panel activo
+            const targetPanel = document.getElementById('panel-' + gw);
+            if (targetPanel) {
+                targetPanel.classList.add('active');
+            }
+        }
+
+        // ACTUALIZAR PANELES DE PASARELAS CON MONTOS REALES
+        function updateGatewayPanels(planCfg) {
+            // PayPal
+            const paypalPriceUSD = currentCurrency === 'usd' ? planCfg.final : (currentPlan === 'earlybird' ? 79 : 349);
+            const paypalChargeAmount = document.getElementById('paypalChargeAmount');
+            const btnPaypalPriceText = document.getElementById('btnPaypalPriceText');
+            if (paypalChargeAmount) paypalChargeAmount.innerText = `$${paypalPriceUSD} USD`;
+            if (btnPaypalPriceText) btnPaypalPriceText.innerText = `$${paypalPriceUSD} USD`;
+
+            // Flow
+            const flowPriceCLP = currentCurrency === 'clp' ? planCfg.final : (currentPlan === 'earlybird' ? 79000 : 349000);
+            const flowChargeAmount = document.getElementById('flowChargeAmount');
+            const btnFlowPriceText = document.getElementById('btnFlowPriceText');
+            if (flowChargeAmount) flowChargeAmount.innerText = `$${flowPriceCLP.toLocaleString('es-CL')} CLP`;
+            if (btnFlowPriceText) btnFlowPriceText.innerText = `$${flowPriceCLP.toLocaleString('es-CL')} CLP`;
+
+            // Transferencia Bancaria
+            const bankTransferAmount = document.getElementById('bankTransferAmount');
+            if (bankTransferAmount) bankTransferAmount.innerText = `$${flowPriceCLP.toLocaleString('es-CL')} CLP`;
+
+            // Stripe button
+            const btnStripeAction = document.getElementById('btnStripeAction');
+            if (btnStripeAction) {
+                btnStripeAction.innerText = `💳 Pagar ${formatPrice(planCfg.final, currentCurrency)} con Stripe`;
+            }
+
+            // Activar el panel actual
+            selectGateway(activeGateway);
+        }
+
+        // ACCIÓN: PAGAR CON PAYPAL EXPRESS
+        function payWithPayPal() {
+            const djName = document.getElementById('customerDjName').value.trim();
             const email = document.getElementById('customerEmail').value.trim();
+
+            if (!djName) {
+                alert('Por favor escribe tu Nombre de DJ o Nombre Artístico para personalizar tu compilación.');
+                document.getElementById('customerDjName').focus();
+                return;
+            }
             if (!email || !email.includes('@')) {
-                alert('Por favor ingresa un correo electrónico válido para recibir tu licencia.');
+                alert('Por favor ingresa tu correo electrónico para enviarte tu software y clave.');
                 document.getElementById('customerEmail').focus();
                 return;
             }
 
-            const payBtn = document.getElementById('btnPayAction');
-            payBtn.disabled = true;
-            payBtn.innerText = `⏳ Conectando con ${selectedGw.toUpperCase()}...`;
+            const amount = currentPlan === 'earlybird' ? 79 : 349;
+            const paypalUrl = `https://trackai.party/suscribir?plan=preset_${currentPlan}&amount=${amount}&email=${encodeURIComponent(email)}&dj=${encodeURIComponent(djName)}`;
+
+            const btn = document.querySelector('.btn-paypal-checkout');
+            if (btn) {
+                btn.innerHTML = `⏳ Conectando a PayPal ($${amount} USD)...`;
+                btn.disabled = true;
+            }
 
             setTimeout(() => {
-                payBtn.style.display = 'none';
-                const successBox = document.getElementById('successBox');
-                const randomHex = () => Math.random().toString(36).substring(2, 6).toUpperCase();
-                const prefix = currentPlan === 'annual' ? 'ANNUAL' : 'LIFETIME';
-                const license = `PRESET-${prefix}-${randomHex()}-${randomHex()}-${randomHex()}`;
-                
-                document.getElementById('generatedLicenseCode').innerText = license;
-                successBox.style.display = 'block';
+                window.location.href = paypalUrl;
+            }, 600);
+        }
+
+        // ACCIÓN: PAGAR CON FLOW / WEBPAY
+        function payWithFlow() {
+            const djName = document.getElementById('customerDjName').value.trim();
+            const email = document.getElementById('customerEmail').value.trim();
+
+            if (!djName) {
+                alert('Por favor escribe tu Nombre de DJ o Nombre Artístico para personalizar tu compilación.');
+                document.getElementById('customerDjName').focus();
+                return;
+            }
+            if (!email || !email.includes('@')) {
+                alert('Por favor ingresa tu correo electrónico para procesar tu orden Flow y enviarte la licencia.');
+                document.getElementById('customerEmail').focus();
+                return;
+            }
+
+            const amount = currentPlan === 'earlybird' ? 79000 : 349000;
+            const planLabel = currentPlan === 'earlybird' ? 'Licencia Early Bird (60% OFF)' : 'Licencia Lifetime Vitalicia';
+
+            const msg = encodeURIComponent(`Hola Alexis! Quiero pagar mi ${planLabel} de PRE SET ($${amount.toLocaleString('es-CL')} CLP) con Webpay/Flow. Mi Nombre de DJ es "${djName}" y mi correo es ${email}. Pásame el link de pago porfa 💳`);
+            const waUrl = `https://wa.me/56992818104?text=${msg}`;
+
+            window.open(waUrl, '_blank');
+            showSuccessLicense(`¡Solicitud Flow Registrada! Se ha generado tu orden para $${amount.toLocaleString('es-CL')} CLP personalizada para "${djName}". Revisa tu WhatsApp para pagar y recibir la confirmación.`);
+        }
+
+        // ACCIÓN: PEDIR DATOS BANCARIOS POR CORREO
+        function requestBankDataByEmail() {
+            const djName = document.getElementById('customerDjName').value.trim();
+            const email = document.getElementById('customerEmail').value.trim();
+
+            if (!djName) {
+                alert('Por favor escribe tu Nombre de DJ o Nombre Artístico para personalizar tu compilación.');
+                document.getElementById('customerDjName').focus();
+                return;
+            }
+            if (!email || !email.includes('@')) {
+                alert('Por favor ingresa tu correo electrónico para enviarte los datos de transferencia.');
+                document.getElementById('customerEmail').focus();
+                return;
+            }
+
+            const amount = currentPlan === 'earlybird' ? 79000 : 349000;
+            const orderId = 'PRESET-EB-' + Math.random().toString(36).substring(2, 7).toUpperCase();
+
+            showSuccessLicense(`¡Datos de Transferencia Registrados!\nOrden: #${orderId}\nDJ: ${djName}\nMonto a transferir: $${amount.toLocaleString('es-CL')} CLP a BancoEstado CuentaRUT 18.928.104.\nHemos registrado tu solicitud para ${email}. Recuerda enviar el comprobante por WhatsApp para validar tu reserva.`);
+        }
+
+        // ACCIÓN: ENVIAR COMPROBANTE POR WHATSAPP
+        function sendTransferReceiptWhatsApp() {
+            const djName = document.getElementById('customerDjName').value.trim() || 'DJ';
+            const email = document.getElementById('customerEmail').value.trim() || 'cliente@dj.com';
+            const amount = currentPlan === 'earlybird' ? 79000 : 349000;
+            const planLabel = currentPlan === 'earlybird' ? 'Licencia Early Bird (60% OFF · 1 Computador)' : 'Licencia Lifetime Vitalicia (2 Computadores)';
+
+            const text = encodeURIComponent(`Hola Alexis! Estoy en preset.trackai.cl y quiero activar mi ${planLabel} de PRE SET por transferencia bancaria directa ($${amount.toLocaleString('es-CL')} CLP). Mi Nombre de DJ es "${djName}" y mi correo es ${email}. Adjunto comprobante 🎧`);
+            window.open(`https://wa.me/56992818104?text=${text}`, '_blank');
+        }
+
+        // ACCIÓN: STRIPE GENÉRICO
+        function processGenericCardPayment() {
+            const djName = document.getElementById('customerDjName').value.trim();
+            const email = document.getElementById('customerEmail').value.trim();
+
+            if (!djName) {
+                alert('Por favor escribe tu Nombre de DJ o Nombre Artístico.');
+                document.getElementById('customerDjName').focus();
+                return;
+            }
+            if (!email || !email.includes('@')) {
+                alert('Por favor ingresa tu correo electrónico.');
+                document.getElementById('customerEmail').focus();
+                return;
+            }
+
+            const planCfg = PRICING[currentCurrency][currentPlan];
+            const btn = document.getElementById('btnStripeAction');
+            btn.disabled = true;
+            btn.innerText = `⏳ Conectando con pasarela segura...`;
+
+            setTimeout(() => {
+                showSuccessLicense(`¡Pago de ${formatPrice(planCfg.final, currentCurrency)} confirmado! Tu build personalizada para "${djName}" se emitirá a contar del 05/10/2026.`);
             }, 1200);
         }
 
+        // ACCIÓN: CRYPTO
+        function processCryptoPayment() {
+            const djName = document.getElementById('customerDjName').value.trim();
+            const email = document.getElementById('customerEmail').value.trim();
+            if (!djName || !email) {
+                alert('Por favor completa tu Nombre de DJ y correo electrónico.');
+                return;
+            }
+            showSuccessLicense(`¡Transacción registrada en Blockchain! Tu build personalizada para "${djName}" se enviará a ${email} a contar del 05/10/2026.`);
+        }
+
+        // MOSTRAR PANTALLA DE ÉXITO Y LICENCIA
+        function showSuccessLicense(customMsg) {
+            const successBox = document.getElementById('successBox');
+            const randomHex = () => Math.random().toString(36).substring(2, 6).toUpperCase();
+            const prefix = currentPlan === 'earlybird' ? 'EARLYBIRD' : 'LIFETIME';
+            const license = `PRESET-${prefix}-${randomHex()}-${randomHex()}-${randomHex()}`;
+
+            if (customMsg) {
+                document.getElementById('successBoxSubtitle').innerText = customMsg;
+            }
+            document.getElementById('generatedLicenseCode').innerText = license;
+            successBox.style.display = 'block';
+            successBox.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // ESCAPE KEY CIERRA MODAL
         window.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') closeCheckout();
         });
+
+        // INICIALIZACIÓN AL CARGAR LA PÁGINA
+        document.addEventListener('DOMContentLoaded', () => {
+            updatePricingCards();
+        });
+        updatePricingCards();
     </script>
 </body>
 </html>
