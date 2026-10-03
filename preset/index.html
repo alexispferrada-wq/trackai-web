@@ -550,20 +550,21 @@
             gap: 5px;
         }
 
-        /* PRICING GRID */
+        /* PRICING GRID (SINGLE HERO CARD) */
         .pricing-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 32px;
-            text-align: left;
-            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
         }
 
         .price-card {
             background: var(--bg-card);
-            border: 1px solid var(--border);
+            border: 2px solid rgba(255, 95, 46, 0.45);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 35px rgba(255, 95, 46, 0.15);
             border-radius: 24px;
-            padding: 44px 32px;
+            padding: 44px 36px;
+            max-width: 680px;
+            width: 100%;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -572,15 +573,9 @@
         }
 
         .price-card:hover {
-            border-color: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 95, 46, 0.7);
             transform: translateY(-4px);
-        }
-
-        .price-card.featured {
-            border-color: rgba(192, 132, 252, 0.45);
-            background: linear-gradient(180deg, rgba(192, 132, 252, 0.09), rgba(15, 20, 32, 0.95));
-            box-shadow: 0 20px 60px rgba(192, 132, 252, 0.2);
-            transform: scale(1.03);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7), 0 0 45px rgba(255, 95, 46, 0.25);
         }
 
         /* CENTERED HIGHLIGHTED PRICE DISPLAY */
@@ -1169,6 +1164,28 @@
             margin-top: 14px;
         }
 
+        .btn-transfer-copy-all {
+            width: 100%;
+            padding: 13px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            font-weight: 800;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-transfer-copy-all:hover {
+            background: rgba(255, 255, 255, 0.18);
+            border-color: #fff;
+        }
+
         .btn-transfer-email {
             width: 100%;
             padding: 14px;
@@ -1438,132 +1455,86 @@
     <!-- PRICING SECTION (EARLY BIRD ACCESO ANTICIPADO) -->
     <section class="pricing-section" id="planes">
         <div class="section-header">
-            <div class="hero-pill" style="margin-bottom: 12px;">🚀 Preventa Oficial Early Bird</div>
-            <h2 class="section-title">Elige tu Licencia Profesional</h2>
-            <p class="section-sub">Acceso anticipado exclusivo. Software personalizado con tu nombre de DJ compilado a medida.</p>
+            <div class="hero-pill" style="margin-bottom: 12px;">🔥 Preventa Oficial Early Bird · Cupos Limitados</div>
+            <h2 class="section-title">Licencia Early Bird PRE SET</h2>
+            <p class="section-sub">Acceso anticipado exclusivo. Compilación personalizada con tu nombre de DJ grabado en el software.</p>
         </div>
 
-        <!-- SELECTOR DE MONEDA (USD / CLP) -->
+        <!-- SELECTOR DE MONEDA / MÉTODO (USD / CHILE) -->
         <div class="currency-toggle-wrapper">
             <div class="currency-toggle-pills">
                 <button type="button" class="curr-pill-btn active" id="btnCurrencyUSD" onclick="setCurrency('usd')">
-                    <span>🇺🇸</span> Dólares (USD)
+                    <span>🌐</span> Dólares (PayPal Express)
                 </button>
                 <button type="button" class="curr-pill-btn" id="btnCurrencyCLP" onclick="setCurrency('clp')">
-                    <span>🇨🇱</span> Pesos Chilenos (CLP)
+                    <span>🇨🇱</span> Chile (Transferencia CuentaRUT)
                 </button>
             </div>
             <div class="currency-info-hint" id="currencyHintText">
-                <span>🌐 Pasarelas globales en USD: <strong>PayPal Express</strong>, Stripe y Crypto.</span>
+                <span>🌐 Pasarela oficial USD: <strong>PayPal Checkout Express</strong> (60% OFF directo · 10 Usos).</span>
             </div>
         </div>
 
         <!-- BANNER DE EARLY BIRD DESTACADO -->
         <div class="promo-coupon-bar">
             <div class="promo-coupon-info">
-                <div class="promo-fire-icon">🚀</div>
+                <div class="promo-fire-icon">🔥</div>
                 <div>
-                    <div class="promo-title-text">VENTA OFICIAL EARLY BIRD: 60% DE DESCUENTO DIRECTO</div>
-                    <div class="promo-sub-text">Tu app irá compilada y <strong>personalizada con tu nombre de DJ</strong>. Entrega por lotes a contar del <strong>05/10/2026</strong>. A partir de esa fecha el precio sube al original ($199 USD) y la versión normal ya no será personalizada.</div>
+                    <div class="promo-title-text" style="font-size: 16px;">60% DE DESCUENTO DIRECTO · ¡SOLO 10 CUPOS DISPONIBLES EN PREVENTA!</div>
+                    <div class="promo-sub-text">Tu software irá compilado a medida con tu <strong>Nombre de DJ grabado</strong>. Entrega por lotes a contar del <strong>05/10/2026</strong>. A contar de esa fecha el precio vuelve al original ($199 USD / $199.000 CLP) y la versión normal ya no será personalizada.</div>
                 </div>
             </div>
             <div class="promo-chip-wrapper">
-                <div class="promo-applied-pill" style="font-size: 13px; padding: 8px 16px;">
-                    <span>⚡</span> 60% OFF Automático
+                <div class="promo-applied-pill" style="font-size: 13.5px; padding: 9px 18px;">
+                    <span>⚡</span> 60% OFF Automático (10 Usos)
                 </div>
             </div>
         </div>
 
-        <!-- GRID DE PRECIOS -->
+        <!-- GRID DE PRECIOS: SOLO EARLY BIRD HERO CARD -->
         <div class="pricing-grid">
-            <!-- EARLY BIRD 1 AÑO (PRECIO CENTRADO Y SUPER DESTACADO) -->
             <div class="price-card">
                 <div>
                     <div class="price-header-centered">
-                        <div class="badge-early-bird">🚀 ACCESO ANTICIPADO · 60% OFF DIRECTO</div>
-                        <div class="price-name" style="text-align: center; font-size: 23px;">Licencia Early Bird (1 Año)</div>
-                        <div class="delivery-notice-pill">
-                            📅 Entrega a contar del <strong>05/10/2026</strong>
+                        <div class="badge-early-bird">🔥 60% OFF DIRECTO · CUPOS LIMITADOS (10 USOS)</div>
+                        <div class="price-name" style="text-align: center; font-size: 26px; font-weight: 900; margin-bottom: 6px;">Licencia Early Bird (1 Año)</div>
+                        <div class="delivery-notice-pill" style="font-size: 13px; padding: 6px 16px;">
+                            📅 Entrega por orden de reserva a contar del <strong>05/10/2026</strong>
                         </div>
 
                         <!-- CAJA DE PRECIO CENTRADA Y SUPER DESTACADA -->
-                        <div class="price-box-centered">
+                        <div class="price-box-centered" style="padding: 24px 20px;">
                             <div class="price-old-centered">
-                                <span>Precio Original:</span>
-                                <span class="price-old-val" id="cardAnnualOldPrice">$199 USD</span>
+                                <span style="font-size: 14px;">Precio Original sin preventa:</span>
+                                <span class="price-old-val" id="cardAnnualOldPrice" style="font-size: 16px;">$199 USD</span>
                             </div>
-                            <div class="price-highlight-main" id="cardAnnualPrice">
+                            <div class="price-highlight-main" id="cardAnnualPrice" style="font-size: 60px; margin: 10px 0;">
                                 $79 <span class="unit-text" id="cardAnnualUnit">USD</span>
                             </div>
-                            <div class="price-promo-tag" id="cardAnnualPromoTag">
-                                🔥 60% OFF · AHORRAS $120 USD
+                            <div class="price-promo-tag" id="cardAnnualPromoTag" style="font-size: 12.5px; padding: 6px 16px;">
+                                🔥 60% OFF APLICADO · AHORRAS $120 USD (10 CUPOS)
                             </div>
                         </div>
                     </div>
 
-                    <div class="price-desc" id="cardAnnualDesc" style="text-align: center; margin-bottom: 20px;">
-                        Tarifa de lanzamiento anticipado por tiempo limitado. Incluye <strong>compilación personalizada</strong> con tu nombre de DJ.
+                    <div class="price-desc" id="cardAnnualDesc" style="text-align: center; margin-bottom: 24px; font-size: 15px; color: #cbd5e1;">
+                        Tarifa de lanzamiento anticipado para los primeros 10 compradores. Incluye <strong>compilación personalizada</strong> con tu nombre de DJ grabado.
                     </div>
 
-                    <ul class="price-features">
-                        <li><span>✓</span> <strong>Compilación Personalizada con tu Nombre de DJ</strong> (Grabado en el software)</li>
+                    <ul class="price-features" style="font-size: 14.5px; gap: 13px;">
+                        <li><span>✓</span> <strong>Compilación personalizada con tu Nombre de DJ</strong> (grabado en el software)</li>
                         <li><span>✓</span> <strong>1 Computador (1 MacBook activada)</strong></li>
+                        <li><span>✓</span> <strong>60% de descuento directo de una sin códigos</strong> (10 usos disponibles)</li>
                         <li><span>✓</span> <strong>Entrega por lotes a contar del 05/10/2026</strong> por orden de reserva</li>
-                        <li><span>✓</span> A contar del 05/10/2026 sube al precio original ($199 USD) sin personalización</li>
+                        <li><span>✓</span> A contar del 05/10/2026 el precio será el original ($199 USD / $199.000 CLP) y la versión normal no irá personalizada</li>
                         <li><span>✓</span> Motor nativo FileProvider con Evicción a 0 Bytes</li>
-                        <li><span>✓</span> Algoritmo Autónomo con recomendación de 1 clic</li>
-                        <li><span>✓</span> Live Show Shield (Bloqueo Anti-Sleep y Buffer)</li>
+                        <li><span>✓</span> Live Show Shield (bloqueo anti-sleep) y Algoritmo Autónomo</li>
                         <li><span>✓</span> Purgador de Stems temporales de Serato</li>
                         <li><span>✓</span> 1 Año completo de soporte prioritario y actualizaciones</li>
                     </ul>
                 </div>
-                <button onclick="openCheckout('earlybird')" class="btn-card btn-primary" id="btnBuyAnnual" style="font-size: 16px; padding: 18px;">
-                    🚀 Reservar Early Bird ($79 USD)
-                </button>
-            </div>
-
-            <!-- LIFETIME FOUNDING MEMBER (TARIFA DEFINITIVA) -->
-            <div class="price-card featured">
-                <div class="badge-lifetime">👑 Acceso Vitalicio · Pago Único</div>
-                <div>
-                    <div class="price-header-centered" style="margin-top: 10px;">
-                        <div class="price-name" style="text-align: center; font-size: 23px;">Lifetime Founding Member</div>
-                        <div class="delivery-notice-pill" style="color: var(--neon-purple); border-color: rgba(192, 132, 252, 0.4); background: rgba(192, 132, 252, 0.08);">
-                            💎 Compilación Personalizada VIP + De Por Vida
-                        </div>
-
-                        <!-- CAJA DE PRECIO CENTRADA -->
-                        <div class="price-box-centered" style="border-color: rgba(192, 132, 252, 0.45); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 0 20px rgba(192, 132, 252, 0.08);">
-                            <div class="price-old-centered">
-                                <span style="color: #c084fc;">Tarifa Definitiva:</span>
-                                <span style="font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #e2e8f0; font-size: 14px;">Sin Mensualidades</span>
-                            </div>
-                            <div class="price-highlight-main" id="cardLifetimePrice" style="background: linear-gradient(135deg, #fff 40%, #f3e8ff 70%, #c084fc 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 4px 16px rgba(192, 132, 252, 0.3));">
-                                $349 <span class="unit-text" id="cardLifetimeUnit" style="-webkit-text-fill-color: #c084fc;">USD</span>
-                            </div>
-                            <div class="price-promo-tag" style="background: rgba(192, 132, 252, 0.2); color: #d8b4fe; border-color: rgba(192, 132, 252, 0.5);">
-                                👑 PAGO ÚNICO PERPETUO
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="price-desc" style="text-align: center; margin-bottom: 20px;">
-                        Inversión definitiva sin cuotas ni renovaciones nunca más. (Tarifa vitalicia fija sin descuentos).
-                    </div>
-
-                    <ul class="price-features">
-                        <li><span>✓</span> <strong>Compilación Personalizada VIP grabada a tu nombre</strong></li>
-                        <li><span>✓</span> <strong>Hasta 2 MacBooks activadas simultáneamente</strong></li>
-                        <li><span>✓</span> <strong>Todas las actualizaciones futuras de por vida (Lifetime Updates)</strong></li>
-                        <li><span>✓</span> Motor universal (Serato DJ Pro + próximos Rekordbox / VirtualDJ)</li>
-                        <li><span>✓</span> Soporte VIP directo 1-a-1 de optimización de biblioteca</li>
-                        <li><span>✓</span> Entrega prioritaria preferente a contar del 05/10/2026</li>
-                        <li><span>✓</span> Sin mensualidades ni cobros adicionales en el futuro</li>
-                        <li><span>✓</span> Licencia perpetua garantizada</li>
-                    </ul>
-                </div>
-                <button onclick="openCheckout('lifetime')" class="btn-card btn-lifetime" id="btnBuyLifetime" style="font-size: 16px; padding: 18px;">
-                    💎 Comprar Lifetime ($349 USD)
+                <button onclick="openCheckout('earlybird')" class="btn-card btn-primary" id="btnBuyAnnual" style="font-size: 18px; padding: 20px; font-weight: 900; letter-spacing: 0.5px;">
+                    🚀 RESERVAR EARLY BIRD ($79 USD / 60% OFF)
                 </button>
             </div>
         </div>
@@ -1571,32 +1542,18 @@
         <!-- GATEWAYS RIBBON -->
         <div class="gateways-ribbon">
             <span class="gateways-label">Pasarelas de Pago Oficiales Habilitadas:</span>
-            <div class="gateway-pill highlight-gw">🌐 PayPal Express (Internacional USD)</div>
-            <div class="gateway-pill highlight-gw">💳 Flow (Webpay / Tarjetas Chilenas CLP)</div>
-            <div class="gateway-pill highlight-gw">🏦 Transferencia Directa (CuentaRUT / Banco)</div>
-            <div class="gateway-pill">💳 Stripe (Visa / Mastercard / Apple Pay)</div>
-            <div class="gateway-pill">⚡ Crypto Web3 (USDT / USDC en Solana)</div>
+            <div class="gateway-pill highlight-gw">🌐 PayPal Checkout Express (60% OFF · $79 USD)</div>
+            <div class="gateway-pill highlight-gw">🏦 Transferencia Directa BancoEstado CuentaRUT ($79.000 CLP)</div>
         </div>
     </section>
 
-    <!-- MODAL DE CHECKOUT MULTI-MONEDA -->
+    <!-- MODAL DE CHECKOUT SIMPLIFICADO: PAYPAL O CHILE -->
     <div class="modal-overlay" id="checkoutModal">
         <div class="checkout-box">
             <button class="modal-close" onclick="closeCheckout()" aria-label="Cerrar modal">✕</button>
             
-            <div class="modal-currency-selector">
-                <div class="currency-toggle-pills" style="transform: scale(0.92);">
-                    <button type="button" class="curr-pill-btn active" id="modalCurrUSD" onclick="setCurrency('usd')">
-                        🇺🇸 USD ($ Dólares)
-                    </button>
-                    <button type="button" class="curr-pill-btn" id="modalCurrCLP" onclick="setCurrency('clp')">
-                        🇨🇱 CLP ($ Chileno)
-                    </button>
-                </div>
-            </div>
-
-            <div class="checkout-title" id="modalPlanTitle">Reserva tu Licencia Early Bird</div>
-            <div class="checkout-sub">Tu compilación a medida se entregará a contar del <strong>05/10/2026</strong>.</div>
+            <div class="checkout-title" id="modalPlanTitle" style="font-size: 23px;">Reserva tu Licencia Early Bird</div>
+            <div class="checkout-sub" style="font-size: 13.5px;">60% de descuento directo · Solo 10 cupos · Entrega a contar del <strong>05/10/2026</strong>.</div>
 
             <!-- AVISO DE PERSONALIZACIÓN Y ENTREGA -->
             <div style="background: rgba(0, 242, 254, 0.08); border: 1px solid rgba(0, 242, 254, 0.35); border-radius: 14px; padding: 14px; margin-bottom: 18px; font-size: 12.5px; text-align: left; display: flex; align-items: flex-start; gap: 12px;">
@@ -1610,13 +1567,13 @@
             </div>
 
             <!-- RESUMEN DEL PEDIDO -->
-            <div class="order-summary">
+            <div class="order-summary" style="margin-bottom: 18px;">
                 <div class="order-row">
                     <span id="summaryPlanName">Licencia Early Bird (1 Año · 1 Computador)</span>
                     <strong id="summaryPlanBasePrice" style="text-decoration: line-through; color: #64748b;">$199 USD</strong>
                 </div>
                 <div class="order-row" id="summaryDiscountRow">
-                    <span id="summaryDiscountLabel" style="color: #ff5f2e; font-weight: 700;">🔥 Descuento Early Bird (60% OFF Automático)</span>
+                    <span id="summaryDiscountLabel" style="color: #ff5f2e; font-weight: 700;">🔥 60% OFF Automático (10 Cupos Disponibles)</span>
                     <strong id="summaryDiscountAmount" style="color: #ff5f2e;">-$120 USD</strong>
                 </div>
                 <div class="order-row">
@@ -1624,15 +1581,15 @@
                     <span style="color: var(--neon-green); font-weight: 800;">INCLUIDA (05/10/2026)</span>
                 </div>
                 <div class="order-row">
-                    <span>Total a Pagar</span>
-                    <span style="color: var(--neon-cyan); font-size: 22px; font-weight: 900;" id="summaryTotalAmount">$79 USD</span>
+                    <span style="font-size: 16px; font-weight: 800;">Total Final</span>
+                    <span style="color: var(--neon-cyan); font-size: 26px; font-weight: 900;" id="summaryTotalAmount">$79 USD</span>
                 </div>
             </div>
 
             <!-- DATOS PARA PERSONALIZAR LA APP -->
             <div class="input-group">
                 <label for="customerDjName">Nombre Artístico / DJ Name (Para personalizar tu App) *</label>
-                <input type="text" id="customerDjName" placeholder="Ej. DJ Alex Ferrada / DJ Phoenix" required>
+                <input type="text" id="customerDjName" placeholder="Ej. DJ Alex Ferrada / DJ Phoenix" required oninput="syncGlosa()">
                 <span style="font-size: 11px; color: #94a3b8; margin-top: 4px; display: block;">Se grabará en la ventana principal y firma de tu build de Pre Set.app</span>
             </div>
 
@@ -1641,61 +1598,46 @@
                 <input type="email" id="customerEmail" placeholder="dj@tudominio.com" required>
             </div>
 
-            <!-- SELECTOR DE PASARELAS -->
+            <!-- SELECTOR DE MÉTODO DE PAGO: PAYPAL O CHILE -->
             <div class="input-group">
-                <label>Selecciona tu Método de Pago</label>
-                <div class="gateways-tabs" id="gatewaysTabContainer">
-                    <!-- Dinámico según USD o CLP -->
+                <label>Elige cómo deseas pagar</label>
+                <div class="gateways-tabs" id="gatewaysTabContainer" style="grid-template-columns: 1fr 1fr;">
+                    <div class="gw-tab active" id="tabPaypal" onclick="selectGateway('paypal')">
+                        <strong style="font-size: 14px;">🌐 Pagar con PayPal</strong>
+                        <span style="font-size: 12px; color: #facc15;">$79 USD (60% OFF)</span>
+                    </div>
+                    <div class="gw-tab" id="tabTransfer" onclick="selectGateway('transfer')">
+                        <strong style="font-size: 14px;">🇨🇱 Pagar en Chile</strong>
+                        <span style="font-size: 12px; color: var(--neon-green);">$79.000 CLP (CuentaRUT)</span>
+                    </div>
                 </div>
             </div>
 
             <!-- PANEL 1: PAYPAL EXPRESS (USD) -->
-            <div class="gw-panel" id="panel-paypal">
-                <div class="paypal-box">
-                    <div class="paypal-box-header">
-                        <strong style="color: #ffc439; font-size: 15px;">🌐 PayPal Checkout Express Oficial</strong>
+            <div class="gw-panel active" id="panel-paypal">
+                <div class="paypal-box" style="padding: 20px;">
+                    <div class="paypal-box-header" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                        <strong style="color: #ffc439; font-size: 16px;">🌐 PayPal Checkout Express (60% OFF)</strong>
+                        <span style="font-size: 11px; background: rgba(255, 196, 57, 0.2); color: #facc15; padding: 2px 8px; border-radius: 99px; font-weight: 800;">10 USOS DISPONIBLES</span>
                     </div>
-                    <p style="font-size: 12.5px; color: #cbd5e1; margin-bottom: 12px; line-height: 1.5;">
-                        Procesa tu pago protegido con el 60% de descuento directo en dólares. Recibirás tu confirmación de reserva y clave inmediatamente.
+                    <p style="font-size: 13px; color: #cbd5e1; margin-bottom: 14px; line-height: 1.5;">
+                        Paga con tarjeta internacional o saldo PayPal con el 60% de descuento directo aplicado de una.
                     </p>
-                    <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 14px;">
-                        Monto a procesar en PayPal: <strong id="paypalChargeAmount" style="color: #fff; font-size: 14px;">$79 USD</strong>
+                    <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 10px;">
+                        Monto oficial a cobrar: <strong style="color: #fff; font-size: 18px; margin-left: 6px;">$79 USD</strong> <span style="text-decoration: line-through; color: #64748b; font-size: 13px; margin-left: 6px;">$199 USD</span>
                     </div>
-                    <button type="button" class="btn-paypal-checkout" onclick="payWithPayPal()">
-                        <span style="font-size: 18px;">🌐</span> Pagar con PayPal (<span id="btnPaypalPriceText">$79 USD</span>)
+                    <button type="button" class="btn-paypal-checkout" onclick="payWithPayPal()" style="font-size: 17px; padding: 18px;">
+                        <span style="font-size: 20px;">🌐</span> Pagar $79 USD con PayPal (60% OFF)
                     </button>
                 </div>
             </div>
 
-            <!-- PANEL 2: FLOW / WEBPAY (CLP) -->
-            <div class="gw-panel" id="panel-flow">
-                <div class="flow-box">
-                    <strong style="color: #00b8e8; font-size: 15px;">💳 Flow / Webpay Plus (Tarjetas Chilenas)</strong>
-                    <p style="font-size: 12.5px; color: #cbd5e1; margin: 6px 0 10px 0; line-height: 1.5;">
-                        Paga en pesos chilenos con cualquier tarjeta de débito, CuentaRUT, Redcompra o crédito en cuotas mediante Flow.
-                    </p>
-                    <div class="flow-badges-row">
-                        <span class="flow-badge">Webpay Plus</span>
-                        <span class="flow-badge">CuentaRUT</span>
-                        <span class="flow-badge">Redcompra</span>
-                        <span class="flow-badge">Débito / Crédito</span>
-                        <span class="flow-badge">Mach / Chek</span>
-                    </div>
-                    <div style="font-size: 12px; color: var(--text-muted); margin: 12px 0 14px 0;">
-                        Monto oficial en pesos chilenos: <strong id="flowChargeAmount" style="color: #00b8e8; font-size: 15px;">$79.000 CLP</strong>
-                    </div>
-                    <button type="button" class="btn-flow-checkout" onclick="payWithFlow()">
-                        <span>💳</span> Pagar con Flow / Webpay (<span id="btnFlowPriceText">$79.000 CLP</span>)
-                    </button>
-                </div>
-            </div>
-
-            <!-- PANEL 3: TRANSFERENCIA BANCARIA DIRECTA (CLP) -->
+            <!-- PANEL 2: TRANSFERENCIA BANCARIA DIRECTA (CHILE CUENTARUT) -->
             <div class="gw-panel" id="panel-transfer">
                 <div class="bank-card">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                        <strong style="color: var(--neon-green); font-size: 14.5px;">🏦 Datos de Transferencia Directa</strong>
-                        <span style="font-size: 11px; background: rgba(16, 185, 129, 0.2); color: var(--neon-green); padding: 2px 8px; border-radius: 99px; font-weight: 800;">0% Comisión</span>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                        <strong style="color: var(--neon-green); font-size: 15px;">🏦 Datos de Transferencia Directa (Chile)</strong>
+                        <span style="font-size: 11px; background: rgba(16, 185, 129, 0.2); color: var(--neon-green); padding: 3px 10px; border-radius: 99px; font-weight: 800;">0% COMISIÓN</span>
                     </div>
                     <div class="bank-row">
                         <span class="bank-label">Banco:</span>
@@ -1703,60 +1645,45 @@
                     </div>
                     <div class="bank-row">
                         <span class="bank-label">Tipo de Cuenta:</span>
-                        <span class="bank-val">CuentaRUT / Cuenta Vista</span>
+                        <span class="bank-val">CuentaRUT (Cuenta Vista)</span>
                     </div>
                     <div class="bank-row">
                         <span class="bank-label">N° de Cuenta:</span>
-                        <span class="bank-val">18.928.104 <button type="button" class="btn-copy-bank" onclick="copyText('18928104')">Copiar</button></span>
+                        <span class="bank-val">15698378 <button type="button" class="btn-copy-bank" onclick="copyText('15698378')">Copiar</button></span>
                     </div>
                     <div class="bank-row">
                         <span class="bank-label">RUT:</span>
-                        <span class="bank-val">18.928.104-5 <button type="button" class="btn-copy-bank" onclick="copyText('18928104-5')">Copiar</button></span>
+                        <span class="bank-val">15.698.378-0 <button type="button" class="btn-copy-bank" onclick="copyText('15698378-0')">Copiar</button></span>
                     </div>
                     <div class="bank-row">
                         <span class="bank-label">Titular:</span>
-                        <span class="bank-val">Alexis Ferrada (TrackAI)</span>
+                        <span class="bank-val">Alexis Ferrada</span>
                     </div>
                     <div class="bank-row">
                         <span class="bank-label">Email comprobante:</span>
-                        <span class="bank-val" style="font-size: 12px;">soporte@trackai.party <button type="button" class="btn-copy-bank" onclick="copyText('soporte@trackai.party')">Copiar</button></span>
+                        <span class="bank-val" style="font-size: 12px;">alexispferrada@gmail.com <button type="button" class="btn-copy-bank" onclick="copyText('alexispferrada@gmail.com')">Copiar</button></span>
                     </div>
                     <div class="bank-row">
                         <span class="bank-label">Monto exacto:</span>
-                        <strong id="bankTransferAmount" style="color: var(--neon-cyan); font-size: 16px;">$79.000 CLP</strong>
+                        <strong style="color: var(--neon-cyan); font-size: 18px;">$79.000 CLP</strong>
+                    </div>
+                    <div class="bank-row">
+                        <span class="bank-label">Asunto / Glosa:</span>
+                        <span class="bank-val" id="bankTransferGlosaText" style="font-size: 13px; color: #facc15;">PRESET Early Bird</span>
                     </div>
 
                     <div class="bank-action-buttons">
-                        <button type="button" class="btn-transfer-email" onclick="requestBankDataByEmail()">
-                            <span>✉️</span> Pedir Datos a mi Correo Electrónico
+                        <button type="button" class="btn-transfer-copy-all" onclick="copyAllBankData()">
+                            📋 Copiar Todos los Datos de CuentaRUT
                         </button>
-                        <a href="javascript:void(0)" class="btn-transfer-wa" id="btnWaTransferLink" onclick="sendTransferReceiptWhatsApp()">
+                        <button type="button" class="btn-transfer-email" onclick="requestBankDataByEmail()">
+                            <span>✉️</span> Enviar Datos a mi Correo Electrónico
+                        </button>
+                        <a href="javascript:void(0)" class="btn-transfer-wa" onclick="sendTransferReceiptWhatsApp()">
                             <span>💬</span> Enviar Comprobante por WhatsApp (+56 9 9281 8104)
                         </a>
                     </div>
                 </div>
-            </div>
-
-            <!-- PANEL 4: STRIPE (USD) -->
-            <div class="gw-panel" id="panel-stripe">
-                <button type="button" class="btn-pay-action" id="btnStripeAction" onclick="processGenericCardPayment()">
-                    💳 Pagar con Tarjeta Internacional (Stripe)
-                </button>
-            </div>
-
-            <!-- PANEL 5: CRYPTO USDT (USD) -->
-            <div class="gw-panel" id="panel-crypto">
-                <div class="crypto-details">
-                    <p style="margin-bottom: 6px; color: var(--neon-cyan);">Envía el monto equivalente en USDT o USDC:</p>
-                    <div style="background: rgba(255,255,255,0.06); padding: 8px; border-radius: 6px; margin-bottom: 6px;">
-                        Red: <strong>Solana (SOL)</strong><br>
-                        Dirección: <code>7xKXtg2CW87d97TXJSD98124YHDs82374Hsd82</code>
-                    </div>
-                    <span style="color: var(--neon-green); font-size: 11px;">Detección automática en blockchain (30 seg)</span>
-                </div>
-                <button type="button" class="btn-pay-action" onclick="processCryptoPayment()">
-                    ⚡ He enviado el pago USDT · Confirmar
-                </button>
             </div>
 
             <!-- RESULTADO Y LICENCIA -->
@@ -1778,96 +1705,66 @@
         <p style="margin-top: 6px; color: #334155;">Tecnología nativa Apple Silicon & Serato Database Engine. Todos los derechos reservados.</p>
     </footer>
 
-    <!-- SCRIPT DE CHECKOUT Y PASARELAS DUALES -->
+    <!-- SCRIPT DE CHECKOUT Y PASARELAS -->
     <script>
-        // CONFIGURACIÓN DE PRECIOS BASE
+        // CONFIGURACIÓN DE PRECIOS BASE (SOLO EARLY BIRD ACTIVO)
         const PRICING = {
-            usd: {
-                earlybird: { base: 199, final: 79, discount: 120, percent: 60, formattedBase: '$199 USD', formattedFinal: '$79 USD' },
-                lifetime: { base: 349, final: 349, discount: 0, percent: 0, formattedBase: '$349 USD', formattedFinal: '$349 USD' }
-            },
-            clp: {
-                earlybird: { base: 199000, final: 79000, discount: 120000, percent: 60, formattedBase: '$199.000 CLP', formattedFinal: '$79.000 CLP' },
-                lifetime: { base: 349000, final: 349000, discount: 0, percent: 0, formattedBase: '$349.000 CLP', formattedFinal: '$349.000 CLP' }
-            }
+            usd: { base: 199, final: 79, discount: 120, percent: 60, formattedBase: '$199 USD', formattedFinal: '$79 USD' },
+            clp: { base: 199000, final: 79000, discount: 120000, percent: 60, formattedBase: '$199.000 CLP', formattedFinal: '$79.000 CLP' }
         };
 
-        // ESTADO GLOBAL
         let currentCurrency = 'usd';
-        let currentPlan = 'earlybird';
         let activeGateway = 'paypal';
 
-        // FORMATEO DE MONEDA
-        function formatPrice(amount, curr) {
-            if (curr === 'clp') {
-                return '$' + amount.toLocaleString('es-CL') + ' CLP';
+        // SINCRONIZAR GLOSA CON NOMBRE DE DJ
+        function syncGlosa() {
+            const dj = document.getElementById('customerDjName')?.value.trim() || '';
+            const glosaEl = document.getElementById('bankTransferGlosaText');
+            if (glosaEl) {
+                glosaEl.innerText = dj ? `PRESET - ${dj}` : 'PRESET Early Bird';
             }
-            return '$' + amount + ' USD';
         }
 
-        // CAMBIO DE MONEDA (USD / CLP)
+        // CAMBIO DE MONEDA
         function setCurrency(curr) {
             currentCurrency = curr;
-
-            // Actualizar botones de moneda
             document.querySelectorAll('.curr-pill-btn').forEach(btn => btn.classList.remove('active'));
+
             if (curr === 'usd') {
                 document.getElementById('btnCurrencyUSD')?.classList.add('active');
-                document.getElementById('modalCurrUSD')?.classList.add('active');
                 if (document.getElementById('currencyHintText')) {
-                    document.getElementById('currencyHintText').innerHTML = '<span>🌐 Pasarelas globales en USD: <strong>PayPal Express</strong>, Stripe y Crypto.</span>';
+                    document.getElementById('currencyHintText').innerHTML = '<span>🌐 Pasarela oficial USD: <strong>PayPal Checkout Express</strong> (60% OFF directo · 10 Usos).</span>';
                 }
+                activeGateway = 'paypal';
             } else {
                 document.getElementById('btnCurrencyCLP')?.classList.add('active');
-                document.getElementById('modalCurrCLP')?.classList.add('active');
                 if (document.getElementById('currencyHintText')) {
-                    document.getElementById('currencyHintText').innerHTML = '<span>🇨🇱 Pasarelas locales Chile: <strong>Flow (Webpay/Débito)</strong> y <strong>Transferencia Bancaria Directa</strong> (CuentaRUT).</span>';
+                    document.getElementById('currencyHintText').innerHTML = '<span>🇨🇱 Pago en Chile: <strong>Transferencia Directa BancoEstado CuentaRUT</strong> (15.698.378-0 · 0% Comisión).</span>';
                 }
+                activeGateway = 'transfer';
             }
 
-            // Actualizar tarjetas de precios en la landing
             updatePricingCards();
-
-            // Si el modal está abierto, refrescar resumen y pasarelas
-            if (document.getElementById('checkoutModal').classList.contains('active')) {
-                updateModalView();
-            }
+            updateModalView();
         }
 
-        // ACTUALIZAR CARDS DE LA LANDING
+        // ACTUALIZAR CARDS EN LA LANDING
         function updatePricingCards() {
-            const eb = PRICING[currentCurrency].earlybird;
-            const lt = PRICING[currentCurrency].lifetime;
-
-            // Card Early Bird
             const cardAnnualOld = document.getElementById('cardAnnualOldPrice');
             const cardAnnualPrice = document.getElementById('cardAnnualPrice');
-            const cardAnnualUnit = document.getElementById('cardAnnualUnit');
             const cardAnnualPromoTag = document.getElementById('cardAnnualPromoTag');
             const btnBuyAnnual = document.getElementById('btnBuyAnnual');
 
             if (currentCurrency === 'usd') {
-                cardAnnualOld.innerText = '$199 USD';
-                cardAnnualPrice.innerHTML = `$79 <span class="unit-text" id="cardAnnualUnit">USD</span>`;
-                cardAnnualPromoTag.innerText = '🔥 60% OFF · AHORRAS $120 USD';
-                btnBuyAnnual.innerText = '🚀 Reservar Early Bird ($79 USD)';
+                if (cardAnnualOld) cardAnnualOld.innerText = '$199 USD';
+                if (cardAnnualPrice) cardAnnualPrice.innerHTML = `$79 <span class="unit-text" id="cardAnnualUnit">USD</span>`;
+                if (cardAnnualPromoTag) cardAnnualPromoTag.innerText = '🔥 60% OFF · AHORRAS $120 USD (10 CUPOS)';
+                if (btnBuyAnnual) btnBuyAnnual.innerText = '🚀 RESERVAR EARLY BIRD ($79 USD / 60% OFF)';
             } else {
-                cardAnnualOld.innerText = '$199.000 CLP';
-                cardAnnualPrice.innerHTML = `$79.000 <span class="unit-text" id="cardAnnualUnit">CLP</span>`;
-                cardAnnualPromoTag.innerText = '🔥 60% OFF · AHORRAS $120.000 CLP';
-                btnBuyAnnual.innerText = '🚀 Reservar Early Bird ($79.000 CLP)';
-            }
-
-            // Card Lifetime
-            const cardLifetimePrice = document.getElementById('cardLifetimePrice');
-            const btnBuyLifetime = document.getElementById('btnBuyLifetime');
-
-            if (currentCurrency === 'usd') {
-                cardLifetimePrice.innerHTML = `$349 <span class="unit-text" id="cardLifetimeUnit" style="-webkit-text-fill-color: #c084fc;">USD</span>`;
-                btnBuyLifetime.innerText = '💎 Comprar Lifetime ($349 USD)';
-            } else {
-                cardLifetimePrice.innerHTML = `$349.000 <span class="unit-text" id="cardLifetimeUnit" style="-webkit-text-fill-color: #c084fc;">CLP</span>`;
-                btnBuyLifetime.innerText = '💎 Comprar Lifetime ($349.000 CLP)';
+                if (cardAnnualOld) cardAnnualOld.innerText = '$199.000 CLP';
+                if (cardAnnualPrice) cardAnnualPrice.innerHTML = `$79.000 <span class="unit-text" id="cardAnnualUnit">CLP</span>`;
+                if (cardAnnualPromoTag) cardAnnualPromoTag.innerText = '🔥 60% OFF · AHORRAS $120.000 CLP (10 CUPOS)';
+                if (btnBuyAnnual) btnBuyAnnual.innerText = '🚀 RESERVAR EARLY BIRD ($79.000 CLP / 60% OFF)';
             }
         }
 
@@ -1877,15 +1774,32 @@
             });
         }
 
+        // COPIAR TODOS LOS DATOS DE CUENTARUT
+        function copyAllBankData() {
+            const dj = document.getElementById('customerDjName')?.value.trim() || 'DJ';
+            const bankData = 
+`DATOS DE TRANSFERENCIA PRE SET (CHILE):
+Banco: BancoEstado
+Tipo de Cuenta: CuentaRUT (Cuenta Vista)
+N° de Cuenta: 15698378
+RUT: 15.698.378-0
+Titular: Alexis Ferrada
+Email comprobante: alexispferrada@gmail.com
+Monto: $79.000 CLP (60% OFF)
+Asunto / Glosa: PRESET - ${dj}`;
+
+            navigator.clipboard.writeText(bankData).then(() => {
+                alert('¡Datos de CuentaRUT copiados con éxito al portapapeles!');
+            });
+        }
+
         // ABRIR CHECKOUT
         function openCheckout(plan) {
-            currentPlan = (plan === 'annual' || plan === 'earlybird') ? 'earlybird' : 'lifetime';
             document.getElementById('checkoutModal').classList.add('active');
             document.getElementById('successBox').style.display = 'none';
 
-            // Auto-seleccionar pasarela según moneda
             if (currentCurrency === 'clp') {
-                activeGateway = 'flow';
+                activeGateway = 'transfer';
             } else {
                 activeGateway = 'paypal';
             }
@@ -1899,136 +1813,55 @@
 
         // ACTUALIZAR VISTA DEL MODAL
         function updateModalView() {
-            const planCfg = PRICING[currentCurrency][currentPlan];
-
-            // Título
-            const titleEl = document.getElementById('modalPlanTitle');
-            const summaryPlanName = document.getElementById('summaryPlanName');
             const summaryPlanBase = document.getElementById('summaryPlanBasePrice');
-            const summaryDiscountRow = document.getElementById('summaryDiscountRow');
-            const summaryDiscountLabel = document.getElementById('summaryDiscountLabel');
             const summaryDiscountAmount = document.getElementById('summaryDiscountAmount');
             const summaryTotal = document.getElementById('summaryTotalAmount');
 
-            if (currentPlan === 'earlybird') {
-                titleEl.innerText = 'Reserva tu Licencia Early Bird Personalizada';
-                summaryPlanName.innerText = 'Licencia Early Bird (1 Año · 1 Computador)';
-                summaryPlanBase.style.textDecoration = 'line-through';
-                summaryPlanBase.style.color = '#64748b';
-                summaryPlanBase.innerText = planCfg.formattedBase;
-                summaryDiscountRow.style.display = 'flex';
-                summaryDiscountLabel.innerText = '🔥 Descuento Early Bird (60% OFF Automático)';
-                summaryDiscountAmount.innerText = `-${formatPrice(planCfg.discount, currentCurrency)}`;
+            if (currentCurrency === 'usd') {
+                if (summaryPlanBase) summaryPlanBase.innerText = '$199 USD';
+                if (summaryDiscountAmount) summaryDiscountAmount.innerText = '-$120 USD';
+                if (summaryTotal) summaryTotal.innerText = '$79 USD';
             } else {
-                titleEl.innerText = 'Comprar Licencia Lifetime Founding Member';
-                summaryPlanName.innerText = 'Licencia Lifetime (Hasta 2 Computadores · Vitalicia)';
-                summaryPlanBase.style.textDecoration = 'none';
-                summaryPlanBase.style.color = '#fff';
-                summaryPlanBase.innerText = planCfg.formattedBase;
-                summaryDiscountRow.style.display = 'none';
+                if (summaryPlanBase) summaryPlanBase.innerText = '$199.000 CLP';
+                if (summaryDiscountAmount) summaryDiscountAmount.innerText = '-$120.000 CLP';
+                if (summaryTotal) summaryTotal.innerText = '$79.000 CLP';
             }
 
-            summaryTotal.innerText = formatPrice(planCfg.final, currentCurrency);
-
-            // Renderizar Tabs de Pasarelas según moneda
-            renderGatewayTabs();
-
-            // Actualizar textos de los paneles de pago
-            updateGatewayPanels(planCfg);
-        }
-
-        // RENDERIZAR TABS DE PASARELAS
-        function renderGatewayTabs() {
-            const container = document.getElementById('gatewaysTabContainer');
-            if (!container) return;
-
-            if (currentCurrency === 'clp') {
-                container.innerHTML = `
-                    <div class="gw-tab ${activeGateway === 'flow' ? 'active' : ''}" onclick="selectGateway('flow')">
-                        <strong>💳 Flow / Webpay</strong>
-                        <span style="font-size: 11px; color: var(--text-muted);">Redcompra · Débito · Crédito</span>
-                    </div>
-                    <div class="gw-tab ${activeGateway === 'transfer' ? 'active' : ''}" onclick="selectGateway('transfer')">
-                        <strong>🏦 Transferencia Directa</strong>
-                        <span style="font-size: 11px; color: var(--text-muted);">CuentaRUT · 0% Comisión</span>
-                    </div>
-                    <div class="gw-tab ${activeGateway === 'paypal' ? 'active' : ''}" onclick="selectGateway('paypal')">
-                        <strong>🌐 PayPal</strong>
-                        <span style="font-size: 11px; color: var(--text-muted);">Pagar en Dólares ($79 USD)</span>
-                    </div>
-                    <div class="gw-tab ${activeGateway === 'stripe' ? 'active' : ''}" onclick="selectGateway('stripe')">
-                        <strong>💳 Stripe</strong>
-                        <span style="font-size: 11px; color: var(--text-muted);">Tarjeta Internacional</span>
-                    </div>
-                `;
-            } else {
-                container.innerHTML = `
-                    <div class="gw-tab ${activeGateway === 'paypal' ? 'active' : ''}" onclick="selectGateway('paypal')">
-                        <strong>🌐 PayPal Express</strong>
-                        <span style="font-size: 11px; color: var(--text-muted);">Recomendado Internacional</span>
-                    </div>
-                    <div class="gw-tab ${activeGateway === 'stripe' ? 'active' : ''}" onclick="selectGateway('stripe')">
-                        <strong>💳 Stripe / Apple Pay</strong>
-                        <span style="font-size: 11px; color: var(--text-muted);">Visa · Master · AMEX</span>
-                    </div>
-                    <div class="gw-tab ${activeGateway === 'flow' ? 'active' : ''}" onclick="selectGateway('flow')">
-                        <strong>🇨🇱 Flow / Webpay</strong>
-                        <span style="font-size: 11px; color: var(--text-muted);">Tarjetas Chilenas (CLP)</span>
-                    </div>
-                    <div class="gw-tab ${activeGateway === 'crypto' ? 'active' : ''}" onclick="selectGateway('crypto')">
-                        <strong>⚡ Crypto (USDT)</strong>
-                        <span style="font-size: 11px; color: var(--text-muted);">Solana / Polygon</span>
-                    </div>
-                `;
-            }
-        }
-
-        // SELECCIONAR PASARELA
-        function selectGateway(gw) {
-            activeGateway = gw;
-            renderGatewayTabs();
-            
-            // Ocultar todos los paneles
-            document.querySelectorAll('.gw-panel').forEach(p => p.classList.remove('active'));
-            
-            // Mostrar el panel activo
-            const targetPanel = document.getElementById('panel-' + gw);
-            if (targetPanel) {
-                targetPanel.classList.add('active');
-            }
-        }
-
-        // ACTUALIZAR PANELES DE PASARELAS CON MONTOS REALES
-        function updateGatewayPanels(planCfg) {
-            // PayPal
-            const paypalPriceUSD = currentCurrency === 'usd' ? planCfg.final : (currentPlan === 'earlybird' ? 79 : 349);
-            const paypalChargeAmount = document.getElementById('paypalChargeAmount');
-            const btnPaypalPriceText = document.getElementById('btnPaypalPriceText');
-            if (paypalChargeAmount) paypalChargeAmount.innerText = `$${paypalPriceUSD} USD`;
-            if (btnPaypalPriceText) btnPaypalPriceText.innerText = `$${paypalPriceUSD} USD`;
-
-            // Flow
-            const flowPriceCLP = currentCurrency === 'clp' ? planCfg.final : (currentPlan === 'earlybird' ? 79000 : 349000);
-            const flowChargeAmount = document.getElementById('flowChargeAmount');
-            const btnFlowPriceText = document.getElementById('btnFlowPriceText');
-            if (flowChargeAmount) flowChargeAmount.innerText = `$${flowPriceCLP.toLocaleString('es-CL')} CLP`;
-            if (btnFlowPriceText) btnFlowPriceText.innerText = `$${flowPriceCLP.toLocaleString('es-CL')} CLP`;
-
-            // Transferencia Bancaria
-            const bankTransferAmount = document.getElementById('bankTransferAmount');
-            if (bankTransferAmount) bankTransferAmount.innerText = `$${flowPriceCLP.toLocaleString('es-CL')} CLP`;
-
-            // Stripe button
-            const btnStripeAction = document.getElementById('btnStripeAction');
-            if (btnStripeAction) {
-                btnStripeAction.innerText = `💳 Pagar ${formatPrice(planCfg.final, currentCurrency)} con Stripe`;
-            }
-
-            // Activar el panel actual
             selectGateway(activeGateway);
         }
 
-        // ACCIÓN: PAGAR CON PAYPAL EXPRESS
+        // SELECCIONAR PASARELA (PAYPAL O TRANSFERENCIA)
+        function selectGateway(gw) {
+            activeGateway = gw;
+
+            // Actualizar pestañas
+            const tabPaypal = document.getElementById('tabPaypal');
+            const tabTransfer = document.getElementById('tabTransfer');
+            if (tabPaypal && tabTransfer) {
+                if (gw === 'paypal') {
+                    tabPaypal.classList.add('active');
+                    tabTransfer.classList.remove('active');
+                } else {
+                    tabTransfer.classList.add('active');
+                    tabPaypal.classList.remove('active');
+                }
+            }
+
+            // Mostrar/ocultar paneles
+            const panelPaypal = document.getElementById('panel-paypal');
+            const panelTransfer = document.getElementById('panel-transfer');
+            if (panelPaypal && panelTransfer) {
+                if (gw === 'paypal') {
+                    panelPaypal.classList.add('active');
+                    panelTransfer.classList.remove('active');
+                } else {
+                    panelTransfer.classList.add('active');
+                    panelPaypal.classList.remove('active');
+                }
+            }
+        }
+
+        // ACCIÓN: PAGAR CON PAYPAL EXPRESS ($79 USD)
         function payWithPayPal() {
             const djName = document.getElementById('customerDjName').value.trim();
             const email = document.getElementById('customerEmail').value.trim();
@@ -2044,57 +1877,28 @@
                 return;
             }
 
-            const amount = currentPlan === 'earlybird' ? 79 : 349;
-            const apiPlan = currentPlan === 'earlybird' ? 'annual' : 'lifetime';
-
             const btn = document.querySelector('.btn-paypal-checkout');
             if (btn) {
-                btn.innerHTML = `⏳ Conectando con PayPal ($${amount} USD)...`;
+                btn.innerHTML = `⏳ Conectando con PayPal ($79 USD)...`;
                 btn.disabled = true;
             }
 
             fetch('https://api.trackai.party/preset/v1/orders', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ plan: apiPlan })
+                body: JSON.stringify({ plan: 'annual' })
             })
             .then(res => res.json())
             .then(data => {
                 if (data && data.id) {
                     window.location.href = `https://www.paypal.com/checkoutnow?token=${data.id}`;
                 } else {
-                    window.location.href = `https://trackai.party/suscribir?plan=preset_${currentPlan}&amount=${amount}&email=${encodeURIComponent(email)}&dj=${encodeURIComponent(djName)}`;
+                    window.location.href = `https://trackai.party/suscribir?plan=preset_earlybird&amount=79&email=${encodeURIComponent(email)}&dj=${encodeURIComponent(djName)}`;
                 }
             })
             .catch(() => {
-                window.location.href = `https://trackai.party/suscribir?plan=preset_${currentPlan}&amount=${amount}&email=${encodeURIComponent(email)}&dj=${encodeURIComponent(djName)}`;
+                window.location.href = `https://trackai.party/suscribir?plan=preset_earlybird&amount=79&email=${encodeURIComponent(email)}&dj=${encodeURIComponent(djName)}`;
             });
-        }
-
-        // ACCIÓN: PAGAR CON FLOW / WEBPAY
-        function payWithFlow() {
-            const djName = document.getElementById('customerDjName').value.trim();
-            const email = document.getElementById('customerEmail').value.trim();
-
-            if (!djName) {
-                alert('Por favor escribe tu Nombre de DJ o Nombre Artístico para personalizar tu compilación.');
-                document.getElementById('customerDjName').focus();
-                return;
-            }
-            if (!email || !email.includes('@')) {
-                alert('Por favor ingresa tu correo electrónico para procesar tu orden Flow y enviarte la licencia.');
-                document.getElementById('customerEmail').focus();
-                return;
-            }
-
-            const amount = currentPlan === 'earlybird' ? 79000 : 349000;
-            const planLabel = currentPlan === 'earlybird' ? 'Licencia Early Bird (60% OFF)' : 'Licencia Lifetime Vitalicia';
-
-            const msg = encodeURIComponent(`Hola Alexis! Quiero pagar mi ${planLabel} de PRE SET ($${amount.toLocaleString('es-CL')} CLP) con Webpay/Flow. Mi Nombre de DJ es "${djName}" y mi correo es ${email}. Pásame el link de pago porfa 💳`);
-            const waUrl = `https://wa.me/56992818104?text=${msg}`;
-
-            window.open(waUrl, '_blank');
-            showSuccessLicense(`¡Solicitud Flow Registrada! Se ha generado tu orden para $${amount.toLocaleString('es-CL')} CLP personalizada para "${djName}". Revisa tu WhatsApp para pagar y recibir la confirmación.`);
         }
 
         // ACCIÓN: PEDIR DATOS BANCARIOS POR CORREO
@@ -2113,66 +1917,25 @@
                 return;
             }
 
-            const amount = currentPlan === 'earlybird' ? 79000 : 349000;
             const orderId = 'PRESET-EB-' + Math.random().toString(36).substring(2, 7).toUpperCase();
 
-            showSuccessLicense(`¡Datos de Transferencia Registrados!\nOrden: #${orderId}\nDJ: ${djName}\nMonto a transferir: $${amount.toLocaleString('es-CL')} CLP a BancoEstado CuentaRUT 18.928.104.\nHemos registrado tu solicitud para ${email}. Recuerda enviar el comprobante por WhatsApp para validar tu reserva.`);
+            showSuccessLicense(`¡Datos de Transferencia Registrados!\nOrden: #${orderId}\nDJ: ${djName}\nMonto a transferir: $79.000 CLP a BancoEstado CuentaRUT 15698378 (RUT 15.698.378-0).\nHemos registrado tu solicitud para ${email}. Recuerda enviar el comprobante por WhatsApp para validar tu reserva.`);
         }
 
         // ACCIÓN: ENVIAR COMPROBANTE POR WHATSAPP
         function sendTransferReceiptWhatsApp() {
             const djName = document.getElementById('customerDjName').value.trim() || 'DJ';
             const email = document.getElementById('customerEmail').value.trim() || 'cliente@dj.com';
-            const amount = currentPlan === 'earlybird' ? 79000 : 349000;
-            const planLabel = currentPlan === 'earlybird' ? 'Licencia Early Bird (60% OFF · 1 Computador)' : 'Licencia Lifetime Vitalicia (2 Computadores)';
 
-            const text = encodeURIComponent(`Hola Alexis! Estoy en preset.trackai.cl y quiero activar mi ${planLabel} de PRE SET por transferencia bancaria directa ($${amount.toLocaleString('es-CL')} CLP). Mi Nombre de DJ es "${djName}" y mi correo es ${email}. Adjunto comprobante 🎧`);
+            const text = encodeURIComponent(`Hola Alexis! Quiero confirmar mi reserva de PRE SET Early Bird con 60% de descuento ($79.000 CLP). Mi Nombre de DJ es "${djName}" y mi correo es ${email}. Adjunto el comprobante de transferencia a tu CuentaRUT 15.698.378-0 🎧`);
             window.open(`https://wa.me/56992818104?text=${text}`, '_blank');
-        }
-
-        // ACCIÓN: STRIPE GENÉRICO
-        function processGenericCardPayment() {
-            const djName = document.getElementById('customerDjName').value.trim();
-            const email = document.getElementById('customerEmail').value.trim();
-
-            if (!djName) {
-                alert('Por favor escribe tu Nombre de DJ o Nombre Artístico.');
-                document.getElementById('customerDjName').focus();
-                return;
-            }
-            if (!email || !email.includes('@')) {
-                alert('Por favor ingresa tu correo electrónico.');
-                document.getElementById('customerEmail').focus();
-                return;
-            }
-
-            const planCfg = PRICING[currentCurrency][currentPlan];
-            const btn = document.getElementById('btnStripeAction');
-            btn.disabled = true;
-            btn.innerText = `⏳ Conectando con pasarela segura...`;
-
-            setTimeout(() => {
-                showSuccessLicense(`¡Pago de ${formatPrice(planCfg.final, currentCurrency)} confirmado! Tu build personalizada para "${djName}" se emitirá a contar del 05/10/2026.`);
-            }, 1200);
-        }
-
-        // ACCIÓN: CRYPTO
-        function processCryptoPayment() {
-            const djName = document.getElementById('customerDjName').value.trim();
-            const email = document.getElementById('customerEmail').value.trim();
-            if (!djName || !email) {
-                alert('Por favor completa tu Nombre de DJ y correo electrónico.');
-                return;
-            }
-            showSuccessLicense(`¡Transacción registrada en Blockchain! Tu build personalizada para "${djName}" se enviará a ${email} a contar del 05/10/2026.`);
         }
 
         // MOSTRAR PANTALLA DE ÉXITO Y LICENCIA
         function showSuccessLicense(customMsg) {
             const successBox = document.getElementById('successBox');
             const randomHex = () => Math.random().toString(36).substring(2, 6).toUpperCase();
-            const prefix = currentPlan === 'earlybird' ? 'EARLYBIRD' : 'LIFETIME';
-            const license = `PRESET-${prefix}-${randomHex()}-${randomHex()}-${randomHex()}`;
+            const license = `PRESET-EARLYBIRD-${randomHex()}-${randomHex()}-${randomHex()}`;
 
             if (customMsg) {
                 document.getElementById('successBoxSubtitle').innerText = customMsg;
