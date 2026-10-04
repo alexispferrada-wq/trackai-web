@@ -70,7 +70,7 @@
             fetch(PANEL + "/api/live/ping", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ sid: sid, page: window.location.pathname, referrer: document.referrer || "directo" }),
+              body: JSON.stringify({ sid: sid, page: window.location.pathname + window.location.search, referrer: document.referrer || (/[?&]utm_source=/.test(window.location.search) ? "anuncio" : "directo") }),
               keepalive: true
             }).catch(function () {});
           } catch (e) {}
