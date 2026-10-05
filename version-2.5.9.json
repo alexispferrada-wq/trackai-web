@@ -1,12 +1,12 @@
 {
-  "version": "2.7.4",
-  "name": "TrackAI 2.7.4 Oficial",
+  "version": "2.7.5",
+  "name": "TrackAI 2.7.5 Oficial",
   "min_version": "2.7.0",
   "force_update": true,
-  "url_mac": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.7.4/TrackAI-2.7.4-arm64.dmg",
-  "url_mac_intel": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.7.4/TrackAI-2.7.4-x64.dmg",
-  "url_win": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.7.4/TrackAI-2.7.4-x64.exe",
-  "url": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.7.4/TrackAI-2.7.4-x64.exe",
-  "notes": "TrackAI 2.7.4: formato vertical, arrastre al plato, 5 sugerencias en el plan Gratis y carga más fiable en VirtualDJ para Windows.",
-  "updated_at": "2026-10-04T20:00:00Z"
+  "url_mac": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.7.5/TrackAI-2.7.5-arm64.dmg",
+  "url_mac_intel": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.7.5/TrackAI-2.7.5-x64.dmg",
+  "url_win": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.7.5/TrackAI-2.7.5-x64.exe",
+  "url": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.7.5/TrackAI-2.7.5-x64.exe",
+  "notes": "TrackAI 2.7.5: formatos Horizontal, Horizontal compacto y Vertical siempre abajo a la derecha, títulos completos, selector de skins nuevo, arrastre al plato, 5 sugerencias en Gratis, carga más fiable en VirtualDJ para Windows e IA de sugerencias con Cloudflare.",
+  "updated_at": "2026-10-05T03:00:00Z"
 }
