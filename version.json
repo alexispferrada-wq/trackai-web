@@ -1,13 +1,13 @@
 {
-  "version": "2.7.5",
-  "name": "TrackAI 2.7.5 Oficial",
+  "version": "2.7.8",
+  "name": "TrackAI 2.7.8 Oficial",
   "min_version": "2.7.0",
-  "force_update": true,
-  "blocked": true,
-  "url_mac": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.7.5/TrackAI-2.7.5-arm64.dmg",
-  "url_mac_intel": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.7.5/TrackAI-2.7.5-x64.dmg",
-  "url_win": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.7.5/TrackAI-2.7.5-x64.exe",
-  "url": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.7.5/TrackAI-2.7.5-x64.exe",
-  "notes": "ACTUALIZACI\u00d3N OBLIGATORIA: Tu versi\u00f3n de TrackAI ha sido inhabilitada por las nuevas pol\u00edticas de servicio. Descarga la nueva versi\u00f3n para continuar usando el sistema.",
-  "updated_at": "2026-10-06T19:00:00Z"
+  "force_update": false,
+  "blocked": false,
+  "url_mac": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.7.8/TrackAI-2.7.8-arm64.dmg",
+  "url_mac_intel": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.7.8/TrackAI-2.7.8-x64.dmg",
+  "url_win": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.7.8/TrackAI-2.7.8-x64.exe",
+  "url": "https://github.com/alexispferrada-wq/trackai-web/releases/download/v2.7.8/TrackAI-2.7.8-x64.exe",
+  "notes": "TrackAI 2.7.8: reconoce el plan Trimestral (3 meses) y ajusta los botones de compra de la app. Recomendamos actualizar.",
+  "updated_at": "2026-10-19T00:00:00Z"
 }
